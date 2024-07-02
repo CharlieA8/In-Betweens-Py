@@ -1,13 +1,28 @@
-from flask import Blueprint, render_template, request, g, current_app, json, make_response, redirect
+from flask import Blueprint, render_template, request, g, current_app, json, make_response, redirect, Response
 from datetime import datetime
+from modeldata import ModelData
+import uuid
+from session_management import active_sessions, get_sessions
+from copy import deepcopy
 
 bp = Blueprint('main', __name__)
-active_sessions = {}
 
 @bp.before_request
 def before_request():
-    # Ensure answers is available in g
     g.answers = current_app.config.get('answers')
+
+    # Check for session cookie
+    session_id = request.cookies.get('session_id')
+
+    if session_id and session_id in active_sessions:
+        g.modelData = active_sessions[session_id]
+    else:
+        g.modelData = None
+
+@bp.route('/active_sessions')
+def debug_active_sessions():
+    sessions_info = get_sessions()
+    return Response(sessions_info, mimetype='text/plain')
 
 @bp.route('/')
 def title():
@@ -41,10 +56,12 @@ def rules():
 
 @bp.route('/play')
 def play():
-    clues = g.modelData.get_clues()
-    clue1, clue2 = clues[0], clues[1]
+    if not g.modelData:
+        return redirect('/')
+
+    g.modelData.get_clues()
     g.modelData.startTimer()
-    return render_template('play.html', clue1=clue1, clue2=clue2, newclue=True, correct=False)
+    return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, newclue=True, correct=False)
 
 @bp.route('/pause')
 def pause():
@@ -53,6 +70,17 @@ def pause():
 
 @bp.route('/resume')
 def resume():
+    if not g.modelData:
+        # New ModelData if no active session
+        session_id = str(uuid.uuid4())
+        g.modelData = ModelData(deepcopy(g.answers.answers))
+        active_sessions[session_id] = g.modelData
+
+        # set session_id cookie
+        response = make_response(redirect('/play'))
+        response.set_cookie('session_id', session_id)
+        return response
+    
     g.modelData.resumeTimer()
     return redirect('/play')
 
@@ -63,19 +91,19 @@ def congrats():
 @bp.route('/submit', methods=['GET','POST'])
 def submit():
     if request.method == 'POST':
-        newclue = False
-        correct = False
-        answer1 = request.form['answer1']
-        in_between = request.form['in_between']
-        answer2 = request.form['answer2']
-        response = g.modelData.check_answer(answer1, in_between, answer2)
-        clue1, clue2 = g.modelData.get_clues()
+        if not g.modelData:
+            return redirect('/')
+    
+        g.modelData.newClue = False
+        g.modelData.correct = False
+        g.modelData.answer1 = request.form['answer1']
+        g.modelData.inbetween = request.form['in_between']
+        g.modelData.answer2 = request.form['answer2']
+        g.modelData.check_answer(g.modelData.answer1, g.modelData.inbetween, g.modelData.answer2)
+        g.modelData.get_clues()
 
-        if response == [True, True, True]:
-            response = [False, False, False]
-            answer1, answer2, in_between = '', '', ''
-            newclue = True 
-            correct = True
+        if g.modelData.response == [True, True, True]:
+            g.modelData.correct_reset()
         
         if g.modelData.done:
             time = g.modelData.stopTimer()
@@ -106,9 +134,15 @@ def submit():
             response = make_response(render_template('congrats.html', time=time))
             response.set_cookie('game_stats', json.dumps(game_stats))
             response.set_cookie('today', json.dumps(today))
+
+            # Clear session data
+            session_id = request.cookies.get('session_id')
+            if session_id in active_sessions:
+                del active_sessions[session_id]
+
+            response.delete_cookie('session_id')
             return response
             
-        return render_template('play.html', clue1=clue1, clue2=clue2, answer1=answer1, 
-                               in_between=in_between, answer2=answer2, response=response, 
-                               newclue=newclue, correct=correct)
-    
+        return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, answer1=g.modelData.answer1, 
+                               in_between=g.modelData.inbetween, answer2=g.modelData.answer2, response=g.modelData.response, 
+                               newclue=g.modelData.newClue, correct=g.modelData.correct)

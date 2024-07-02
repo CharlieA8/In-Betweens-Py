@@ -9,6 +9,15 @@ class ModelData:
         self.time = 0
         self.pauses = []
         self.pause_start = None
+        self.newClue = False
+        self.correct = False
+        self.response = [False, False, False]
+        self.answer1 = ''
+        self.inbetween = ''
+        self.answer2 = ''
+        self.clue1 = ''
+        self.clue2 = ''
+
 
     def reset(self):
         self.start_time = None
@@ -18,31 +27,18 @@ class ModelData:
         self.pauses.clear()
         self.done = False
     
-    def load_from_dict(self, data):
-        self.num_correct = data['num_correct']
-        self.done = data['done']
-        self.start_time = datetime.fromisoformat(data['start_time']) if data['start_time'] else None
-        self.end_time = datetime.fromisoformat(data['end_time']) if data['end_time'] else None
-        self.time = data['time']
-        self.pauses = [(datetime.fromisoformat(start), datetime.fromisoformat(end)) for start, end in data['pauses']]
-        self.pause_start = datetime.fromisoformat(data['pause_start']) if data['pause_start'] else None
-
-    def to_dict(self):
-        return {
-            'num_correct': self.num_correct,
-            'done': self.done,
-            'start_time': self.start_time.isoformat() if self.start_time else None,
-            'end_time': self.end_time.isoformat() if self.end_time else None,
-            'time': self.time,
-            'pauses': [(start.isoformat(), end.isoformat()) for start, end in self.pauses],
-            'pause_start': self.pause_start.isoformat() if self.pause_start else None
-        }
+    def correct_reset(self):
+        self.newClue = True
+        self.correct = True
+        self.response = [False, False, False]
+        self.answer1 = ''
+        self.inbetween = ''
+        self.answer2 = ''
     
-
     def get_clues(self):
         answer = self.answers[self.num_correct]
-        clues = [answer.clue1, answer.clue2]
-        return clues
+        self.clue1 = answer.clue1
+        self.clue2 = answer.clue2
     
     def check_answer(self, answer1, in_between, answer2):
         response = [False, False, False]
@@ -55,7 +51,7 @@ class ModelData:
                 self.done = True
                 for answer in self.answers:
                     answer.response = [False, False, False]
-        return response
+        self.response = response
     
     def startTimer(self):
         if self.start_time == None:
