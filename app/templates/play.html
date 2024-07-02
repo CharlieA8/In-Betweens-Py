@@ -1,0 +1,35 @@
+{% extends 'base.html'%}
+
+{% block head %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="title">
+        <h1 class="clue1">In</h1>
+        <h1 class="in_between">+</h1>
+        <h1 class="clue2">Betweens</h1>
+    </div>
+
+    <div class="clues">
+        <div class="clue clue1 {% if newclue %}leftSlide{% endif %}" id="clueBox">{{ clue1 }}</div>
+        <div class="in_between plus" id="clueBox">+</div>
+        <div class="clue clue2 {% if newclue %}rightSlide{% endif %}" id="clueBox">{{ clue2 }}</div>
+    </div>
+
+    <div class="parent">
+        {% if correct %}<div class="gotIt">Got it!</div>{% endif %}
+    </div>
+
+    <form action="/submit" method="post" id="game-form">
+        <p><input type="text" autocomplete="off" class="clue1 {% if response and response[0] %}correct{% endif %}" name="answer1" placeholder="Clue 1" value="{{ answer1 }}"></p>
+        <p style="padding: 1vw;"><input type="text" autocomplete="off" class="in_between {% if response and response[1] %}correct{% endif %}" name="in_between" placeholder="In-Between" value="{{ in_between }}"></p>
+        <p><input type="text" autocomplete="off" class="clue2 {% if response and response[2] %}correct{% endif %}" name="answer2" placeholder="Clue 2" value="{{ answer2 }}"></p>
+        <div class="parent">
+            <button type="submit" class="submit" name="button" id="submit">Submit</button>
+            <button type="button" class="backButton" name="button" onclick="window.location.href='/pause'">Pause</button>
+        </div>
+    </form>
+{% endblock %}

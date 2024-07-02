@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block body %}
+    <div class="rules">
+        <h1 class="doneCard topSlide" id="borderCycle">Rules!</h1>
+
+        <div class="rulesCard">
+            <div class="clues">
+                <div class="exampleClue clue1" id="clueBox">What an optimist sees</div>
+                <div class="in_between plus" id="clueBox">+</div>
+                <div class="exampleClue clue2" id="clueBox">John Stamos hit show</div>
+            </div>
+
+            <p>You will be given two clues, each of which corresponds to a multi-word phrase</p>
+
+            <div class="clues">
+                <div class="clue1">Glass Half Full</div>
+                <div class="in_between">+</div>
+                <div class="clue2">Full House</div>
+            </div>
+
+            <p>But the two phrases are connected: they share one word in the middle, called the "In-Between"</p>
+            <div class="in_between">Full</div>
+        </div>
+
+        <button class="backButton" name="button" onclick="window.location.href='/'">Back</button>
+    </div>
+{% endblock %}
