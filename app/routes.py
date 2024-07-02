@@ -1,13 +1,22 @@
 from flask import Blueprint, render_template, request, g, current_app, json, make_response, redirect
 from datetime import datetime
+from modeldata import ModelData
+import uuid
 
 bp = Blueprint('main', __name__)
 active_sessions = {}
 
 @bp.before_request
 def before_request():
-    # Ensure answers is available in g
     g.answers = current_app.config.get('answers')
+
+    # Check for session cookie
+    session_id = request.cookies.get('session_id')
+
+    if session_id and session_id in active_sessions:
+        g.modelData = active_sessions[session_id]
+    else:
+        g.modelData = None
 
 @bp.route('/')
 def title():
@@ -53,6 +62,17 @@ def pause():
 
 @bp.route('/resume')
 def resume():
+    if not g.modelData:
+        # New ModelData if no active session
+        session_id = str(uuid.uuid4())
+        g.modelData = ModelData(g.answers.answers)
+        active_sessions[session_id] = g.modelData
+
+        # set session_id cookie
+        response = make_response(redirect('/play'))
+        response.set_cookie('session_id', session_id)
+        return response
+    
     g.modelData.resumeTimer()
     return redirect('/play')
 
@@ -63,6 +83,9 @@ def congrats():
 @bp.route('/submit', methods=['GET','POST'])
 def submit():
     if request.method == 'POST':
+        if not g.modelData:
+            return redirect('/')
+    
         newclue = False
         correct = False
         answer1 = request.form['answer1']
@@ -106,9 +129,16 @@ def submit():
             response = make_response(render_template('congrats.html', time=time))
             response.set_cookie('game_stats', json.dumps(game_stats))
             response.set_cookie('today', json.dumps(today))
+
+            # Clear session data
+            session_id = request.cookies.get('session_id')
+            if session_id in active_sessions:
+                del active_sessions[session_id]
+
+            response.delete_cookie('session_id')
             return response
             
         return render_template('play.html', clue1=clue1, clue2=clue2, answer1=answer1, 
                                in_between=in_between, answer2=answer2, response=response, 
                                newclue=newclue, correct=correct)
-    
+        
