@@ -81,6 +81,16 @@ input {
     padding: 1vh;
 }
 
+.exInput {
+        font-size: clamp(20px, 3vw, 40px);
+        border-radius: clamp(50px, 6vw, 6vw);
+        border-width: 5px;
+        border-style: outset;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0.5); 
+        transition: border-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+        padding: 1vh;
+}
+
 
 .clue1 {
     text-align: center;
@@ -133,6 +143,7 @@ input {
     padding: 10px;
     padding-left: 2vw;
     padding-right: 2vw;
+    padding-top: 1vh;
     transition: box-shadow 0.3s ease;
     cursor: pointer;
 }
@@ -201,13 +212,31 @@ input {
     text-align: center;
 }
 
+.rulesText {
+    font-size: clamp(20px, 3vw, 40px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding-left: 8vw;
+    padding-right: 8vw;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    font-family: 'Georgia';
+}
+
+.rulesHeading {
+    font-size: clamp(30px, 4vw, 60px);
+    font-weight: bold;
+}
+
 .exampleClue {
-    width: clamp(150px, 15vw, 15vw);
-    height: clamp(100px, 15vh, 15vh);
+    width: clamp(250px, 25vw, 25vw);
+    height: clamp(125px, 12.5vh, 12.5vh);
     border: 5px solid black;
     padding: 10px;
     font-family: 'InBetween';
-    font-size: clamp(20px, 2vw, 30px);
+    font-size: clamp(20px, 3vw, 40px);
     background-color: white;
     border-radius: 10px;
     overflow: hidden;
@@ -329,6 +358,13 @@ input {
     box-sizing: border-box;
     transform: translateY(50%);
     animation: gotIt 2s forwards;
+}
+
+.tutorialForm {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .fadeIn {

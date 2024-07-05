@@ -7,26 +7,43 @@
 {% block body %}
     <div class="rules">
         <h1 class="doneCard topSlide" id="borderCycle">Rules!</h1>
+    </div>
 
-        <div class="rulesCard">
-            <div class="clues">
-                <div class="exampleClue clue1" id="clueBox">What an optimist sees</div>
-                <div class="in_between plus" id="clueBox">+</div>
-                <div class="exampleClue clue2" id="clueBox">John Stamos hit show</div>
-            </div>
+    <div class="clues">
+        <div class="exampleClue clue1" id="clueBox">What an optimist sees</div>
+        <div class="in_between plus" id="clueBox">+</div>
+        <div class="exampleClue clue2" id="clueBox">John Stamos hit show</div>
+    </div>
 
-            <p>You will be given two clues, each of which corresponds to a multi-word phrase</p>
+    <p class="rulesText">You will be given two clues, each of which corresponds to a multi-word phrase:</p>
 
-            <div class="clues">
-                <div class="clue1">Glass Half Full</div>
-                <div class="in_between">+</div>
-                <div class="clue2">Full House</div>
-            </div>
+    <div class="clues">
+        <div class="clue1 rulesHeading">Glass Half Full</div>
+        <div class="in_between rulesHeading">+</div>
+        <div class="clue2 rulesHeading">Full House</div>
+    </div>
 
-            <p>But the two phrases are connected: they share one word in the middle, called the "In-Between"</p>
-            <div class="in_between">Full</div>
-        </div>
+    <p class="rulesText">But the two phrases are connected: they share one word in the middle, called the "In-Between":</p>
 
+    <div class="in_between rulesHeading">Full</div>
+
+    <p class="rulesText">When entering answers, the In-Between goes in the middle box, while the rest of the words go in the corresponding top and bottom boxes. The In-Between should not be present in the top or bottom box:</p>
+
+    <form id="game-form" class="tutorialForm">
+        <p>
+            <input type="text" autocomplete="off" class="clue1 exInput" name="answer1" placeholder="Clue 1" value="Glass half" readonly>
+        </p>
+        <p style="padding: 1vw;">
+            <input type="text" autocomplete="off" class="in_between exInput" name="in_between" placeholder="In-Between" value="Full" readonly>
+        </p>
+        <p>
+            <input type="text" autocomplete="off" class="clue2 exInput" name="answer2" placeholder="Clue 2" value="House" readonly>
+        </p>
+    </form>
+
+    <p class="rulesText">Each day's puzzle contains 3 sets of clues - try to answer as fast as you can!</p>
+
+    <div class="rules">
         <button class="backButton" name="button" onclick="window.location.href='/'">Back</button>
     </div>
 {% endblock %}

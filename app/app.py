@@ -17,7 +17,7 @@ def create_app():
     app = Flask(__name__)
     app.register_blueprint(routes.bp)   
     
-    # Load modelData and store it in app config
+    # Load answers and store it in app config
     with app.app_context():
         app.config['answers'] = Answers('/Users/charlie/Desktop/Code/In-Betweens-Py/app/static/resources/answers.json')
 
