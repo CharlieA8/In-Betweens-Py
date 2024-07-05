@@ -19,7 +19,7 @@ def before_request():
     else:
         g.modelData = None
 
-@bp.route('/active_sessions')
+@bp.route('/debug/active_sessions')
 def debug_active_sessions():
     sessions_info = get_sessions()
     return Response(sessions_info, mimetype='text/plain')
@@ -65,6 +65,9 @@ def play():
 
 @bp.route('/pause')
 def pause():
+    if not g.modelData:
+        return redirect('/')
+    
     g.modelData.pauseTimer()
     return redirect('/')
 
@@ -83,10 +86,6 @@ def resume():
     
     g.modelData.resumeTimer()
     return redirect('/play')
-
-@bp.route('/congrats')
-def congrats():
-    return render_template('congrats.html', time="10.47")
 
 @bp.route('/submit', methods=['GET','POST'])
 def submit():

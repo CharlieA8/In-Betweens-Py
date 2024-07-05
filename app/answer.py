@@ -28,14 +28,12 @@ class Answer:
         return self.response
     
 class Answers:
-    def __init__(self, file_path):
+    def __init__(self, data):
         self.answers = []
-        self.load_answers_from_json(file_path)
+        self.load_answers_from_json(data)
 
-    def load_answers_from_json(self, file_path):
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-            for item in data:
-                answer = Answer(item['id'], item['answer1'], item['in_between'], item['answer2'], item['clue1'], item['clue2'])
-                self.answers.append(answer)
+    def load_answers_from_json(self, data):
+        for item in data:
+            answer = Answer(item['id'], item['answer1'], item['in_between'], item['answer2'], item['clue1'], item['clue2'])
+            self.answers.append(answer)
 
