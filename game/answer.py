@@ -1,5 +1,3 @@
-import json
-
 class Answer:
     def __init__(self, id, answer1, in_between, answer2, clue1, clue2):
         self.id = id
@@ -36,4 +34,7 @@ class Answers:
         for item in data:
             answer = Answer(item['id'], item['answer1'], item['in_between'], item['answer2'], item['clue1'], item['clue2'])
             self.answers.append(answer)
+
+    def __str__(self):
+        return "\n".join([str(answer) for answer in self.answers])
 

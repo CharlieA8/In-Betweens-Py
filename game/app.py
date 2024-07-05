@@ -7,6 +7,7 @@ import signal
 import sys
 
 scheduler_thread = None
+answers = None
 
 def signal_handler(sig, frame):
     if scheduler_thread:
@@ -21,16 +22,23 @@ def fetch_answers():
         return response.json()
     else:
         raise Exception("Failed to fetch answers from Google Drive")
-
+    
+def update_answers():
+    global answers
+    answers_data = fetch_answers()
+    answers = Answers(answers_data)
+    print("Answers updated successfully")
 
 def create_app():
+    global answers
     app = Flask(__name__)
-    app.register_blueprint(routes.bp)   
-    
-    # Load answers and store it in app config
-    with app.app_context():
-        answers_data = fetch_answers()
-        app.config['answers'] = Answers(answers_data)
+
+    # Load and update answers
+    update_answers()
+
+    # Set up routes
+    main_bp = routes.create_blueprint(answers)
+    app.register_blueprint(main_bp)   
 
     # Set up session reset
     setup_daily_reset()
