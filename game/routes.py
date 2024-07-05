@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, g, json, make_response, redirect, Response
 from datetime import datetime
-from modeldata import ModelData
+from game.modeldata import ModelData
 import uuid
-from session_management import active_sessions, get_sessions
+from game.session_management import active_sessions, get_sessions
 from copy import deepcopy
 
 def create_blueprint(answers):
