@@ -1,1 +1,1 @@
-web: gunicorn game.app:app
+web: gunicorn 'game.app:create_app()'

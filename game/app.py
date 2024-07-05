@@ -1,5 +1,6 @@
 from game.answer import Answers
 from flask import Flask
+import game.routes
 import requests
 from game.session_management import setup_daily_reset, stop_scheduler
 import signal
@@ -36,7 +37,7 @@ def create_app():
     update_answers()
 
     # Set up routes
-    main_bp = routes.create_blueprint(answers)
+    main_bp = game.routes.create_blueprint(answers)
     app.register_blueprint(main_bp)   
 
     # Set up session reset
