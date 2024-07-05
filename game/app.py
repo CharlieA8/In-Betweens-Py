@@ -1,6 +1,5 @@
 from game.answer import Answers
 from flask import Flask
-import routes
 import requests
 from game.session_management import setup_daily_reset, stop_scheduler
 import signal
