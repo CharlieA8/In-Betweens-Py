@@ -2,6 +2,8 @@ import time
 import schedule
 import threading
 import sqlite3
+import json
+import datetime
 
 shutdown_flag = threading.Event()
 
@@ -33,16 +35,20 @@ def stop_scheduler():
 
 def save_session(session_id, model_data):
     with get_db_connection() as conn:
+        # Convert pauses array to json
+        pauses_json = json.dumps([
+            [p[0].isoformat(), p[1].isoformat() if p[1] else None] 
+            for p in model_data.pauses
+        ])
         conn.execute('''
             INSERT OR REPLACE INTO active_sessions (
                 session_id, num_correct, done, start_time, time, pauses, 
                 clue1, clue2, answer1, inbetween, answer2, correct, newClue
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
-            session_id, model_data.num_correct, model_data.done, model_data.start_time,
-            model_data.time, ','.join(map(str, model_data.pauses)), model_data.clue1,
-            model_data.clue2, model_data.answer1, model_data.inbetween, model_data.answer2,
-            model_data.correct, model_data.newClue
+            session_id, model_data.num_correct, model_data.done, model_data.start_time, model_data.time, 
+            pauses_json, model_data.clue1, model_data.clue2, model_data.answer1, model_data.inbetween, 
+            model_data.answer2, model_data.correct, model_data.newClue
         ))
         conn.commit()
 
@@ -50,13 +56,18 @@ def load_session(session_id):
     with get_db_connection() as conn:
         session = conn.execute('SELECT * FROM active_sessions WHERE session_id = ?', (session_id,)).fetchone()
         if session:
-            # Assuming ModelData expects these fields
+            # Convert pauses json to array
+            pauses_data = json.loads(session['pauses']) if session['pauses'] else []
+            pauses = [
+                [datetime.fromisoformat(p[0]), datetime.fromisoformat(p[1]) if p[1] else None]
+                for p in pauses_data
+            ]
             return {
                 'num_correct': session['num_correct'],
                 'done': session['done'],
                 'start_time': session['start_time'],
                 'time': session['time'],
-                'pauses': session['pauses'].split(',') if session['pauses'] else [],
+                'pauses': pauses,
                 'clue1': session['clue1'],
                 'clue2': session['clue2'],
                 'answer1': session['answer1'],
