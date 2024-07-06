@@ -75,6 +75,14 @@ def create_blueprint(answers):
 
     @bp.route('/resume')
     def resume():
+        # Check if the user has already played today
+        today_cookie = request.cookies.get('today')
+        if today_cookie:
+            today = json.loads(today_cookie)
+            date = str(datetime.now().date())
+            if date == today[1]:
+                return redirect('/')
+
         if not g.answers:
             return redirect('/')
         if not g.modelData:
