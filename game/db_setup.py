@@ -11,6 +11,7 @@ def init_db():
                 start_time TEXT,
                 time REAL,
                 pauses TEXT,
+                pause_start TEXT,
                 clue1 TEXT,
                 clue2 TEXT,
                 answer1 TEXT,
