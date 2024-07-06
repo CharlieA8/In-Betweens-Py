@@ -50,7 +50,21 @@ def load_session(session_id):
     with get_db_connection() as conn:
         session = conn.execute('SELECT * FROM active_sessions WHERE session_id = ?', (session_id,)).fetchone()
         if session:
-            return dict(session)
+            # Assuming ModelData expects these fields
+            return {
+                'num_correct': session['num_correct'],
+                'done': session['done'],
+                'start_time': session['start_time'],
+                'time': session['time'],
+                'pauses': session['pauses'].split(',') if session['pauses'] else [],
+                'clue1': session['clue1'],
+                'clue2': session['clue2'],
+                'answer1': session['answer1'],
+                'inbetween': session['inbetween'],
+                'answer2': session['answer2'],
+                'correct': session['correct'],
+                'newClue': session['newClue']
+            }
         return None
     
 def delete_session(session_id):

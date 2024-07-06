@@ -1,23 +1,22 @@
 from datetime import datetime
 class ModelData:
-    def __init__(self, answers):
-        self.session_id = None
+    def __init__(self, num_correct, done, start_time, time, pauses, clue1, clue2, answer1, inbetween, answer2, correct, newClue, answers):
         self.answers = answers
-        self.num_correct = 0
-        self.done = False
-        self.start_time = None
+        self.num_correct = num_correct
+        self.done = done
+        self.start_time = start_time
         self.end_time = None
-        self.time = 0
-        self.pauses = []
+        self.time = time
+        self.pauses = pauses
         self.pause_start = None
-        self.newClue = False
-        self.correct = False
+        self.newClue = newClue
+        self.correct = correct
         self.response = [False, False, False]
-        self.answer1 = ''
-        self.inbetween = ''
-        self.answer2 = ''
-        self.clue1 = ''
-        self.clue2 = ''
+        self.answer1 = answer1
+        self.inbetween = inbetween
+        self.answer2 = answer2
+        self.clue1 = clue1
+        self.clue2 = clue2
 
 
     def reset(self):
