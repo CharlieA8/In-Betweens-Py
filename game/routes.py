@@ -66,6 +66,7 @@ def create_blueprint(answers):
 
         g.modelData.get_clues()
         g.modelData.startTimer()
+        save_session(request.cookies.get('session_id'), g.modelData)
         return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, newclue=True, correct=False)
 
     @bp.route('/pause')
