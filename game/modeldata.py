@@ -18,6 +18,25 @@ class ModelData:
         self.clue1 = clue1
         self.clue2 = clue2
 
+    @classmethod
+    def initialize_with_defaults(cls, answers):
+        return cls(
+            answers = answers,
+            num_correct=0,
+            done=False,
+            start_time=None,
+            end_time=None,
+            time=None,
+            pauses=[],
+            pause_start=None,
+            clue1= '',
+            clue2= '',
+            answer1='',
+            inbetween='',
+            answer2='',
+            correct=False,
+            newClue=False
+        )
 
     def reset(self):
         self.start_time = None

@@ -84,7 +84,7 @@ def create_blueprint(answers):
         if not g.modelData:
             # New ModelData if no active session
             session_id = str(uuid.uuid4())
-            g.modelData = ModelData(deepcopy(g.answers.answers))
+            g.modelData = ModelData.initialize_with_defaults(deepcopy(g.answers.answers))
             save_session(session_id, g.modelData)
 
             # set session_id cookie
