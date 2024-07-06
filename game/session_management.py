@@ -46,8 +46,8 @@ def save_session(session_id, model_data):
                 clue1, clue2, answer1, inbetween, answer2, correct, newClue
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
-            session_id, model_data.num_correct, model_data.done, model_data.start_time, model_data.time, 
-            pauses_json, model_data.clue1, model_data.clue2, model_data.answer1, model_data.inbetween, 
+            session_id, model_data.num_correct, model_data.done, model_data.start_time.isoformat() if model_data.start_time else None, 
+            model_data.time, pauses_json, model_data.clue1, model_data.clue2, model_data.answer1, model_data.inbetween, 
             model_data.answer2, model_data.correct, model_data.newClue
         ))
         conn.commit()

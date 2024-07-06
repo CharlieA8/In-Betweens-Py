@@ -8,7 +8,7 @@ def init_db():
                 session_id TEXT PRIMARY KEY,
                 num_correct INTEGER,
                 done BOOLEAN,
-                start_time REAL,
+                start_time TEXT,
                 time REAL,
                 pauses TEXT,
                 clue1 TEXT,
