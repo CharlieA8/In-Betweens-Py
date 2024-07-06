@@ -65,7 +65,7 @@ def load_session(session_id):
             return {
                 'num_correct': session['num_correct'],
                 'done': session['done'],
-                'start_time': session['start_time'],
+                'start_time': datetime.fromisoformat(session['start_time']) if session['start_time'] else None,
                 'time': session['time'],
                 'pauses': pauses,
                 'clue1': session['clue1'],
