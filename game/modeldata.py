@@ -1,6 +1,7 @@
 from datetime import datetime
 class ModelData:
     def __init__(self, answers):
+        self.session_id = None
         self.answers = answers
         self.num_correct = 0
         self.done = False
