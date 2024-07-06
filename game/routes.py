@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, g, json, make_response, r
 from datetime import datetime
 from game.modeldata import ModelData
 import uuid
-from game.session_management import active_sessions, get_sessions
+from game.session_management import save_session, load_session, delete_session, get_all_sessions
 from copy import deepcopy
 
 def create_blueprint(answers):
@@ -15,16 +15,20 @@ def create_blueprint(answers):
         # Check for session cookie
         session_id = request.cookies.get('session_id')
 
-        if session_id and session_id in active_sessions:
-            g.modelData = active_sessions[session_id]
+        if session_id:
+            session_data = load_session(session_id)
+            if session_data:
+                g.modelData = ModelData(deepcopy(g.answers.answers), **session_data)
+            else:
+                g.modelData = None
         else:
             g.modelData = None
 
-    @bp.route('/debug/active_sessions')
+    @bp.route('/active_sessions')
     def debug_active_sessions():
-        sessions_info = get_sessions()
+        sessions_info = get_all_sessions()
         return Response(sessions_info, mimetype='text/plain')
-
+    
     @bp.route('/')
     def title():
         stats_cookie = request.cookies.get('game_stats')
@@ -70,6 +74,7 @@ def create_blueprint(answers):
             return redirect('/')
         
         g.modelData.pauseTimer()
+        save_session(request.cookies.get('session_id'), g.modelData)
         return redirect('/')
 
     @bp.route('/resume')
@@ -80,7 +85,7 @@ def create_blueprint(answers):
             # New ModelData if no active session
             session_id = str(uuid.uuid4())
             g.modelData = ModelData(deepcopy(g.answers.answers))
-            active_sessions[session_id] = g.modelData
+            save_session(session_id, g.modelData)
 
             # set session_id cookie
             response = make_response(redirect('/play'))
@@ -88,6 +93,7 @@ def create_blueprint(answers):
             return response
         
         g.modelData.resumeTimer()
+        save_session(request.cookies.get('session_id'), g.modelData)
         return redirect('/play')
 
     @bp.route('/submit', methods=['GET','POST'])
@@ -139,12 +145,12 @@ def create_blueprint(answers):
 
                 # Clear session data
                 session_id = request.cookies.get('session_id')
-                if session_id in active_sessions:
-                    del active_sessions[session_id]
+                delete_session(session_id)
 
                 response.delete_cookie('session_id')
                 return response
-                
+            
+            save_session(request.cookies.get('session_id'), g.modelData)
             return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, answer1=g.modelData.answer1, 
                                 in_between=g.modelData.inbetween, answer2=g.modelData.answer2, response=g.modelData.response, 
                                 newclue=g.modelData.newClue, correct=g.modelData.correct)

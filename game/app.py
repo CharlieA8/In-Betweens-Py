@@ -5,6 +5,7 @@ import requests
 from game.session_management import setup_daily_reset, stop_scheduler
 import signal
 import sys
+from game.db_setup import init_db
 
 scheduler_thread = None
 answers = None
@@ -32,6 +33,9 @@ def update_answers():
 def create_app():
     global answers
     app = Flask(__name__)
+
+    # Initialize database
+    init_db()
 
     # Load and update answers
     update_answers()
