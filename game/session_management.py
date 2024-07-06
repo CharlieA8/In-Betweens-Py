@@ -3,7 +3,7 @@ import schedule
 import threading
 import sqlite3
 import json
-import datetime
+from datetime import datetime
 
 shutdown_flag = threading.Event()
 
