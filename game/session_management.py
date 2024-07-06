@@ -44,7 +44,7 @@ def save_session(session_id, model_data):
             INSERT OR REPLACE INTO active_sessions (
                 session_id, num_correct, done, start_time, time, pauses, pause_start,
                 clue1, clue2, answer1, inbetween, answer2, correct, newClue
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
             session_id, model_data.num_correct, model_data.done, model_data.start_time.isoformat() if model_data.start_time else None, 
             model_data.time, pauses_json, model_data.pause_start.isoformat() if model_data.pause_start else None, 
