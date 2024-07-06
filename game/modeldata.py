@@ -9,7 +9,7 @@ class ModelData:
         self.start_time = start_time
         self.end_time = None
         self.time = time
-        self.pauses = pauses
+        self.pauses = pauses if pauses is not None else []
         self.pause_start = None
         self.newClue = newClue
         self.correct = correct
