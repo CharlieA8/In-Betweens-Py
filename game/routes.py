@@ -102,10 +102,10 @@ def create_blueprint(answers):
 
     @bp.route('/submit', methods=['GET','POST'])
     def submit():
-        if request.method == 'POST':
-            if not g.modelData:
+        if not g.modelData:
                 return redirect('/')
-        
+    
+        if request.method == 'POST':
             g.modelData.newClue = False
             g.modelData.correct = False
             g.modelData.answer1 = request.form['answer1']
