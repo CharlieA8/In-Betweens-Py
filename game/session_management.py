@@ -24,7 +24,7 @@ def run_scheduler():
         time.sleep(1)
 
 def setup_daily_reset():
-    schedule.every().day.at("00:00").do(clear_all_sessions)
+    schedule.every().day.at("04:00").do(clear_all_sessions)
     scheduler_thread = threading.Thread(target=run_scheduler)
     scheduler_thread.daemon = True
     scheduler_thread.start()

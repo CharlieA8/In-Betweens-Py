@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, g, json, make_response, r
 from datetime import datetime
 from game.modeldata import ModelData
 import uuid
-from game.session_management import save_session, load_session, delete_session, get_all_sessions
+from game.session_management import save_session, load_session, delete_session
 from copy import deepcopy
 
 def create_blueprint(answers):
@@ -23,11 +23,6 @@ def create_blueprint(answers):
                 g.modelData = None
         else:
             g.modelData = None
-
-    @bp.route('/active_sessions')
-    def debug_active_sessions():
-        sessions_info = get_all_sessions()
-        return Response(sessions_info, mimetype='text/plain')
     
     @bp.route('/')
     def title():
