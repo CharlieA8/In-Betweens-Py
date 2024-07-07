@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, g, json, make_response, redirect, Response
+from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file
 from datetime import datetime
 from game.modeldata import ModelData
 import uuid
@@ -158,4 +158,16 @@ def create_blueprint(answers):
             return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, answer1=g.modelData.answer1, 
                                 in_between=g.modelData.inbetween, answer2=g.modelData.answer2, response=g.modelData.response, 
                                 newclue=g.modelData.newClue, correct=g.modelData.correct)
+        
+    @bp.route('/sitemap.xml', methods=['GET'])
+    def sitemap():
+        sitemap_content = render_template('sitemap.xml')
+        response = make_response(sitemap_content)
+        response.headers['Content-Type'] = 'application/xml'
+        return response
+    
+    @bp.route('/robots.txt', methods=['GET'])
+    def robots_txt():
+        return send_file('robots.txt')
+
     return bp
