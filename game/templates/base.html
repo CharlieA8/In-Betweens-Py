@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>In+Betweens</title>
+    <title>In + Betweens</title>
+    <meta name="description" content="A game of quick word association, with new clues daily!">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height">
     <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <meta property="og:title" content="In + Betweens">
+    <meta property="og:description" content="A game of quick word association!">
+    <meta property="og:image" content="{{ url_for('static', filename='favicon.png') }}">
+    <meta property="og:url" content="https://inbetweens.xyz">
+    <meta property="og:type" content="website">
+
     <script src="static/script/shadows.js" defer></script>
     <script src="static/script/scaleText.js" defer></script>
     <script src="static/script/textCycle.js" defer></script>
