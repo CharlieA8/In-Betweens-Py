@@ -5,4 +5,4 @@ Disallow: /resume
 Disallow: /pause
 Allow: / 
 
-Sitemap: https://inbetweens.xyz/sitemap.xml 
+Sitemap: https://www.inbetweens.xyz/sitemap.xml 
