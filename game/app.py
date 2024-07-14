@@ -1,10 +1,10 @@
 from flask import Flask
-import routes
-from session_management import setup_daily_reset, stop_scheduler
+import game.routes
+from game.session_management import setup_daily_reset, stop_scheduler
 import signal
 import sys
-from db_setup import init_db
-from answer_management import update_answers
+from game.db_setup import init_db
+from game.answer_management import update_answers
 
 scheduler_thread = None
 
