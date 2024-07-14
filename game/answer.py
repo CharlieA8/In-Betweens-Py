@@ -13,19 +13,33 @@ class Answer:
     def __str__(self):
         return f"{self.clue1} + {self.clue2}\n{self.answer1} + {self.in_between} + {self.answer2}"
     
-    def checkAnswer(self, answer1, in_between, answer2):
-        ans1 = answer1.strip()
-        inbtw = in_between.strip()
-        ans2 = answer2.strip()
+    def normalize_apostrophes(self, input_string):
+        # Replace smart apostrophes with standard apostrophes
+        if input_string is None:
+            return
+        else:
+            new_string = input_string.replace("’", "'").replace("‘", "'")
+            return new_string
 
-        if ans1.upper() == self.answer1:
+    def checkAnswer(self, answer1, in_between, answer2):
+        # Normalize apostrophes in the input strings
+        ans1 = answer1.strip().upper()
+        inbtw = in_between.strip().upper()
+        ans2 = answer2.strip().upper()
+
+        ans1 = self.normalize_apostrophes(ans1)
+        inbtw = self.normalize_apostrophes(inbtw)
+        ans2 = self.normalize_apostrophes(ans2)
+
+        if ans1 == self.answer1:
             self.response[0] = True
-        if inbtw.upper() == self.in_between:
+        if inbtw == self.in_between:
             self.response[1] = True
-        if ans2.upper() == self.answer2:
+        if ans2 == self.answer2:
             self.response[2] = True
 
         return self.response
+
     
 class Answers:
     def __init__(self, data):

@@ -2,8 +2,6 @@ from game.session_management import get_db_connection
 from game.answer import Answers
 import requests
 import json
-import logging
-import sqlite3
 
 
 def fetch_answers():
