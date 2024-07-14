@@ -1,14 +1,12 @@
-from game.answer import Answers
 from flask import Flask
 import game.routes
-import requests
 from game.session_management import setup_daily_reset, stop_scheduler
 import signal
 import sys
 from game.db_setup import init_db
+from game.answer_management import update_answers
 
 scheduler_thread = None
-answers = None
 
 def signal_handler(sig, frame):
     if scheduler_thread:
@@ -16,22 +14,7 @@ def signal_handler(sig, frame):
         scheduler_thread.join()
     sys.exit(0)
 
-def fetch_answers():
-    url = "https://drive.google.com/uc?export=download&id=17mPmTa93JrBDtxFNkv9bMoqJxM9ho6is"
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        raise Exception("Failed to fetch answers from Google Drive")
-    
-def update_answers():
-    global answers
-    answers_data = fetch_answers()
-    answers = Answers(answers_data)
-    print("Answers updated successfully")
-
 def create_app():
-    global answers
     app = Flask(__name__)
 
     # Initialize database
@@ -41,8 +24,7 @@ def create_app():
     update_answers()
 
     # Set up routes
-    main_bp = game.routes.create_blueprint(answers)
-    app.register_blueprint(main_bp)   
+    app.register_blueprint(routes.bp)   
 
     # Set up session reset
     setup_daily_reset()

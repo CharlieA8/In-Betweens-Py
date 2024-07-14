@@ -5,7 +5,9 @@
         "in_between": "BLUE",
         "answer2": "MAN GROUP",
         "clue1": "What Columbus Sailed",
-        "clue2": "Popular Music Group of an Unusual Hue"
+        "clue2": "Popular Music Group of an Unusual Hue",
+        "count1": 2,
+        "count2": 3
     },
     
     {
@@ -14,7 +16,9 @@
         "in_between": "FULL",
         "answer2": "HOUSE",
         "clue1": "What an Optimist Sees",
-        "clue2": "John Stamos Hit Show"
+        "clue2": "John Stamos Hit Show",
+        "count1": 3,
+        "count2": 2
     },
     
     
@@ -24,6 +28,8 @@
         "in_between": "THROW",
         "answer2": "HANDS",
         "clue1": "Only Worth One Point in Basketball",
-        "clue2": "A More Hip Way to Say ‘Tussle’"
+        "clue2": "A More Hip Way to Say ‘Tussle’",
+        "count1": 2,
+        "count2": 2
     }
 ]

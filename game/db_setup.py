@@ -1,7 +1,7 @@
 import sqlite3
 
 def init_db():
-    with sqlite3.connect('database.db') as conn:
+    with sqlite3.connect('sessions.db') as conn:
         cursor = conn.cursor()
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS active_sessions (
@@ -19,6 +19,18 @@ def init_db():
                 answer2 TEXT,
                 correct BOOLEAN,
                 newClue BOOLEAN
+            )
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS answers (
+                id INTEGER PRIMARY KEY,
+                answer1 TEXT,
+                in_between TEXT,
+                answer2 TEXT,
+                clue1 TEXT,
+                clue2 TEXT,
+                count1 INTEGER,
+                count2 INTEGER
             )
         ''')
         conn.commit()
