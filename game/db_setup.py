@@ -23,7 +23,7 @@ def init_db():
         ''')
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS answers (
-                id INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
                 answer1 TEXT,
                 in_between TEXT,
                 answer2 TEXT,

@@ -20,9 +20,9 @@ def update_answers():
         answers_data = fetch_answers()
         for answer in answers_data:
             try:
-                    conn.execute('''INSERT INTO answers (id, answer1, in_between, answer2, clue1, 
+                    conn.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
                                      clue2, count1, count2) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                                     ''', (answer['id'], answer['answer1'], answer['in_between'], answer['answer2'], 
+                                     ''', (answer['answer1'], answer['in_between'], answer['answer2'], 
                                            answer['clue1'], answer['clue2'], answer['count1'], answer['count2']))
                     logging.info(f"Inserted answer with id {answer['id']}")
             except sqlite3.IntegrityError as e:
