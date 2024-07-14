@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file
 from datetime import datetime
-from modeldata import ModelData
+from game.modeldata import ModelData
 import uuid
-from session_management import save_session, load_session, delete_session
-from answer_management import get_answers
+from game.session_management import save_session, load_session, delete_session
+from game.answer_management import get_answers
 from copy import deepcopy
 
 
