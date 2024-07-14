@@ -2,6 +2,8 @@ from game.session_management import get_db_connection
 from game.answer import Answers
 import requests
 import json
+import logging
+import sqlite3
 
 
 def fetch_answers():
@@ -17,10 +19,15 @@ def update_answers():
         clear_answers(conn)
         answers_data = fetch_answers()
         for answer in answers_data:
-            conn.execute('''INSERT INTO answers (id, answer1, in_between, answer2, clue1, 
-                         clue2, count1, count2) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                         ''', (answer['id'], answer['answer1'], answer['in_between'], answer['answer2'], 
-                               answer['clue1'], answer['clue2'], answer['count1'], answer['count2']))
+            try:
+                    conn.execute('''INSERT INTO answers (id, answer1, in_between, answer2, clue1, 
+                                     clue2, count1, count2) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                                     ''', (answer['id'], answer['answer1'], answer['in_between'], answer['answer2'], 
+                                           answer['clue1'], answer['clue2'], answer['count1'], answer['count2']))
+                    logging.info(f"Inserted answer with id {answer['id']}")
+            except sqlite3.IntegrityError as e:
+                    logging.error(f"IntegrityError for id {answer['id']}: {e}")
+                    raise
         conn.commit()
 
 def get_answers():
