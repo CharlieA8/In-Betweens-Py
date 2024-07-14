@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /submit
+Disallow: /play
+Disallow: /resume
+Disallow: /pause
+Allow: / 
+
+Sitemap: https://www.inbetweens.xyz/sitemap.xml 
