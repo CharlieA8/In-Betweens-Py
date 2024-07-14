@@ -24,7 +24,7 @@ def create_app():
     update_answers()
 
     # Set up routes
-    app.register_blueprint(routes.bp)   
+    app.register_blueprint(game.routes.bp)   
 
     # Set up session reset
     setup_daily_reset()
