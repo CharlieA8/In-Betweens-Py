@@ -1,5 +1,5 @@
-from session_management import get_db_connection
-from answer import Answers
+from game.session_management import get_db_connection
+from game.answer import Answers
 import requests
 import json
 
