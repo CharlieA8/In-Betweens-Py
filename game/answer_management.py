@@ -35,5 +35,12 @@ def get_answers():
 def clear_answers(conn):
     conn.execute('DELETE FROM answers')
     conn.commit()
-    print("Answers cleared")
 
+    # Check if the table is empty after deletion
+    cursor = conn.execute('SELECT COUNT(*) FROM answers')
+    count = cursor.fetchone()[0]
+    
+    if count == 0:
+        print("Answers table successfully cleared")
+    else:
+        print(f"Error: Answers table still contains {count} records after deletion")
