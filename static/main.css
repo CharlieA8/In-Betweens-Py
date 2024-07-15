@@ -214,8 +214,7 @@ input {
 
 .rulesText {
     font-size: clamp(20px, 3vw, 40px);
-    display: flex;
-    flex-direction: column;
+    display: inline-block;
     justify-content: center;
     text-align: center;
     padding-left: 8vw;
@@ -223,6 +222,10 @@ input {
     padding-top: 2vh;
     padding-bottom: 2vh;
     font-family: 'Georgia';
+}
+
+.rulesText strong {
+    display: inline;
 }
 
 .rulesHeading {
