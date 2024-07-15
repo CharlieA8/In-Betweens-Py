@@ -19,6 +19,8 @@ class ModelData:
         self.answer2 = answer2
         self.clue1 = clue1
         self.clue2 = clue2
+        self.count1 = 0
+        self.count2 = 0
 
     def reset(self):
         self.start_time = None
@@ -40,6 +42,8 @@ class ModelData:
         answer = self.answers[self.num_correct]
         self.clue1 = answer.clue1
         self.clue2 = answer.clue2
+        self.count1 = answer.count1
+        self.count2 = answer.count2
     
     def check_answer(self, answer1, in_between, answer2):
         response = [False, False, False]
