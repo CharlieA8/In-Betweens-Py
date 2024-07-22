@@ -1,17 +1,15 @@
 from datetime import datetime
 class ModelData:
-    def __init__(self, answers, num_correct=0, done=False, start_time=None, 
-                 time=0, pauses=None, pause_start=None, clue1='', clue2='', answer1='', inbetween='', 
-                 answer2='', correct=None, newClue=True):
-        self.answers = answers
-        self.num_correct = num_correct
+    def __init__(self, answer, done=False, start_time=None, time=0, pauses=None, 
+                 pause_start=None, clue1='', clue2='', answer1='', inbetween='', 
+                 answer2='', correct=False):
+        self.answer = answer
         self.done = done
         self.start_time = start_time
         self.end_time = None
         self.time = time
         self.pauses = pauses if pauses is not None else []
         self.pause_start = pause_start
-        self.newClue = newClue
         self.correct = correct
         self.response = [False, False, False]
         self.answer1 = answer1
@@ -30,33 +28,20 @@ class ModelData:
         self.pauses.clear()
         self.done = False
     
-    def correct_reset(self):
-        self.newClue = True
-        self.correct = True
-        self.response = [False, False, False]
-        self.answer1 = ''
-        self.inbetween = ''
-        self.answer2 = ''
-    
     def get_clues(self):
-        answer = self.answers[self.num_correct]
-        self.clue1 = answer.clue1
-        self.clue2 = answer.clue2
-        self.count1 = answer.count1
-        self.count2 = answer.count2
+        self.clue1 = self.answer.clue1
+        self.clue2 = self.answer.clue2
+        self.count1 = self.answer.count1
+        self.count2 = self.answer.count2
     
     def check_answer(self, answer1, in_between, answer2):
         response = [False, False, False]
-        answer = self.answers[self.num_correct]
+        answer = self.answer
         response = answer.checkAnswer(answer1, in_between, answer2)
         if all(response):
-            self.num_correct += 1
-            if self.num_correct > 2:
-                self.num_correct = 0
-                self.done = True
-                for answer in self.answers:
-                    answer.response = [False, False, False]
-        self.response = response
+            self.correct = True
+        else:
+            self.response = response
     
     def startTimer(self):
         if self.start_time == None:

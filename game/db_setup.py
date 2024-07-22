@@ -6,8 +6,6 @@ def init_db():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS active_sessions (
                 session_id TEXT PRIMARY KEY,
-                num_correct INTEGER,
-                done BOOLEAN,
                 start_time TEXT,
                 time REAL,
                 pauses TEXT,
@@ -17,8 +15,7 @@ def init_db():
                 answer1 TEXT,
                 inbetween TEXT,
                 answer2 TEXT,
-                correct BOOLEAN,
-                newClue BOOLEAN
+                correct BOOLEAN
             )
         ''')
         cursor.execute('''

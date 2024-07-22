@@ -1,7 +1,6 @@
 from game.session_management import get_db_connection
-from game.answer import Answers
+from game.answer import Answer
 import requests
-import json
 
 
 def fetch_answers():
@@ -15,32 +14,22 @@ def fetch_answers():
 def update_answers():
     with get_db_connection() as conn:
         clear_answers(conn)
-        answers_data = fetch_answers()
-        for answer in answers_data:
-            conn.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
-                                clue2, count1, count2) VALUES (?, ?, ?, ?, ?, ?, ?)
-                                ''', (answer['answer1'], answer['in_between'], answer['answer2'], 
-                                    answer['clue1'], answer['clue2'], answer['count1'], answer['count2']))
+        answers = fetch_answers()
+        conn.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
+                            clue2, count1, count2) VALUES (?, ?, ?, ?, ?, ?, ?)
+                            ''', (answers['answer1'], answers['in_between'], answers['answer2'], 
+                                answers['clue1'], answers['clue2'], answers['count1'], answers['count2']))
         conn.commit()
 
 def get_answers():
     with get_db_connection() as conn:
         cursor = conn.execute('SELECT * FROM answers')
-        answers_sql = cursor.fetchall()
+        answers_sql = cursor.fetchone()
         column_names = [description[0] for description in cursor.description]
-        answers_list = [dict(zip(column_names, row)) for row in answers_sql]
-        
-        return Answers(answers_list)
+        answers_dict = dict(zip(column_names, answers_sql))
+
+        return Answer(answers_dict)
 
 def clear_answers(conn):
     conn.execute('DELETE FROM answers')
     conn.commit()
-
-    # Check if the table is empty after deletion
-    cursor = conn.execute('SELECT COUNT(*) FROM answers')
-    count = cursor.fetchone()[0]
-    
-    if count == 0:
-        print("Answers table successfully cleared")
-    else:
-        print(f"Error: Answers table still contains {count} records after deletion")
