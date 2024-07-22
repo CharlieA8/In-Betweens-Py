@@ -42,14 +42,14 @@ def save_session(session_id, model_data):
         ])
         conn.execute('''
             INSERT OR REPLACE INTO active_sessions (
-                session_id, num_correct, done, start_time, time, pauses, pause_start,
-                clue1, clue2, answer1, inbetween, answer2, correct, newClue
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                session_id, start_time, time, pauses, pause_start,
+                clue1, clue2, answer1, inbetween, answer2, correct
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ''', (
-            session_id, model_data.num_correct, model_data.done, model_data.start_time.isoformat() if model_data.start_time else None, 
+            session_id, model_data.start_time.isoformat() if model_data.start_time else None, 
             model_data.time, pauses_json, model_data.pause_start.isoformat() if model_data.pause_start else None, 
             model_data.clue1, model_data.clue2, model_data.answer1, model_data.inbetween, 
-            model_data.answer2, model_data.correct, model_data.newClue
+            model_data.answer2, model_data.correct
         ))
         conn.commit()
 
@@ -64,8 +64,6 @@ def load_session(session_id):
                 for p in pauses_data
             ]
             return {
-                'num_correct': session['num_correct'],
-                'done': session['done'],
                 'start_time': datetime.fromisoformat(session['start_time']) if session['start_time'] else None,
                 'time': session['time'],
                 'pauses': pauses,
@@ -76,7 +74,6 @@ def load_session(session_id):
                 'inbetween': session['inbetween'],
                 'answer2': session['answer2'],
                 'correct': session['correct'],
-                'newClue': session['newClue']
             }
         return None
     
@@ -91,8 +88,6 @@ def get_all_sessions():
         info = []
         for session in sessions:
             session_info = f"Session ID: {session['session_id']}\n"
-            session_info += f"  Num Correct: {session['num_correct']}\n"
-            session_info += f"  Done: {session['done']}\n"
             session_info += f"  Start Time: {session['start_time']}\n"
             session_info += f"  Time: {session['time']}\n"
             session_info += f"  Pauses: {session['pauses']}\n"
@@ -102,6 +97,5 @@ def get_all_sessions():
             session_info += f"  In Between: {session['inbetween']}\n"
             session_info += f"  Answer 2: {session['answer2']}\n"
             session_info += f"  Correct: {session['correct']}\n"
-            session_info += f"  New Clue: {session['newClue']}\n"
             info.append(session_info)
         return "\n".join(info)
