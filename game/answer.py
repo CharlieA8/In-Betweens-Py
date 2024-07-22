@@ -22,7 +22,6 @@ class Answer:
             return new_string
 
     def checkAnswer(self, answer1, in_between, answer2):
-        # Normalize apostrophes in the input strings
         ans1 = answer1.strip().upper()
         inbtw = in_between.strip().upper()
         ans2 = answer2.strip().upper()
@@ -39,19 +38,8 @@ class Answer:
             self.response[2] = True
 
         return self.response
-
     
-class Answers:
-    def __init__(self, data):
-        self.answers = []
-        self.load_answers_from_json(data)
-
-    def load_answers_from_json(self, data):
-        for item in data:
-            answer = Answer(item['id'], item['answer1'], item['in_between'], item['answer2'], item['clue1'], item['clue2'],
-                            item['count1'], item['count2'])
-            self.answers.append(answer)
-
-    def __str__(self):
-        return "\n".join([str(answer) for answer in self.answers])
-
+    def load_answer_from_json(self, data):
+        answer = Answer(data['id'], data['answer1'], data['in_between'], data['answer2'], data['clue1'], data['clue2'],
+                        data['count1'], data['count2'])
+        self.answer = answer
