@@ -1,14 +1,6 @@
 class Answer:
-    def __init__(self, id, answer1, in_between, answer2, clue1, clue2, count1, count2):
-        self.id = id
-        self.answer1 = answer1
-        self.in_between = in_between
-        self.answer2 = answer2
-        self.clue1 = clue1
-        self.clue2 = clue2
-        self.count1 = count1
-        self.count2 = count2
-        self.response = [False, False, False]
+    def __init__(self, data):
+        self.load_answer_from_json(data)
 
     def __str__(self):
         return f"{self.clue1} + {self.clue2}\n{self.answer1} + {self.in_between} + {self.answer2}"
@@ -40,6 +32,11 @@ class Answer:
         return self.response
     
     def load_answer_from_json(self, data):
-        answer = Answer(data['id'], data['answer1'], data['in_between'], data['answer2'], data['clue1'], data['clue2'],
-                        data['count1'], data['count2'])
-        self.answer = answer
+        self.id = data['id']
+        self.answer1 = data['answer1']
+        self.in_between = data['in_between']
+        self.answer2 = data['answer2']
+        self.clue1 = data['clue1']
+        self.clue2 = data['clue2']
+        self.count1 = data['count1']
+        self.count2 = data['count2']
