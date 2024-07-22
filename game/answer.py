@@ -40,3 +40,4 @@ class Answer:
         self.clue2 = data['clue2']
         self.count1 = data['count1']
         self.count2 = data['count2']
+        self.response = [False, False, False]
