@@ -19,7 +19,7 @@ def before_request():
     if session_id:
         session_data = load_session(session_id)
         if session_data:
-            g.modelData = ModelData(deepcopy(g.answers.answers), **session_data)
+            g.modelData = ModelData(deepcopy(g.answers), **session_data)
         else:
             g.modelData = None
     else:
@@ -63,8 +63,8 @@ def play():
     g.modelData.get_clues()
     g.modelData.startTimer()
     save_session(request.cookies.get('session_id'), g.modelData)
-    return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, newclue=True, correct=False,
-                           count1=g.modelData.count1, count2=g.modelData.count2)
+    return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, correct=False,
+                           count1=g.modelData.count1, count2=g.modelData.count2, newclue=True)
 
 @bp.route('/pause')
 def pause():
@@ -90,7 +90,7 @@ def resume():
     if not g.modelData:
         # New ModelData if no active session
         session_id = str(uuid.uuid4())
-        g.modelData = ModelData(deepcopy(g.answers.answers))
+        g.modelData = ModelData(deepcopy(g.answers))
         save_session(session_id, g.modelData)
 
         # set session_id cookie
@@ -108,20 +108,13 @@ def submit():
             return redirect('/')
 
     if request.method == 'POST':
-        g.modelData.newClue = False
-        g.modelData.correct = False
         g.modelData.answer1 = request.form['answer1']
         g.modelData.inbetween = request.form['in_between']
         g.modelData.answer2 = request.form['answer2']
         g.modelData.check_answer(g.modelData.answer1, g.modelData.inbetween, g.modelData.answer2)
-        g.modelData.get_clues()
 
-        if g.modelData.response == [True, True, True]:
-            g.modelData.correct_reset()
-        
-        if g.modelData.done:
+        if g.modelData.correct:
             time = g.modelData.stopTimer()
-            g.modelData.reset()
             
             # Get the existing stats from cookies
             stats_cookie = request.cookies.get('game_stats')
@@ -159,7 +152,7 @@ def submit():
         save_session(request.cookies.get('session_id'), g.modelData)
         return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, answer1=g.modelData.answer1, 
                             in_between=g.modelData.inbetween, answer2=g.modelData.answer2, response=g.modelData.response, 
-                            newclue=g.modelData.newClue, correct=g.modelData.correct, count1=g.modelData.count1, count2=g.modelData.count2)
+                            correct=g.modelData.correct, count1=g.modelData.count1, count2=g.modelData.count2, newclue=True)
     
 @bp.route('/sitemap.xml', methods=['GET'])
 def sitemap():
