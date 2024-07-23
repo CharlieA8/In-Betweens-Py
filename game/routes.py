@@ -79,6 +79,7 @@ def pause():
 def resume():
     # Check if the user has already played today
     today_cookie = request.cookies.get('today')
+
     if today_cookie:
         today = json.loads(today_cookie)
         date = str(datetime.now().date())
@@ -138,9 +139,10 @@ def submit():
             game_stats['average_time'] = round(sum(game_stats['times']) / len(game_stats['times']), 2)
 
             # Set the updated stats in cookies
+            max_age = 10 * 365 * 24 * 60 * 60 # 10 years!!
             response = make_response(render_template('congrats.html', time=time))
-            response.set_cookie('game_stats', json.dumps(game_stats))
-            response.set_cookie('today', json.dumps(today))
+            response.set_cookie('game_stats', json.dumps(game_stats), max_age=max_age)
+            response.set_cookie('today', json.dumps(today), max_age=86400)
 
             # Clear session data
             session_id = request.cookies.get('session_id')
