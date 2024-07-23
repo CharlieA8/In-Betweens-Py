@@ -64,7 +64,7 @@ def play():
     g.modelData.startTimer()
     save_session(request.cookies.get('session_id'), g.modelData)
     return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, correct=False,
-                           count1=g.modelData.count1, count2=g.modelData.count2, newclue=True)
+                           count1=g.answers.count1, count2=g.answers.count2, newclue=True)
 
 @bp.route('/pause')
 def pause():
@@ -152,7 +152,7 @@ def submit():
         save_session(request.cookies.get('session_id'), g.modelData)
         return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, answer1=g.modelData.answer1, 
                             in_between=g.modelData.inbetween, answer2=g.modelData.answer2, response=g.modelData.response, 
-                            correct=g.modelData.correct, count1=g.modelData.count1, count2=g.modelData.count2, newclue=True)
+                            correct=g.modelData.correct, count1=g.answers.count1, count2=g.answers.count2, newclue=False)
     
 @bp.route('/sitemap.xml', methods=['GET'])
 def sitemap():
