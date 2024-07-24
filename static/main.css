@@ -34,7 +34,7 @@ p {
 
 body {
     transition: background-color 0.1s;
-    background-color: rgb(178, 245, 255); 
+    background-color: rgb(234, 203, 210); 
 }
 
 .mainButtons {
@@ -139,12 +139,12 @@ input {
     border-style: outset;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
     background-color: rgb(255, 255, 255);
-    border-color: rgb(91, 255, 107);
+    border-color: rgb(184, 216, 186);
     padding: 10px;
     padding-left: 2vw;
     padding-right: 2vw;
     padding-top: 1vh;
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
     cursor: pointer;
 }
 
@@ -302,9 +302,9 @@ input {
     border-width: 5px;
     border-style: outset;
     background-color: rgb(255, 255, 255);
-    border-color: rgb(91, 255, 107);
+    border-color: rgb(195, 88, 195);
     padding: 2vw;
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
     cursor: pointer;
 }
 
@@ -316,9 +316,9 @@ input {
     border-width: 5px;
     border-style: outset;
     background-color: rgb(255, 255, 255);
-    border-color: rgb(255, 236, 64);
+    border-color: rgb(195, 88, 195);
     padding: 2vw;
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
     cursor: pointer;
 }
 

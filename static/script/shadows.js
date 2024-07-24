@@ -46,11 +46,13 @@ document.addEventListener("DOMContentLoaded", function() {
             const borderColor = window.getComputedStyle(submitButton).borderColor;
             submitButton.style.boxShadow = `0 0 clamp(20px, 6vw, 40px) ${borderColor}`;
             submitButton.style.backgroundColor = lightenColor(borderColor, 0.9);
+            submitButton.style.color = borderColor;
         });
 
         submitButton.addEventListener("mouseleave", function() {
             submitButton.style.boxShadow = "none";
             submitButton.style.backgroundColor = "white"; // Reset background color
+            submitButton.style.color = "black"; // Reset text color
         });
     });
 });
