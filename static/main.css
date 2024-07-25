@@ -34,7 +34,7 @@ p {
 
 body {
     transition: background-color 0.1s;
-    background-color: rgb(234, 203, 210); 
+    background-color: rgb(188, 194, 242); 
 }
 
 .mainButtons {
@@ -128,6 +128,12 @@ input {
     justify-content: center;
     gap: 20px;
     padding-top: clamp(10px, 2vw, 2vw);
+}
+
+.times .clue.leftSlide, .times .clue.rightSlide {
+    display: flex;
+    flex-direction: column;
+    float: none;
 }
 
 .submit {
@@ -290,7 +296,7 @@ input {
 
 .tooltip {
     justify-content: center;
-    font-size: clamp(30px, 4vw, 4vw);
+    font-size: clamp(20px, 2vw, 2vw);
     padding-top: 1vh;
 }
 
