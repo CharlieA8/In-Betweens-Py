@@ -1,5 +1,8 @@
 import psycopg2
+from psycopg2 import pool
 import os
+
+connection_pool = None
 
 def init_db(database_url):
     conn = psycopg2.connect(database_url, sslmode='require')
@@ -35,6 +38,17 @@ def init_db(database_url):
         ''')
     conn.commit()
     conn.close()
+
+def setup_db_pool():
+    global connection_pool
+    database_url = os.environ.get('DATABASE_URL')
+    connection_pool = pool.SimpleConnectionPool(1, 20, database_url, sslmode='require')
+
+def get_db_connection():
+    return connection_pool.getconn()
+
+def release_db_connection(conn):
+    connection_pool.putconn(conn)
 
 if __name__ == "__main__":
     init_db()

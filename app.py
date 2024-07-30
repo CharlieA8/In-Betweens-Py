@@ -4,7 +4,7 @@ from game.session_management import setup_daily_reset, stop_scheduler
 import signal
 import sys
 import os
-from game.db_setup import init_db
+from game.db_setup import init_db, setup_db_pool, connection_pool
 from game.answer_management import daily_update
 
 scheduler_thread = None
@@ -29,6 +29,7 @@ def create_app():
 
     # Initialize database
     init_db(app.config['DATABASE_URL'])
+    setup_db_pool()
 
     # Load and update answers
     daily_update()
@@ -50,6 +51,7 @@ if __name__ == "__main__":
     try:
         app.run(host="0.0.0.0", port=port)
     finally:
+        connection_pool.closeall()
         if scheduler_thread:
             stop_scheduler()
             scheduler_thread.join()

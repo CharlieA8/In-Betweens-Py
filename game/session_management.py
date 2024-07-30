@@ -8,20 +8,20 @@ from psycopg2.extras import RealDictCursor
 import os
 import pytz
 from game.answer_management import daily_update
+from db_setup import get_db_connection, release_db_connection
 
 shutdown_flag = threading.Event()
 
-def get_db_connection():
-    database_url = os.environ.get('DATABASE_URL')
-    return psycopg2.connect(database_url, sslmode='require')
-
 
 def clear_all_sessions():
-    with get_db_connection() as conn:
+    conn = get_db_connection()
+    try:
         with conn.cursor() as cursor:
             cursor.execute('DELETE FROM active_sessions')
         conn.commit()
         print("All sessions cleared")
+    finally:
+        release_db_connection(conn)
 
 def run_scheduler():
     while not shutdown_flag.is_set():
@@ -29,7 +29,6 @@ def run_scheduler():
         time.sleep(1)
 
 def setup_daily_reset():
-    
     est = pytz.timezone('US/Eastern')
     schedule.every().day.at("00:00", est).do(clear_all_sessions)
     schedule.every().day.at("00:00", est).do(daily_update)
@@ -42,7 +41,8 @@ def stop_scheduler():
     shutdown_flag.set()
 
 def save_session(session_id, model_data):
-    with get_db_connection() as conn:
+    conn = get_db_connection()
+    try:
         pauses_json = json.dumps([
             [p[0].isoformat(), p[1].isoformat() if p[1] else None] 
             for p in model_data.pauses
@@ -72,9 +72,12 @@ def save_session(session_id, model_data):
                 model_data.answer2, model_data.correct, model_data.response
             ))
         conn.commit()
+    finally:
+        release_db_connection(conn)
 
 def load_session(session_id):
-    with get_db_connection() as conn:
+    conn = get_db_connection()
+    try:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute('SELECT * FROM active_sessions WHERE session_id = %s', (session_id,))
             session = cursor.fetchone()
@@ -98,9 +101,14 @@ def load_session(session_id):
                 'response': session['response']
             }
         return None
+    finally:
+        release_db_connection(conn)
     
 def delete_session(session_id):
-    with get_db_connection() as conn:
+    conn = get_db_connection()
+    try:
         with conn.cursor() as cursor:
             cursor.execute('DELETE FROM active_sessions WHERE session_id = %s', (session_id,))
         conn.commit()
+    finally:
+        release_db_connection(conn)

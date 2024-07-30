@@ -3,12 +3,9 @@ import requests
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
-from datetime import datetime, timezone
+from datetime import datetime
+from db_setup import get_db_connection, release_db_connection
 import pytz
-
-def get_db_connection():
-    database_url = os.environ.get('DATABASE_URL')
-    return psycopg2.connect(database_url, sslmode='require')
 
 def fetch_answers():
     url = "https://drive.google.com/uc?export=download&id=178X71g7a4-TcbMBQAz6z0r7zTE3v6sXN" 
@@ -29,7 +26,8 @@ def update_answers(date, conn):
     conn.commit()
 
 def daily_update():
-    with get_db_connection() as conn:
+    conn = get_db_connection()
+    try:
         cursor = conn.cursor()
         todays_date = datetime.now(pytz.timezone('US/Eastern')).date()
         cursor.execute('SELECT COUNT(*) FROM answers')
@@ -48,9 +46,12 @@ def daily_update():
             else:
                 print("Answers already updated for " + todays_date.isoformat())
                 return
+    finally:
+        release_db_connection(conn)
 
 def get_answers():
-    with get_db_connection() as conn:
+    conn = get_db_connection()
+    try:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute('SELECT * FROM answers')
             answers_sql = cursor.fetchone()
@@ -59,10 +60,12 @@ def get_answers():
                 return Answer(answers_dict)
             else:
                 return None
+    finally:
+        release_db_connection(conn)
 
 
 def clear_answers(conn):
-    with conn.cursor() as cursor:
-        cursor.execute('DELETE FROM answers')
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM answers')
     conn.commit()
     print("Answers cleared")
