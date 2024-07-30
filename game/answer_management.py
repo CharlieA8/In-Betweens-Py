@@ -4,7 +4,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
 from datetime import datetime
-from db_setup import get_db_connection, release_db_connection
+from game.db_setup import get_db_connection, release_db_connection
 import pytz
 
 def fetch_answers():

@@ -8,7 +8,7 @@ from psycopg2.extras import RealDictCursor
 import os
 import pytz
 from game.answer_management import daily_update
-from db_setup import get_db_connection, release_db_connection
+from game.db_setup import get_db_connection, release_db_connection
 
 shutdown_flag = threading.Event()
 
