@@ -5,6 +5,7 @@ import uuid
 from game.session_management import save_session, load_session, delete_session
 from game.answer_management import get_answers
 from copy import deepcopy
+import pytz
 
 
 bp = Blueprint('main', __name__)
@@ -30,7 +31,11 @@ def title():
     stats_cookie = request.cookies.get('game_stats')
     today_cookie = request.cookies.get('today')
     playable = False
-    date = str(datetime.now().date())
+
+    # Get date in EST
+    timezone = pytz.timezone('US/Eastern')
+    current_time = datetime.now(timezone)
+    date = str(current_time.date())
 
     if stats_cookie:
         game_stats = json.loads(stats_cookie)
@@ -83,7 +88,12 @@ def resume():
 
     if today_cookie:
         today = json.loads(today_cookie)
-        date = str(datetime.now().date())
+
+        # Get date in EST
+        timezone = pytz.timezone('US/Eastern')
+        current_time = datetime.now(timezone)
+        date = str(current_time.date())
+
         if date == today[1]:
             return redirect('/')
 
@@ -130,12 +140,17 @@ def submit():
             if today_cookie:
                 today = json.loads(today_cookie)
             else:
-                today = ["N/A", str(datetime.now().date())]
+                # Get date in EST
+                timezone = pytz.timezone('US/Eastern')
+                current_time = datetime.now(timezone)
+                date = str(current_time.date())
+                today = ["N/A", date]
 
             # Update the stats
-            if str(datetime.now().date()) != today[1] or game_stats['times'] == []:
+            timezone = pytz.timezone('US/Eastern')
+            if str(datetime.now(timezone).date()) != today[1] or game_stats['times'] == []:
                 game_stats['times'].append(time)
-                today = [time, str(datetime.now().date())]
+                today = [time, str(datetime.now(timezone).date())]
 
             game_stats['average_time'] = round(sum(game_stats['times']) / len(game_stats['times']), 2)
 
