@@ -40,7 +40,7 @@ def daily_update():
             cursor.execute('SELECT date FROM answers')
             date = cursor.fetchone()[0].date()
             if date != todays_date:
-                update_answers(todays_date)
+                update_answers(todays_date, conn)
                 print("Answers updated for " + todays_date.isoformat())
                 return
             else:
