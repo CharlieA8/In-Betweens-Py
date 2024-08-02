@@ -144,9 +144,10 @@ def submit():
 
             # Update the stats
             timezone = pytz.timezone('US/Eastern')
-            if today[0] == "N/A" or game_stats['times'] == []:
+            date = str(datetime.now(timezone).date())
+            if today[0] == "N/A" or today[1] != date or game_stats['times'] == []:
                 game_stats['times'].append(time)
-                today = [time, str(datetime.now(timezone).date())]
+                today = [time, date]
 
             game_stats['average_time'] = round(sum(game_stats['times']) / len(game_stats['times']), 2)
 
