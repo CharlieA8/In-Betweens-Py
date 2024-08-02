@@ -2,7 +2,7 @@ from datetime import datetime
 class ModelData:
     def __init__(self, answer, done=False, start_time=None, time=0, pauses=None, 
                  pause_start=None, clue1='', clue2='', answer1='', inbetween='', 
-                 answer2='', correct=False):
+                 answer2='', correct=False, response=[False, False, False]):
         self.answer = answer
         self.done = done
         self.start_time = start_time
@@ -11,7 +11,7 @@ class ModelData:
         self.pauses = pauses if pauses is not None else []
         self.pause_start = pause_start
         self.correct = correct
-        self.response = [False, False, False]
+        self.response = response
         self.answer1 = answer1
         self.inbetween = inbetween
         self.answer2 = answer2
