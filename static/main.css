@@ -300,6 +300,14 @@ input {
     padding-top: 1vh;
 }
 
+.countdown {
+    font-size: clamp(30px, 3vw, 30px);
+    font-family: 'InBetween';
+    color: rgb(195, 88, 195);
+    text-align: center;
+    padding-top: 1vh;
+}
+
 .playButton{
     font-size: clamp(40px, 5vw, 60px);
     font-family: 'InBetween';

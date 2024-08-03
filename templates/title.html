@@ -2,6 +2,9 @@
 
 {% block head %}
     <script src="static/script/shareButton.js" defer></script>
+    <script src="static/script/countdown.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -32,7 +35,12 @@
             <button class="rulesButton" id="rules" name="button" onclick="window.location.href='/rules'">Rules</button>
         </div>
 
-        {% if not playable %}<div class="tooltip">Already Played Today!</div>{% endif %}
+        {% if not playable %}
+            <div class="tooltip">Next Puzzle In:</div>
+            <div class="countdown">
+                <span id="countdown"></span>
+            </div>
+        {% endif %}
         
     </div>
 {% endblock %}  
