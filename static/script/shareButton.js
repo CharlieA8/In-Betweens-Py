@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const shareButton = document.getElementById('shareButton');
-    const time = document.querySelector('[name="textCycle"]').textContent;
+    const time = document.getElementById('time').textContent;
     
     function formatDate(date) {
         const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
