@@ -140,15 +140,11 @@ def submit():
             if today_cookie:
                 today = json.loads(today_cookie)
             else:
-                # Get date in EST
-                timezone = pytz.timezone('US/Eastern')
-                current_time = datetime.now(timezone)
-                date = str(current_time.date())
-                today = ["N/A", date]
+                today = ["N/A", None]
 
             # Update the stats
             timezone = pytz.timezone('US/Eastern')
-            if str(datetime.now(timezone).date()) != today[1] or game_stats['times'] == []:
+            if today[0] == "N/A" or game_stats['times'] == []:
                 game_stats['times'].append(time)
                 today = [time, str(datetime.now(timezone).date())]
 
