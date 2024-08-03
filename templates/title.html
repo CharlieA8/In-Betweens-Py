@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
+    <script src="static/script/shareButton.js" defer></script>
 {% endblock %}
 
 {% block body %}
@@ -16,7 +16,7 @@
 
         <div class="times">
             <div class="clue leftSlide">
-                <span class="in_between">Today's Time:</span>{{ time_today }}
+                <span class="in_between">Today's Time:</span><span id="time">{{ time_today }}</span>
             </div>
             <div class="clue rightSlide">
                 <span class="in_between">Average Time:</span> {{ average_time }}
@@ -27,7 +27,7 @@
             {% if playable %}
                 <button class="playButton" id="play" name="button" onclick="window.location.href='/resume'">Play</button>
             {% else %}
-                <button class="alreadyPlayed" name="button" disabled>Play</button>
+                <button class="rulesButton" name="button" id="shareButton">Share</button>
             {% endif %}
             <button class="rulesButton" id="rules" name="button" onclick="window.location.href='/rules'">Rules</button>
         </div>
