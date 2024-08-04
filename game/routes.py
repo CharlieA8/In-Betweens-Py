@@ -149,7 +149,8 @@ def submit():
                 game_stats['times'].append(time)
                 today = [time, date]
 
-            game_stats['average_time'] = round(sum(game_stats['times']) / len(game_stats['times']), 2)
+            num_times = len(game_stats['times'])
+            game_stats['average_time'] = round(sum(game_stats['times']) / num_times, 2)
 
             # Set the updated stats in cookies
             max_age = 10 * 365 * 24 * 60 * 60 # 10 years!!
@@ -160,8 +161,11 @@ def submit():
             # Clear session data
             session_id = request.cookies.get('session_id')
             delete_session(session_id)
-
             response.delete_cookie('session_id')
+
+            # Log usage
+            print(f"*Completion* New user submitted in {time}s. Total times: {num_times}")
+
             return response
         
         save_session(request.cookies.get('session_id'), g.modelData)
