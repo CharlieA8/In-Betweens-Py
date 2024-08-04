@@ -108,6 +108,10 @@ def resume():
         # set session_id cookie
         response = make_response(redirect('/play'))
         response.set_cookie('session_id', session_id)
+
+        # Log usage
+        print(f"*Start* New user started with id {session_id}")
+
         return response
     
     g.modelData.resumeTimer()
@@ -164,7 +168,7 @@ def submit():
             response.delete_cookie('session_id')
 
             # Log usage
-            print(f"*Completion* New user submitted in {time}s. Total times: {num_times}")
+            print(f"*Completion* New user ({session_id}) submitted in {time}s. Total times: {num_times}")
 
             return response
         
