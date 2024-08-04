@@ -176,7 +176,10 @@ def submit():
         return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, answer1=g.modelData.answer1, 
                             in_between=g.modelData.inbetween, answer2=g.modelData.answer2, response=g.modelData.response, 
                             correct=g.modelData.correct, count1=g.answers.count1, count2=g.answers.count2, newclue=False)
-    
+    else:
+        return redirect('/resume')
+
+
 @bp.route('/sitemap.xml', methods=['GET'])
 def sitemap():
     sitemap_content = render_template('sitemap.xml')
