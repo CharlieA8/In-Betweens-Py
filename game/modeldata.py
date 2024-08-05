@@ -56,6 +56,15 @@ class ModelData:
             pause_end = datetime.now()
             self.pauses.append([self.pause_start, pause_end])
             self.pause_start = None
+
+    def getResponse(self):
+        result = ""
+        for response in self.response:
+            if response:
+                result += "T "
+            else:
+                result += "F "
+        return result
     
     def stopTimer(self):
         self.end_time = datetime.now()
