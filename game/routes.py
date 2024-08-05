@@ -171,11 +171,17 @@ def submit():
             print(f"*Completion* New user ({session_id}) submitted in {time}s. Total times: {num_times}")
 
             return response
-        
-        save_session(request.cookies.get('session_id'), g.modelData)
-        return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, answer1=g.modelData.answer1, 
-                            in_between=g.modelData.inbetween, answer2=g.modelData.answer2, response=g.modelData.response, 
-                            correct=g.modelData.correct, count1=g.answers.count1, count2=g.answers.count2, newclue=False)
+        else:
+            session_id = request.cookies.get('session_id')
+            save_session(session_id, g.modelData)
+
+            # Log progress
+            result = g.modelData.getResponse()
+            print(f"*Progress* User ({session_id}) submitted an incorrect answer ({result})")
+
+            return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, answer1=g.modelData.answer1, 
+                                in_between=g.modelData.inbetween, answer2=g.modelData.answer2, response=g.modelData.response, 
+                                correct=g.modelData.correct, count1=g.answers.count1, count2=g.answers.count2, newclue=False)
     else:
         return redirect('/resume')
 
