@@ -354,27 +354,50 @@ input {
     cursor: pointer;
 }
 
-.gotIt {
+.hint {
     width: clamp(200px, 30vw, 30vw);
-    height: clamp(200px, 30vh, 15vh);
+    height: clamp(300px, 40vh, 40vh);
     border: 5px solid black;
     padding: 10px;
     font-family: 'InBetween';
-    font-size: clamp(40px, 6vw, 6vw); /* Increase font size */
-    background-color: rgb(91, 255, 107);
+    font-size: clamp(20px, 2vw, 2vw);
+    background-color: white;
     color: black;
-    border-radius: 10px;
+    border-radius: clamp(50px, 6vw, 6vw);
     z-index: 10;
     overflow: hidden;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     align-self: center;
     position: fixed;
     box-sizing: border-box;
-    transform: translateY(50%);
-    animation: gotIt 2s forwards;
+    transform: translateY(25%);
+    transition: opacity 0.5s ease, height 0.5s ease;
+}
+
+.hint.hidden {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+}
+
+.dismissButton {
+    font-size: clamp(20px, 2vw, 2vw);
+    font-family: "InBetween";
+    border-color: rgb(195, 88, 195);
+    border-width: 5px;
+    border-style: outset;
+    background-color: white;
+    color: black;
+    padding: 10px 20px;
+    border-radius: clamp(50px, 6vw, 6vw);
+    cursor: pointer;
+    margin-top: 20px;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); 
 }
 
 .tutorialForm {

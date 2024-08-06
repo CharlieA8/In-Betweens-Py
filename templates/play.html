@@ -4,6 +4,13 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<script>
+    function dismissHint() {
+        var hint = document.getElementById('hint');
+        hint.classList.add('hidden');
+    }
+</script>
 {% endblock %}
 
 {% block body %}
@@ -20,7 +27,13 @@
     </div>
 
     <div class="parent">
-        {% if correct %}<div class="gotIt">Got it!</div>{% endif %}
+        {% if hint %}
+        <div class="hint" id="hint">
+            <span class="in_between">So Close!</span>
+            <span>Make sure the In-Between is only in the middle box!</span>
+            <button name="button" class="dismissButton" onclick="dismissHint()">Dismiss</button>
+        </div>
+        {% endif %}
     </div>
 
     <form action="/submit" method="post" id="game-form">
