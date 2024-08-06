@@ -22,14 +22,24 @@ class Answer:
         inbtw = self.normalize_apostrophes(inbtw)
         ans2 = self.normalize_apostrophes(ans2)
 
+        hint = False
+
         if ans1 == self.answer1:
             self.response[0] = True
+        else:
+            if self.in_between in ans1:
+                hint = True
+        
         if inbtw == self.in_between:
             self.response[1] = True
+        
         if ans2 == self.answer2:
             self.response[2] = True
+        else:
+            if self.in_between in ans2:
+                hint = True
 
-        return self.response
+        return [self.response, hint]
     
     def load_answer_from_json(self, data):
         self.id = data['id']
