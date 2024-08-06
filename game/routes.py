@@ -127,7 +127,7 @@ def submit():
         g.modelData.answer1 = request.form['answer1']
         g.modelData.inbetween = request.form['in_between']
         g.modelData.answer2 = request.form['answer2']
-        g.modelData.check_answer(g.modelData.answer1, g.modelData.inbetween, g.modelData.answer2)
+        hint = g.modelData.check_answer(g.modelData.answer1, g.modelData.inbetween, g.modelData.answer2)
 
         if g.modelData.correct:
             time = g.modelData.stopTimer()
@@ -181,7 +181,7 @@ def submit():
 
             return render_template('play.html', clue1=g.modelData.clue1, clue2=g.modelData.clue2, answer1=g.modelData.answer1, 
                                 in_between=g.modelData.inbetween, answer2=g.modelData.answer2, response=g.modelData.response, 
-                                correct=g.modelData.correct, count1=g.answers.count1, count2=g.answers.count2, newclue=False)
+                                correct=g.modelData.correct, count1=g.answers.count1, count2=g.answers.count2, newclue=False, hint=hint)
     else:
         return redirect('/resume')
 
