@@ -37,11 +37,16 @@ class ModelData:
     def check_answer(self, answer1, in_between, answer2):
         response = [False, False, False]
         answer = self.answer
-        response = answer.checkAnswer(answer1, in_between, answer2)
+        
+        results = answer.checkAnswer(answer1, in_between, answer2)
+        response = results[0]
+        hint = results[1]
         if all(response):
             self.correct = True
         else:
             self.response = response
+
+        return hint
     
     def startTimer(self):
         if self.start_time == None:
