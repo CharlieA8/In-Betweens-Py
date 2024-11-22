@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file, flash, url_for
+from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file, session
 from datetime import datetime
 from game.modeldata import ModelData
 import uuid
@@ -211,17 +211,14 @@ def login():
         if not username or not password:
             return render_template('login.html', message="All fields must be filled!")
         if username == os.getenv('USERNAME') and password == os.getenv('PASSWORD'):
-            response = make_response(redirect('/update'))
-            admin_key = os.getenv('ADMIN_KEY')
-            max_age = 2 * 24 * 60 * 60  # 2 days
-            response.set_cookie('admin', admin_key, max_age=max_age)
-            return response
+            session['admin'] = True
+            return redirect('/update')
         else:
             return render_template('login.html', message="Incorrect username or password")
         
 @bp.route('/update', methods=['GET', 'POST'])
 def update():
-    if not request.cookies.get('admin') or request.cookies.get('admin') != os.getenv('ADMIN_KEY'):
+    if not session.get('admin'):
         return redirect('/login')
     
     if request.method == 'GET':
@@ -252,5 +249,4 @@ def update():
                 "count2": len(answer2.split()) + 1,
             }
             upload_answers(data)
-            flash("Answers updated!", "success")  
             return redirect('/update')
