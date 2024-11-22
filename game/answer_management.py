@@ -59,9 +59,9 @@ def update_answers():
                                 ''', ("GLASS HALF", "FULL", "HOUSE", "What an optimist sees", 
                                 "John Stamos hit show", 3, 2, datetime.now().date()))
                 conn.commit()
-            cursor.execute('DELETE FROM update')
-            conn.commit()
-            print("No new answers found in update table; default values added.")
+                cursor.execute('DELETE FROM update')
+                conn.commit()
+                print("No new answers found in update table; default values added.")
     finally:
         release_db_connection(conn)
 
