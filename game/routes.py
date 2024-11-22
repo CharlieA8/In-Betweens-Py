@@ -253,4 +253,4 @@ def update():
             }
             upload_answers(data)
             flash("Answers updated!", "success")  
-            return redirect(url_for('update'))
+            return redirect('/update')
