@@ -97,7 +97,8 @@ input {
     font-family: 'InBetween';
     font-weight: bold;
     color:rgb(178, 60, 60);
-    border-color:rgb(178, 60, 60)
+    border-color:rgb(178, 60, 60);
+    resize: none;
 }
 
 .clue2 {
@@ -105,7 +106,8 @@ input {
     font-family: 'InBetween';
     font-weight: bold;
     color:rgb(72, 72, 205);
-    border-color:rgb(72, 72, 205)
+    border-color:rgb(72, 72, 205);
+    resize: none;
 }
 
 .in_between {
@@ -423,6 +425,48 @@ input {
 .topSlide {
     animation: topSlide 1s;
 }
+
+table {
+    width: 60%; /* Center 60% width */
+    margin: 0 auto; /* Automatically add 20% margin on left and right */
+    border-collapse: collapse; /* Avoid double borders */
+    table-layout: auto; /* Allow rows to adjust based on content */
+    word-wrap: break-word; /* Wrap text for long values */
+    overflow-wrap: break-word; /* Ensure content wraps properly */
+    border: 1px solid #ccc; /* Add a border around the table */
+    font-family: Arial, sans-serif; /* Use a clean font */
+}
+
+th, td {
+    padding: 15px; /* Add space inside cells */
+    text-align: left; /* Align text to the left */
+    vertical-align: top; /* Ensure multi-line content aligns properly */
+}
+
+th {
+    background-color: #f4f4f4; /* Light background for header column */
+    width: 30%; /* Take up 30% width for header column */
+    font-weight: bold; /* Bold text for headers */
+    border-right: 1px solid #ccc; /* Separate header column from values */
+}
+
+td {
+    width: 70%; /* Take up 70% width for value column */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9; /* Alternate row background color */
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff; /* Keep odd rows white */
+}
+
+table, th, td {
+    border: 1px solid #ccc; /* Uniform border for table and cells */
+    box-sizing: border-box; /* Prevent padding from affecting cell size */
+}
+
 
 @keyframes topSlide {
     from {

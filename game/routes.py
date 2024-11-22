@@ -1,11 +1,13 @@
-from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file
+from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file, session
 from datetime import datetime
 from game.modeldata import ModelData
 import uuid
 from game.session_management import save_session, load_session, delete_session
-from game.answer_management import get_answers
+from game.answer_management import get_answers, upload_answers, check_answers
+from game.answer import normalize_apostrophes
 from copy import deepcopy
 import pytz
+import os
 
 
 bp = Blueprint('main', __name__)
@@ -196,3 +198,55 @@ def sitemap():
 @bp.route('/robots.txt', methods=['GET'])
 def robots_txt():
     return send_file('robots.txt')
+
+@bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        # code here for logging anna in 
+        # and redirecting to update screen
+        username = request.form['username']
+        password = request.form['password']
+        if not username or not password:
+            return render_template('login.html', message="All fields must be filled!")
+        if username == os.getenv('USERNAME') and password == os.getenv('PASSWORD'):
+            session['admin'] = True
+            return redirect('/update')
+        else:
+            return render_template('login.html', message="Incorrect username or password")
+        
+@bp.route('/update', methods=['GET', 'POST'])
+def update():
+    if not session.get('admin'):
+        return redirect('/login')
+    
+    if request.method == 'GET':
+        return render_template('update.html', new_data=check_answers())
+    else:
+        clue1 = normalize_apostrophes(request.form["clue1"].strip())
+        clue2 = normalize_apostrophes(request.form["clue2"].strip())
+        in_between = normalize_apostrophes(request.form["in_between"].strip().upper())
+        answer1 = normalize_apostrophes(request.form["answer1"].strip().upper())
+        answer2 = normalize_apostrophes(request.form["answer2"].strip().upper())
+
+        if not (clue1 and clue2 and in_between and answer1 and answer2):
+            message = "All fields must be filled!"
+            message_type = "error"
+            return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
+        elif '"' in clue1 or '"' in clue2:
+            message = "Clues cannot contain double quotes!"
+            message_type = "error"
+            return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
+        else:
+            data = {
+                "clue1": clue1,
+                "clue2": clue2,
+                "in_between": in_between,
+                "answer1": answer1,
+                "answer2": answer2,
+                "count1": len(answer1.split()) + 1,
+                "count2": len(answer2.split()) + 1,
+            }
+            upload_answers(data)
+            return redirect('/update')

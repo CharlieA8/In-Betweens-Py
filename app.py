@@ -5,7 +5,7 @@ import signal
 import sys
 import os
 from game.db_setup import init_db, setup_db_pool, connection_pool
-from game.answer_management import daily_update
+from game.answer_management import update_answers
 
 scheduler_thread = None
 
@@ -32,7 +32,7 @@ def create_app():
     setup_db_pool()
 
     # Load and update answers
-    daily_update()
+    update_answers()
 
     # Set up routes
     app.register_blueprint(game.routes.bp)   

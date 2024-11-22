@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+
+    <div class="title">
+        <h1 class="clue1">Who</h1>
+        <h1 class="in_between">Are</h1>
+        <h1 class="clue2">You??</h1>
+    </div>
+
+    <div class="message">
+        <p>{{ message }}</p>
+    </div>
+
+    <form action="/login" method="post" id="login-form">
+        <p><input type="text" name="username" class="clue1" placeholder="Username"></p>
+        <p><input type="password" name="password" class="clue2" placeholder="Password"></p>
+
+        <div class="parent">
+            <button type="submit" class="submit">Submit</button>
+        </div>
+
+{% endblock %}
