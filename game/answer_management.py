@@ -50,7 +50,7 @@ def update_answers():
                 conn.commit()
                 cursor.execute('DELETE FROM update')
                 conn.commit()
-                print("Answers updated for " + data[8])
+                print("Answers updated for " + str(datetime.now().date()))
         else:
             clear_answers(conn)
             with conn.cursor() as cursor:
