@@ -51,3 +51,11 @@ class Answer:
         self.count1 = data['count1']
         self.count2 = data['count2']
         self.response = [False, False, False]
+
+def normalize_apostrophes(input_string):
+        # Replace smart apostrophes with standard apostrophes
+        if input_string is None:
+            return
+        else:
+            new_string = input_string.replace("’", "'").replace("‘", "'")
+            return new_string
