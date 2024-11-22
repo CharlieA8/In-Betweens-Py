@@ -2,6 +2,7 @@ from game.answer import Answer
 from psycopg2.extras import RealDictCursor
 from game.db_setup import get_db_connection, release_db_connection
 from datetime import datetime
+from pytz import timezone
 
 def get_answers():
     conn = get_db_connection()
@@ -28,17 +29,26 @@ def upload_answers(data):
     try:
         with conn.cursor() as cursor:
             cursor.execute('''INSERT INTO update (answer1, in_between, answer2, clue1, 
-                            clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                            clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
                             ''', (data['answer1'], data['in_between'], data['answer2'], 
-                                data['clue1'], data['clue2'], data['count1'], data['count2'], data['date']))
+                                data['clue1'], data['clue2'], data['count1'], data['count2']))
         conn.commit()
     finally:
         release_db_connection(conn)
 
 def update_answers():
     conn = get_db_connection()
+    now = datetime.now(timezone('US/Eastern')).date()
     try:
         cursor = conn.cursor()
+
+        cursor.execute('SELECT date FROM answers LIMIT 1')
+        current_data = cursor.fetchone()
+        if current_data and current_data[0] == now:
+            # If the date matches today's date, terminate the update
+            print(f"Answers already updated for {now}. Update aborted.")
+            return
+        
         cursor.execute('SELECT * FROM update')
         data = cursor.fetchone()
         if data:
@@ -46,18 +56,18 @@ def update_answers():
             with conn.cursor() as cursor:
                 cursor.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
                                 clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                                ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]))
+                                ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], now))
                 conn.commit()
                 cursor.execute('DELETE FROM update')
                 conn.commit()
-                print("Answers updated for " + str(datetime.now().date()))
+                print("Answers updated for " + str(now))
         else:
             clear_answers(conn)
             with conn.cursor() as cursor:
                 cursor.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
                                 clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                                 ''', ("GLASS HALF", "FULL", "HOUSE", "What an optimist sees", 
-                                "John Stamos hit show", 3, 2, datetime.now().date()))
+                                "John Stamos hit show", 3, 2, datetime(2000, 1, 1).date()))
                 conn.commit()
                 cursor.execute('DELETE FROM update')
                 conn.commit()

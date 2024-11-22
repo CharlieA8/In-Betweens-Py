@@ -225,7 +225,7 @@ def update():
         return redirect('/login')
     
     if request.method == 'GET':
-        return render_template('update.html', new_data=None)
+        return render_template('update.html', new_data=check_answers())
     else:
         clue1 = normalize_apostrophes(request.form["clue1"].strip())
         clue2 = normalize_apostrophes(request.form["clue2"].strip())
@@ -236,11 +236,11 @@ def update():
         if not (clue1 and clue2 and in_between and answer1 and answer2):
             message = "All fields must be filled!"
             message_type = "error"
-            return render_template('update.html', message=message, message_type=message_type)
+            return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
         elif '"' in clue1 or '"' in clue2:
             message = "Clues cannot contain double quotes!"
             message_type = "error"
-            return render_template('update.html', message=message, message_type=message_type)
+            return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
         else:
             data = {
                 "clue1": clue1,
@@ -250,7 +250,6 @@ def update():
                 "answer2": answer2,
                 "count1": len(answer1.split()) + 1,
                 "count2": len(answer2.split()) + 1,
-                "date": datetime.now(pytz.timezone('US/Eastern')).date()
             }
             upload_answers(data)
             new_data = check_answers()

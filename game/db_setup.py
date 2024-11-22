@@ -45,8 +45,7 @@ def init_db(database_url):
                 clue1 TEXT,
                 clue2 TEXT,
                 count1 INTEGER,
-                count2 INTEGER,
-                date TIMESTAMP
+                count2 INTEGER
             )
         ''')
     conn.commit()
