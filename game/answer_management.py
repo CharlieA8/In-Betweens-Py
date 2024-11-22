@@ -48,9 +48,9 @@ def update_answers():
                                 clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                                 ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]))
                 conn.commit()
-            cursor.execute('DELETE FROM update')
-            conn.commit()
-            print("Answers updated for " + data[8])
+                cursor.execute('DELETE FROM update')
+                conn.commit()
+                print("Answers updated for " + data[8])
         else:
             clear_answers(conn)
             with conn.cursor() as cursor:
