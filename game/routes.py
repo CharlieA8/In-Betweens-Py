@@ -3,9 +3,11 @@ from datetime import datetime
 from game.modeldata import ModelData
 import uuid
 from game.session_management import save_session, load_session, delete_session
-from game.answer_management import get_answers
+from game.answer_management import get_answers, upload_answers, check_answers
+from game.answer import normalize_apostrophes
 from copy import deepcopy
 import pytz
+import os
 
 
 bp = Blueprint('main', __name__)
@@ -196,3 +198,56 @@ def sitemap():
 @bp.route('/robots.txt', methods=['GET'])
 def robots_txt():
     return send_file('robots.txt')
+
+@bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        # code here for logging anna in 
+        # and redirecting to update screen
+        username = request.form['username']
+        password = request.form['password']
+        if username == os.getenv('USERNAME') and password == os.getenv('PASSWORD'):
+            response = make_response(redirect('/update'))
+            admin_key = os.getenv('ADMIN_KEY')
+            max_age = 2 * 24 * 60 * 60  # 2 days
+            response.set_cookie('admin', admin_key, max_age=max_age)
+            return response
+        
+@bp.route('/update', methods=['GET', 'POST'])
+def update():
+    if request.cookies.get('admin') != os.getenv('ADMIN_KEY'):
+        return redirect('/login')
+    
+    if request.method == 'GET':
+        return render_template('update.html')
+    else:
+        clue1 = normalize_apostrophes(request.form["clue1"].strip())
+        clue2 = normalize_apostrophes(request.form["clue2"].strip())
+        in_between = normalize_apostrophes(request.form["in_between"].strip().upper())
+        answer1 = normalize_apostrophes(request.form["answer1"].strip().upper())
+        answer2 = normalize_apostrophes(request.form["answer2"].strip().upper())
+
+        if not (clue1 and clue2 and in_between and answer1 and answer2):
+            message = "All fields must be filled!"
+            message_type = "error"
+            return render_template('update.html', message=message, message_type=message_type)
+        elif '"' in clue1 or '"' in clue2:
+            message = "Clues cannot contain double quotes!"
+            message_type = "error"
+            return render_template('update.html', message=message, message_type=message_type)
+        else:
+            data = {
+                "clue1": clue1,
+                "clue2": clue2,
+                "in_between": in_between,
+                "answer1": answer1,
+                "answer2": answer2,
+                "count1": len(answer1.split()) + 1,
+                "count2": len(answer2.split()) + 1,
+                "date": datetime.now(pytz.timezone('US/Eastern')).date()
+            }
+            upload_answers(data)
+            new_data = check_answers()
+            return render_template('update.html', message="Answers updated!", message_type="success", update_data=new_data)
