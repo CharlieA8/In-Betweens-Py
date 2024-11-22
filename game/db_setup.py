@@ -36,6 +36,19 @@ def init_db(database_url):
                 date TIMESTAMP
             )
         ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS update (
+                id SERIAL PRIMARY KEY,
+                answer1 TEXT,
+                in_between TEXT,
+                answer2 TEXT,
+                clue1 TEXT,
+                clue2 TEXT,
+                count1 INTEGER,
+                count2 INTEGER,
+                date TIMESTAMP
+            )
+        ''')
     conn.commit()
     conn.close()
 
