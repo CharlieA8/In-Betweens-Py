@@ -1,6 +1,7 @@
 from game.answer import Answer
 from psycopg2.extras import RealDictCursor
 from game.db_setup import get_db_connection, release_db_connection
+from datetime import datetime
 
 def get_answers():
     conn = get_db_connection()
@@ -51,7 +52,16 @@ def update_answers():
             conn.commit()
             print("Answers updated for " + data[8])
         else:
-            print("No new answers found in update table.")
+            clear_answers(conn)
+            with conn.cursor() as cursor:
+                cursor.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
+                                clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                ''', ("GLASS HALF", "FULL", "HOUSE", "What an optimist sees", 
+                                "John Stamos hit show", 3, 2, datetime.now().date()))
+                conn.commit()
+            cursor.execute('DELETE FROM update')
+            conn.commit()
+            print("No new answers found in update table; default values added.")
     finally:
         release_db_connection(conn)
 
