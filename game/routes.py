@@ -221,7 +221,7 @@ def login():
         
 @bp.route('/update', methods=['GET', 'POST'])
 def update():
-    if request.cookies.get('admin') != os.getenv('ADMIN_KEY'):
+    if not request.cookies.get('admin') or request.cookies.get('admin') != os.getenv('ADMIN_KEY'):
         return redirect('/login')
     
     if request.method == 'GET':
