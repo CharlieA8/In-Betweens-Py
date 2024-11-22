@@ -28,6 +28,7 @@ def upload_answers(data):
     conn = get_db_connection()
     try:
         with conn.cursor() as cursor:
+            cursor.execute('DELETE FROM update')
             cursor.execute('''INSERT INTO update (answer1, in_between, answer2, clue1, 
                             clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
                             ''', (data['answer1'], data['in_between'], data['answer2'], 
@@ -44,7 +45,7 @@ def update_answers():
 
         cursor.execute('SELECT date FROM answers LIMIT 1')
         current_data = cursor.fetchone()
-        if current_data and current_data[0] == now:
+        if current_data and current_data[0].date() == now:
             # If the date matches today's date, terminate the update
             print(f"Answers already updated for {now}. Update aborted.")
             return
@@ -58,8 +59,6 @@ def update_answers():
                                 clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                                 ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], now))
                 conn.commit()
-                cursor.execute('DELETE FROM update')
-                conn.commit()
                 print("Answers updated for " + str(now))
         else:
             clear_answers(conn)
@@ -68,8 +67,6 @@ def update_answers():
                                 clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                                 ''', ("GLASS HALF", "FULL", "HOUSE", "What an optimist sees", 
                                 "John Stamos hit show", 3, 2, datetime(2000, 1, 1).date()))
-                conn.commit()
-                cursor.execute('DELETE FROM update')
                 conn.commit()
                 print("No new answers found in update table; default values added.")
     finally:
