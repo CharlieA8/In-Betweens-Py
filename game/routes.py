@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file
+from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file, flash, url_for
 from datetime import datetime
 from game.modeldata import ModelData
 import uuid
@@ -252,5 +252,5 @@ def update():
                 "count2": len(answer2.split()) + 1,
             }
             upload_answers(data)
-            new_data = check_answers()
-            return render_template('update.html', message="Answers updated!", message_type="success", update_data=new_data)
+            flash("Answers updated!", "success")  
+            return redirect(url_for('update'))
