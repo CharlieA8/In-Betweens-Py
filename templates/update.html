@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="title">
+        <h1 class="clue1">Welcome</h1>
+        <h1 class="clue2">Anna!</h1>
+    </div>
+
+    <form action="/edit" method="post" id="editor-form">
+        <!-- Editable Clues -->
+        <div class="clues">
+            <textarea name="clue1" class="clue clue1" placeholder="Enter Clue 1" value="{{ firstClue }}"></textarea>
+            <div class="in_between plus">+</div>
+            <textarea name="clue2" class="clue clue2" placeholder="Enter Clue 2" value="{{ secondClue }}"></textarea>
+        </div>
+
+        <br>
+
+        <!-- Editable Answers -->
+        <p><input type="text" name="answer1" class="clue1" placeholder="Answer 1" value="{{ answer1 }}"></p>
+        <p><input type="text" name="in_between" class="in_between" placeholder="In-Between" value="{{ in_between }}"></p>
+        <p><input type="text" name="answer2" class="clue2" placeholder="Answer 2" value="{{ answer2 }}"></p>
+
+        <div class="parent">
+            <button type="submit" class="submit">Update!</button>
+        </div>
+    </form>
+
+    { % if new_data % }
+        <table>
+            <tr>
+                <th>Clue 1</th>
+                <th>Clue 2</th>
+                <th>Answer 1</th>
+                <th>In-Between</th>
+                <th>Answer 2</th>
+            </tr>
+            <tr>
+                <td>{{ new_data.clue1 }}</td>
+                <td>{{ new_data.clue2 }}</td>
+                <td>{{ new_data.answer1 }}</td>
+                <td>{{ new_data.in_between }}</td>
+                <td>{{ new_data.answer2 }}</td>
+            </tr>
+        </table>
+    { % endif % }
+
+    <script>
+        // Check if there's a message to display
+        const message = "{{ message|safe }}";
+        const messageType = "{{ message_type }}";
+        
+        if (message) {
+            if (messageType === "success") {
+                alert(message);
+            } else if (messageType === "error") {
+                alert("Error: " + message);
+            }
+        }
+    </script>
+{% endblock %}
