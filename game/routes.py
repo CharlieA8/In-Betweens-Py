@@ -221,7 +221,7 @@ def update():
         return redirect('/login')
     
     if request.method == 'GET':
-        return render_template('update.html')
+        return render_template('update.html', new_data=None)
     else:
         clue1 = normalize_apostrophes(request.form["clue1"].strip())
         clue2 = normalize_apostrophes(request.form["clue2"].strip())

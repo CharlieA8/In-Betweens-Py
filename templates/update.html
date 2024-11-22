@@ -12,9 +12,9 @@
     <form action="/edit" method="post" id="editor-form">
         <!-- Editable Clues -->
         <div class="clues">
-            <textarea name="clue1" class="clue clue1" placeholder="Enter Clue 1" value="{{ firstClue }}"></textarea>
+            <textarea name="clue1" class="clue clue1" placeholder="Enter Clue 1">{{ firstClue }}</textarea>
             <div class="in_between plus">+</div>
-            <textarea name="clue2" class="clue clue2" placeholder="Enter Clue 2" value="{{ secondClue }}"></textarea>
+            <textarea name="clue2" class="clue clue2" placeholder="Enter Clue 2">{{ secondClue }}</textarea>
         </div>
 
         <br>
@@ -29,7 +29,7 @@
         </div>
     </form>
 
-    { % if new_data % }
+    {% if new_data %}
         <table>
             <tr>
                 <th>Clue 1</th>
@@ -46,7 +46,7 @@
                 <td>{{ new_data.answer2 }}</td>
             </tr>
         </table>
-    { % endif % }
+    {% endif %}
 
     <script>
         // Check if there's a message to display
