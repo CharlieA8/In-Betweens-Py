@@ -467,6 +467,19 @@ table, th, td {
     box-sizing: border-box; /* Prevent padding from affecting cell size */
 }
 
+.clueUpdate {
+    display: flex;
+    align-self: center;
+    width: 80%;
+    height: 20vh;
+    font-family: 'InBetween';
+    font-size: 4vw;
+    border: solid black 4px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    resize: vertical;
+    padding: 3px;
+}
 
 @keyframes topSlide {
     from {
