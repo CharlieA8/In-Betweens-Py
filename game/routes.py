@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file, session
+from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file, session, url_for
 from datetime import datetime
 from game.modeldata import ModelData
 import uuid
 from game.session_management import save_session, load_session, delete_session
-from game.answer_management import get_answers, upload_answers, check_answers
+from game.answer_management import get_answers, upload_answers, check_answers, force_update
 from game.answer import normalize_apostrophes
 from copy import deepcopy
 import pytz
@@ -250,3 +250,12 @@ def update():
             }
             upload_answers(data)
             return redirect('/update')
+        
+@bp.route('/forceupdate', methods=['GET'])
+def force():
+    if not session.get('admin'):
+        return redirect('/login')
+    force_update()
+    message = "Update successfully forced."
+    message_type = "success"
+    return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())

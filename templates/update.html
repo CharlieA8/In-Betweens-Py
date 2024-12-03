@@ -53,6 +53,10 @@
         <p>No current data found in the update table.</p>
     {% endif %}
 
+    <div class="parent">
+        <button class="rulesButton" id="forceupdate" name="button" onclick="window.location.href='/forceupdate'">Force Update</button>
+    </div>
+
     <script>
         // Check if there's a message to display
         const message = "{{ message|safe }}";

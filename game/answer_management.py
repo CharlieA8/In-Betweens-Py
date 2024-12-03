@@ -72,6 +72,25 @@ def update_answers():
     finally:
         release_db_connection(conn)
 
+def force_update():
+    conn = get_db_connection()
+    now = datetime.now(timezone('US/Eastern')).date()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute('SELECT * FROM update')
+            data = cursor.fetchone()
+            if data:
+                clear_answers(conn)
+                cursor.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
+                                clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                                ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], now))
+                conn.commit()
+                print("Answers updated by force.")
+            else:
+                print("No new answers found in update table; no changes made.")
+    finally:
+        release_db_connection(conn)
+
 def check_answers():
     conn = get_db_connection()
     try:
