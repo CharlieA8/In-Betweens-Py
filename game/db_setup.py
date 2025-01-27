@@ -48,6 +48,18 @@ def init_db(database_url):
                 count2 INTEGER
             )
         ''')
+        cursor.exectue('''
+            CREATE TABLE IF NOT EXISTS archive (
+                id SERIAL PRIMARY KEY,
+                answer1 TEXT,
+                in_between TEXT,
+                answer2 TEXT,
+                clue1 TEXT,
+                clue2 TEXT,
+                count1 INTEGER,
+                count2 INTEGER,
+            )
+        ''')
     conn.commit()
     conn.close()
 
