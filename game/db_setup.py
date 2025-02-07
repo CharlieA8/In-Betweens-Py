@@ -57,8 +57,15 @@ def init_db(database_url):
                 clue1 TEXT,
                 clue2 TEXT,
                 count1 INTEGER,
-                count2 INTEGER,
+                count2 INTEGER
             )
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS user_data(
+                user_id TEXT PRIMARY KEY,
+                last_updated TIMESTAMP,
+                completed_levels INTEGER[]
+                )
         ''')
     conn.commit()
     conn.close()
