@@ -24,11 +24,11 @@ def get_user_progress(user_id):
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute('SELECT completed_levels FROM user_data WHERE user_id = %s', (user_id))
             result = cursor.fetchone()
-            return result['completed_levels'] if result else []
+            return result['completed_levels'] if result else [] # returns an array of ints
     finally:
         release_db_connection(conn)
 
-def save_archive_completion(user_id, level):
+def save_level_completion(user_id, level):
     conn = get_db_connection()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
@@ -54,5 +54,15 @@ def upload_archive(data):
                                 data['clue1'], data['clue2'], data['count1'], data['count2'])
             )
         conn.commit()
+    finally:
+        release_db_connection(conn)
+
+def visualize_archive():
+    conn = get_db_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute('SELECT * FROM archive')
+            archive_data = cursor.fetchall()
+            return archive_data # returns a list of dictionaries
     finally:
         release_db_connection(conn)
