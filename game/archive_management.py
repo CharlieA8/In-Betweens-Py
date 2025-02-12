@@ -18,8 +18,18 @@ def get_archive(level):
     finally:
         release_db_connection(conn)
 
+def get_user_progress(user_id):
+    conn = get_db_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute('SELECT completed_levels FROM user_data WHERE user_id = %s', (user_id))
+            result = cursor.fetchone()
+            return result['completed_levels'] if result else []
+    finally:
+        release_db_connection(conn)
+
 def save_archive_completion(user_id, level):
-    conn = get_db_connection
+    conn = get_db_connection()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute('''
@@ -27,8 +37,21 @@ def save_archive_completion(user_id, level):
             VALUES (%s, %s, ARRAY[%s])
             ON CONFLICT (user_id) DO UPDATE SET
                 last_updated = EXCLUDED.last_updated,
-                completed_levels = array_append(user_data.completed_levels, %s)
-            ''', (user_id, datetime.now(timezone('US/Eastern')), level, level)
+                completed_levels = user_data.completed_levels || %s 
+            ''', (user_id, datetime.now(timezone('US/Eastern')), level, [level])
+            )
+        conn.commit()
+    finally:
+        release_db_connection(conn)
+
+def upload_archive(data):
+    conn = get_db_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute('''INSERT INTO archive (answer1, in_between, answer2, clue1, 
+                            clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                            ''', (data['answer1'], data['in_between'], data['answer2'], 
+                                data['clue1'], data['clue2'], data['count1'], data['count2'])
             )
         conn.commit()
     finally:
