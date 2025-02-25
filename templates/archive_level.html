@@ -1,0 +1,48 @@
+{% extends 'base.html'%}
+
+{% block head %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+<script>
+    function dismissHint() {
+        var hint = document.getElementById('hint');
+        hint.classList.add('hidden');
+    }
+</script>
+{% endblock %}
+
+{% block body %}
+    <div class="title">
+        <h1 class="clue1">In</h1>
+        <h1 class="in_between">+</h1>
+        <h1 class="clue2">Betweens</h1>
+    </div>
+
+    <div class="clues">
+        <div class="clue clue1 {% if newclue %}leftSlide{% endif %}" id="clueBox">{{ clue1 }} ({{ count1 }})</div>
+        <div class="in_between plus" id="clueBox">+</div>
+        <div class="clue clue2 {% if newclue %}rightSlide{% endif %}" id="clueBox">{{ clue2 }} ({{ count2 }})</div>
+    </div>
+
+    <div class="parent">
+        {% if hint %}
+        <div class="hint" id="hint">
+            <span class="in_between">So Close!</span>
+            <span>Make sure the In-Between is only in the middle box!</span>
+            <button name="button" class="dismissButton" onclick="dismissHint()">Dismiss</button>
+        </div>
+        {% endif %}
+    </div>
+
+    <form action="{{ request.path }}" method="POST" id="game-form">
+        <p><input type="text" autocomplete="off" class="clue1 {% if response and response[0] %}correct{% endif %}" name="answer1" placeholder="Clue 1" value="{{ answer1 }}"></p>
+        <p style="padding: 1vw;"><input type="text" autocomplete="off" class="in_between {% if response and response[1] %}correct{% endif %}" name="in_between" placeholder="In-Between" value="{{ in_between }}"></p>
+        <p><input type="text" autocomplete="off" class="clue2 {% if response and response[2] %}correct{% endif %}" name="answer2" placeholder="Clue 2" value="{{ answer2 }}"></p>
+        <div class="parent">
+            <button type="submit" class="submit" name="button" id="submit">Submit</button>
+            <button type="button" class="backButton" name="button" onclick="window.location.href='/archive'">Back</button>
+        </div>
+    </form>
+{% endblock %}
