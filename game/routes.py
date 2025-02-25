@@ -265,4 +265,4 @@ def archive():
     answers = []
     for i in range(0, 10):
         answers.append(Answer().dictify())
-    return render_template('archive.html')
+    return render_template('archive.html', levels=answers)
