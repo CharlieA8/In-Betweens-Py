@@ -3,9 +3,7 @@ import schedule
 import threading
 import json
 from datetime import datetime
-import psycopg2
 from psycopg2.extras import RealDictCursor
-import os
 import pytz
 from game.answer_management import update_answers
 from game.db_setup import get_db_connection, release_db_connection
