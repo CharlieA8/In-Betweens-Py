@@ -48,7 +48,7 @@ def init_db(database_url):
                 count2 INTEGER
             )
         ''')
-        cursor.exectue('''
+        cursor.execute('''
             CREATE TABLE IF NOT EXISTS archive (
                 id SERIAL PRIMARY KEY,
                 answer1 TEXT,
