@@ -4,7 +4,7 @@ from game.modeldata import ModelData
 import uuid
 from game.session_management import save_session, load_session, delete_session
 from game.answer_management import get_answers, upload_answers, check_answers, force_update
-from game.answer import normalize_apostrophes
+from game.answer import normalize_apostrophes, Answer
 from copy import deepcopy
 import pytz
 import os
@@ -259,3 +259,10 @@ def force():
     message = "Update successfully forced."
     message_type = "success"
     return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
+
+@bp.route('/archive', methods=['GET'])
+def archive():
+    answers = []
+    for i in range(0, 10):
+        answers.append(Answer())
+    return render_template('archive.html')
