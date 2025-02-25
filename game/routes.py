@@ -5,7 +5,7 @@ import uuid
 from game.session_management import save_session, load_session, delete_session
 from game.answer_management import get_answers, upload_answers, check_answers, force_update
 from game.answer import normalize_apostrophes, Answer
-from game.archive_management import get_archive, save_level_completion
+from game.archive_management import get_archive, save_level_completion, get_levels_array
 from copy import deepcopy
 import pytz
 import os
@@ -263,17 +263,15 @@ def force():
 
 @bp.route('/archive', methods=['GET'])
 def archive():
-    answers = []
-    for i in range(0, 10):
-        answers.append(Answer().dictify())
-    return render_template('archive.html', levels=answers)
+    levels = get_levels_array()
+    return render_template('archive.html', levels=levels)
 
 @bp.route("/archive/<int:n>", methods=['GET', 'POST'])
 def archive_level(n):
     if request.method == 'GET':
         g.archive_session = ModelData(get_archive(n))
         g.archive_session.get_clues()
-        g.modelData.startTimer()
+        g.archive_session.startTimer()
         return render_template('archive_level.html', clue1=g.archive_session.clue1, clue2=g.archive_session.clue2, correct=False,
                         count1=g.archive_session.count1, count2=g.archive_session.count2, newclue=True, response=g.archive_session.response, 
                         answer1 = g.archive_session.answer1, in_between = g.archive_session.inbetween, answer2 = g.archive_session.answer2)
@@ -284,7 +282,7 @@ def archive_level(n):
         hint = g.archive_session.check_answer(g.archive_session.answer1, g.archive_session.inbetween, g.archive_session.answer2)
 
         if g.archive_session.correct:
-            time = g.modelData.stopTimer()
+            time = g.archive_session.stopTimer()
             
             # Get the existing stats from cookies
             user_id = request.cookies.get('archive')
