@@ -12,6 +12,18 @@ class Answer:
             self.count1 = "count1"
             self.count2 = "count2"
             self.response = [False, False, False]
+    
+    def dictify(self):
+        return {
+            'id': self.id,
+            'answer1': self.answer1,
+            'in_between': self.in_between,
+            'answer2': self.answer2,
+            'clue1': self.clue1,
+            'clue2': self.clue2,
+            'count1': self.count1,
+            'count2': self.count2
+        }
 
     def __str__(self):
         return f"{self.clue1} + {self.clue2}\n{self.answer1} + {self.in_between} + {self.answer2}"

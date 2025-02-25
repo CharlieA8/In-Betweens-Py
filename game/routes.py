@@ -264,5 +264,5 @@ def force():
 def archive():
     answers = []
     for i in range(0, 10):
-        answers.append(Answer())
+        answers.append(Answer().dictify())
     return render_template('archive.html')
