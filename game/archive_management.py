@@ -8,7 +8,7 @@ def get_archive(level):
     conn = get_db_connection()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute('SELECT * FROM archive WHERE id = %s', (level,))
+            cursor.execute('SELECT * FROM archive WHERE id = %s', (level))
             answers_sql = cursor.fetchone()
             if answers_sql:
                 answers_dict = dict(answers_sql)
@@ -56,6 +56,22 @@ def upload_archive(data):
         conn.commit()
     finally:
         release_db_connection(conn)
+
+def get_levels_array():
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute('SELECT COUNT(*) FROM archive')
+            count = cursor.fetchone()[0]
+            if count == 0:
+                return None
+            elif count == 1:
+                return [1]
+            else:
+                return list(range(1, count + 1))  # Returns [1, 2, ..., count]
+    finally:
+        release_db_connection(conn)
+
 
 def visualize_archive():
     conn = get_db_connection()
