@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <div class="title">Archive</div>
+
+    {% if levels %}
+        <table>
+            <tr>
+                <th>Level</th>
+                <th>Clue 1</th>
+                <th>Clue 2</th>
+                <th>Answer 1</th>
+                <th>In-Between</th>
+                <th>Answer 2</th>
+            </tr>
+            {% for level in levels %}
+                <tr>
+                    <td>{{ level.id }}</td>
+                    <td>{{ level.clue1 }}</td>
+                    <td>{{ level.clue2 }}</td>
+                    <td>{{ level.answer1 }}</td>
+                    <td>{{ level.in_between }}</td>
+                    <td>{{ level.answer2 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No levels found in the archive.</p>
+    {% endif %}
+
+{% endblock %}
