@@ -8,7 +8,7 @@ def init_db(database_url):
     conn = psycopg2.connect(database_url, sslmode='require')
     with conn.cursor() as cursor:
         cursor.execute('''
-            CREATE TABLE IF NOT EXISTS active_sessions (
+            CREATE TABLE IF NOT EXISTS sessions (
             session_id TEXT PRIMARY KEY,
             start_time TIMESTAMP,
             time FLOAT,
