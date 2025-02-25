@@ -5,6 +5,7 @@ import uuid
 from game.session_management import save_session, load_session, delete_session
 from game.answer_management import get_answers, upload_answers, check_answers, force_update
 from game.answer import normalize_apostrophes, Answer
+from game.archive_management import get_archive, save_level_completion
 from copy import deepcopy
 import pytz
 import os
@@ -266,3 +267,49 @@ def archive():
     for i in range(0, 10):
         answers.append(Answer().dictify())
     return render_template('archive.html', levels=answers)
+
+@bp.route("/archive/<int:n>", methods=['GET', 'POST'])
+def archive_level(n):
+    if request.method == 'GET':
+        g.archive_session = ModelData(get_archive(n))
+        g.archive_session.get_clues()
+        g.modelData.startTimer()
+        return render_template('archive_level.html', clue1=g.archive_session.clue1, clue2=g.archive_session.clue2, correct=False,
+                        count1=g.archive_session.count1, count2=g.archive_session.count2, newclue=True, response=g.archive_session.response, 
+                        answer1 = g.archive_session.answer1, in_between = g.archive_session.inbetween, answer2 = g.archive_session.answer2)
+    else:
+        g.archive_session.answer1 = request.form['answer1']
+        g.archive_session.inbetween = request.form['in_between']
+        g.archive_session.answer2 = request.form['answer2']
+        hint = g.archive_session.check_answer(g.archive_session.answer1, g.archive_session.inbetween, g.archive_session.answer2)
+
+        if g.archive_session.correct:
+            time = g.modelData.stopTimer()
+            
+            # Get the existing stats from cookies
+            user_id = request.cookies.get('archive')
+
+            if user_id == None:
+                user_id = str(uuid.uuid4())
+
+            # Update the stats
+            save_level_completion(user_id, n)
+
+            # Update archive cookie
+            max_age = 10 * 365 * 24 * 60 * 60 # 10 years!!
+            response = make_response(render_template('congrats.html', time=time))
+            response.set_cookie('archive', user_id, max_age=max_age)
+
+            # Log usage
+            print(f"*Completion* New user ({user_id}) submitted level {n} in {time}s.")
+            return response
+        else:
+            # Log progress
+            result = g.archive_session.getResponse()
+            print(f"*Progress* User ({user_id}) submitted an incorrect answer for level {n}: ({result})")
+
+            return render_template('archive_level.html', clue1=g.archive_session.clue1, clue2=g.archive_session.clue2, answer1=g.archive_session.answer1, 
+                                in_between=g.archive_session.inbetween, answer2=g.archive_session.answer2, response=g.archive_session.response, 
+                                correct=g.archive_session.correct, count1=g.archive_session.count1, count2=g.archive_session.count2, newclue=False, hint=hint)
+
+
