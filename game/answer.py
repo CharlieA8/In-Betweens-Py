@@ -1,5 +1,5 @@
 class Answer:
-    def __init__(self, data):
+    def __init__(self, data: None):
         if data is not None:
             self.load_answer_from_json(data)
         else:
