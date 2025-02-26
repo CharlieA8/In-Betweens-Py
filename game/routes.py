@@ -5,7 +5,7 @@ import uuid
 from game.session_management import save_session, load_session, delete_session
 from game.answer_management import get_answers, upload_answers, check_answers, force_update
 from game.answer import normalize_apostrophes, Answer
-from game.archive_management import get_archive, save_level_completion, get_levels_array
+from game.archive_management import get_archive, save_level_completion, get_levels_array, upload_archive, visualize_archive
 from copy import deepcopy
 import pytz
 import os
@@ -224,33 +224,48 @@ def update():
     
     if request.method == 'GET':
         return render_template('update.html', new_data=check_answers())
-    else:
-        clue1 = normalize_apostrophes(request.form["clue1"].strip())
-        clue2 = normalize_apostrophes(request.form["clue2"].strip())
-        in_between = normalize_apostrophes(request.form["in_between"].strip().upper())
-        answer1 = normalize_apostrophes(request.form["answer1"].strip().upper())
-        answer2 = normalize_apostrophes(request.form["answer2"].strip().upper())
 
-        if not (clue1 and clue2 and in_between and answer1 and answer2):
-            message = "All fields must be filled!"
-            message_type = "error"
-            return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
-        elif '"' in clue1 or '"' in clue2:
-            message = "Clues cannot contain double quotes!"
-            message_type = "error"
-            return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
-        else:
-            data = {
-                "clue1": clue1,
-                "clue2": clue2,
-                "in_between": in_between,
-                "answer1": answer1,
-                "answer2": answer2,
-                "count1": len(answer1.split()) + 1,
-                "count2": len(answer2.split()) + 1,
-            }
-            upload_answers(data)
-            return redirect('/update')
+    submit_action = request.form.get('submit_action')
+
+    # Extract form values
+    clue1 = normalize_apostrophes(request.form["clue1"].strip())
+    clue2 = normalize_apostrophes(request.form["clue2"].strip())
+    in_between = normalize_apostrophes(request.form["in_between"].strip().upper())
+    answer1 = normalize_apostrophes(request.form["answer1"].strip().upper())
+    answer2 = normalize_apostrophes(request.form["answer2"].strip().upper())
+
+    if not (clue1 and clue2 and in_between and answer1 and answer2):
+        message = "All fields must be filled!"
+        message_type = "error"
+        return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
+    elif '"' in clue1 or '"' in clue2:
+        message = "Clues cannot contain double quotes!"
+        message_type = "error"
+        return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
+
+    data = {
+        "clue1": clue1,
+        "clue2": clue2,
+        "in_between": in_between,
+        "answer1": answer1,
+        "answer2": answer2,
+        "count1": len(answer1.split()) + 1,
+        "count2": len(answer2.split()) + 1,
+    }
+    if submit_action == 'update':
+        upload_answers(data)
+    else:
+        upload_archive(data)
+    return redirect('/update')
+    
+@bp.route('/view-archive', methods=['GET'])
+def view_archive():
+    if not session.get('admin'):
+        return redirect('/login')
+    
+    levels = visualize_archive()
+    return render_template('view_archive.html', levels=levels)
+
         
 @bp.route('/forceupdate', methods=['GET'])
 def force():

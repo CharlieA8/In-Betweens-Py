@@ -72,7 +72,6 @@ def get_levels_array():
     finally:
         release_db_connection(conn)
 
-
 def visualize_archive():
     conn = get_db_connection()
     try:
