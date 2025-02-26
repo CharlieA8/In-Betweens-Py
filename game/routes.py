@@ -354,7 +354,7 @@ def archive_level(n):
 
                 # Update archive cookies
                 max_age = 10 * 365 * 24 * 60 * 60 # 10 years!!
-                response = make_response(render_template('congrats.html', time=time))
+                response = make_response(render_template('congrats.html', time=time, level=n))
                 
                 response.set_cookie('archive', user_id, max_age=max_age)
                 archive_id = json.loads(request.cookies.get('archive_id'))[0]
