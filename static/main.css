@@ -492,16 +492,16 @@ table, th, td {
 }
 
 .newlevelCard, .completedLevelCard {
-    width: 10vw; 
+    width: 12vw; 
+    height: 12vw;
     color: black;
     text-decoration: none;
-    height: 10vw;
     border: 1vw solid black;
     padding: 2vw;
     font-family: 'InBetween';
-    font-size: 8vw;
+    font-size: 9vw;
     background-color: white;
-    border-radius: 15px; /* Slightly rounded corners */
+    border-radius: 5vw; /* Slightly rounded corners */
     overflow: hidden;
     display: flex;
     justify-content: center;
