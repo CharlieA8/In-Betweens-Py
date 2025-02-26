@@ -5,7 +5,7 @@ import uuid
 from game.session_management import save_session, load_session, delete_session
 from game.answer_management import get_answers, upload_answers, check_answers, force_update
 from game.answer import normalize_apostrophes, Answer
-from game.archive_management import get_archive, save_level_completion, get_levels_array, upload_archive, visualize_archive
+from game.archive_management import get_archive, save_level_completion, get_levels_array, upload_archive, visualize_archive, get_user_progress
 from copy import deepcopy
 import pytz
 import os
@@ -289,8 +289,13 @@ def force():
 
 @bp.route('/archive', methods=['GET'])
 def archive():
+    user_id = request.cookies.get('archive')
     levels = get_levels_array()
-    return render_template('archive.html', levels=levels)
+    if user_id:
+        user_levels = get_user_progress(user_id)
+    else:
+        user_levels = {}
+    return render_template('archive.html', levels=levels, user_levels=user_levels)
 
 @bp.route("/archive/<int:n>", methods=['GET', 'POST'])
 def archive_level(n):
