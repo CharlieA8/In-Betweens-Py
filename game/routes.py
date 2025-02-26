@@ -17,8 +17,17 @@ bp = Blueprint('main', __name__)
 def before_request():
     g.answers = get_answers()
 
-    # Check for session cookie
+    # Check for session cookies
     session_id = request.cookies.get('session_id')
+    archive_cookie = request.cookies.get('archive_id')
+    
+    if archive_cookie:
+        archive_id, n = archive_cookie[0], archive_cookie[1]
+        archive_data = load_session(archive_id)
+        if archive_data:
+            g.archive_session = ModelData(get_archive(n), **archive_data)
+        else:
+            g.archive_session = None
 
     if session_id:
         session_data = load_session(session_id)
@@ -283,46 +292,78 @@ def archive():
 
 @bp.route("/archive/<int:n>", methods=['GET', 'POST'])
 def archive_level(n):
-    if request.method == 'GET':
+    # Check if there's an active session
+    if not g.archive_session:
+        archive_id = str(uuid.uuid4())
         g.archive_session = ModelData(get_archive(n))
+        save_session(archive_id, g.archive_session)
+
+        # set archive_id cookie
+        response = make_response(redirect('/archive/' + str(n)))
+        response.set_cookie('archive_id', [archive_id, n])
+
+        # Log usage
+        print(f"*Start (A)* New user started level {n} with id {archive_id}")
+        return response
+    
+    if request.method == 'GET':
         g.archive_session.get_clues()
         g.archive_session.startTimer()
+        save_session(request.cookies.get('archive_id')[0], g.archive_session)
+
         return render_template('archive_level.html', clue1=g.archive_session.clue1, clue2=g.archive_session.clue2, correct=False,
                         count1=g.archive_session.count1, count2=g.archive_session.count2, newclue=True, response=g.archive_session.response, 
                         answer1 = g.archive_session.answer1, in_between = g.archive_session.inbetween, answer2 = g.archive_session.answer2)
     else:
-        g.archive_session.answer1 = request.form['answer1']
-        g.archive_session.inbetween = request.form['in_between']
-        g.archive_session.answer2 = request.form['answer2']
-        hint = g.archive_session.check_answer(g.archive_session.answer1, g.archive_session.inbetween, g.archive_session.answer2)
+        submit_action = request.form.get('submit_action')
 
-        if g.archive_session.correct:
-            time = g.archive_session.stopTimer()
-            
-            # Get the existing stats from cookies
-            user_id = request.cookies.get('archive')
-
-            if user_id == None:
-                user_id = str(uuid.uuid4())
-
-            # Update the stats
-            save_level_completion(user_id, n)
-
-            # Update archive cookie
-            max_age = 10 * 365 * 24 * 60 * 60 # 10 years!!
-            response = make_response(render_template('congrats.html', time=time))
-            response.set_cookie('archive', user_id, max_age=max_age)
+        if submit_action == 'back':
+            response = make_response(redirect('/archive'))
+            archive_id = request.cookies.get('archive_id')[0]
+            delete_session(archive_id)
+            response.delete_cookie('archive_id')
 
             # Log usage
-            print(f"*Completion* New user ({user_id}) submitted level {n} in {time}s.")
-            return response
+            print(f"*Progress* User ({archive_id}) went back to archive.")
         else:
-            # Log progress
-            result = g.archive_session.getResponse()
-            print(f"*Progress* User ({user_id}) submitted an incorrect answer for level {n}: ({result})")
+            g.archive_session.answer1 = request.form['answer1']
+            g.archive_session.inbetween = request.form['in_between']
+            g.archive_session.answer2 = request.form['answer2']
+            hint = g.archive_session.check_answer(g.archive_session.answer1, g.archive_session.inbetween, g.archive_session.answer2)
 
-            return render_template('archive_level.html', clue1=g.archive_session.clue1, clue2=g.archive_session.clue2, answer1=g.archive_session.answer1, 
-                                in_between=g.archive_session.inbetween, answer2=g.archive_session.answer2, response=g.archive_session.response, 
-                                correct=g.archive_session.correct, count1=g.archive_session.count1, count2=g.archive_session.count2, newclue=False, hint=hint)
+            if g.archive_session.correct:
+                time = g.archive_session.stopTimer()
+                
+                # Get the existing stats from cookies
+                user_id = request.cookies.get('archive')
+
+                if user_id == None:
+                    user_id = str(uuid.uuid4())
+
+                # Update the stats
+                save_level_completion(user_id, n)
+
+                # Update archive cookies
+                max_age = 10 * 365 * 24 * 60 * 60 # 10 years!!
+                response = make_response(render_template('congrats.html', time=time))
+                
+                response.set_cookie('archive', user_id, max_age=max_age)
+                archive_id = request.cookies.get('archive_id')[0]
+                delete_session(archive_id)
+                response.delete_cookie('archive_id')
+
+                # Log usage
+                print(f"*Completion* New user ({user_id}) submitted level {n} in {time}s.")
+                return response
+            else:
+                # Log progress
+                result = g.archive_session.getResponse()
+                save_session(request.cookies.get('archive_id')[0], g.archive_session)
+
+                print(f"*Progress* User ({user_id}) submitted an incorrect answer for level {n}: ({result})")
+
+                return render_template('archive_level.html', clue1=g.archive_session.clue1, clue2=g.archive_session.clue2, answer1=g.archive_session.answer1, 
+                                    in_between=g.archive_session.inbetween, answer2=g.archive_session.answer2, response=g.archive_session.response, 
+                                    correct=g.archive_session.correct, count1=g.archive_session.count1, count2=g.archive_session.count2, newclue=False, hint=hint)
 
 
