@@ -31,7 +31,9 @@
             <button class="rulesButton" id="rules" name="button" onclick="window.location.href='/rules'">Rules</button>
         </div>
 
-        <button class="rulesButton" id="archive" name="button" onclick="window.location.href='/archive'">Archive</button>
+        <div class="parent">
+            <button class="rulesButton" id="archive" name="button" onclick="window.location.href='/archive'">Archive</button>
+        </div>
 
         {% if not playable %}
             <div class="tooltip">Next Puzzle In:</div>
