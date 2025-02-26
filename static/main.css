@@ -483,7 +483,6 @@ table, th, td {
 
 .levelGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Ensure four squares per row */
     gap: 10px;
     justify-items: center;
     align-items: center;
@@ -492,11 +491,12 @@ table, th, td {
 }
 
 .newlevelCard, .completedLevelCard {
-    width: 150px; /* Fixed width for square shape */
-    height: 150px; /* Fixed height for square shape */
-    border: 5px solid black;
+    width: 14vw; 
+    height: 14vw;
+    border: 10px solid black;
     padding: 10px;
     font-family: 'InBetween';
+    font-size: 13vw;
     background-color: white;
     border-radius: 15px; /* Slightly rounded corners */
     overflow: hidden;
