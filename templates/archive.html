@@ -4,19 +4,24 @@
 {% endblock %}
 
 {% block body %}
-    <div class="title">Archive</div>
+    <div class="rules">
+        <h1 class="doneCard topSlide" id="borderCycle">Rules!</h1>
+    </div>
 
     {% if levels %}
-        <table>
-            <tr>
-                <th>Level</th>
-            </tr>
+        <div class="levelGrid">
             {% for level in levels %}
-                <tr>
-                    <td><a href="/archive/{{level}}">{{ level }}</a></td>
-                </tr>
+                {% if user_levels.get(level) == True %}
+                    <div class="completedLevelCard">
+                        <a href="/archive/{{level}}">{{ level }}</a>
+                    </div>
+                {% else %}
+                    <div class="newLevelCard">
+                        <a href="/archive/{{level}}">{{ level }}</a>
+                    </div>
+                {% endif %}
             {% endfor %}
-        </table>
+        </div>
     {% else %}
         <p>No levels found in the archive.</p>
     {% endif %}
