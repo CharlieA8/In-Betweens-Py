@@ -22,7 +22,7 @@ def before_request():
     archive_cookie = request.cookies.get('archive_id')
     
     if archive_cookie:
-        archive_id, n = archive_cookie[0], archive_cookie[1]
+        archive_id, n = json.loads(archive_cookie)
         archive_data = load_session(archive_id)
         if archive_data:
             g.archive_session = ModelData(get_archive(n), **archive_data)
@@ -300,7 +300,7 @@ def archive_level(n):
 
         # set archive_id cookie
         response = make_response(redirect('/archive/' + str(n)))
-        response.set_cookie('archive_id', [archive_id, n])
+        response.set_cookie('archive_id', json.dumps([archive_id, n]))
 
         # Log usage
         print(f"*Start (A)* New user started level {n} with id {archive_id}")
