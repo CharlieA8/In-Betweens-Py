@@ -328,6 +328,7 @@ def archive_level(n):
 
             # Log usage
             print(f"*Progress* User ({archive_id}) went back to archive.")
+            return response
         else:
             g.archive_session.answer1 = request.form['answer1']
             g.archive_session.inbetween = request.form['in_between']
