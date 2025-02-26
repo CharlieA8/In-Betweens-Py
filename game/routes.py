@@ -28,6 +28,8 @@ def before_request():
             g.archive_session = ModelData(get_archive(n), **archive_data)
         else:
             g.archive_session = None
+    else:
+        g.archive_session = None
 
     if session_id:
         session_data = load_session(session_id)
