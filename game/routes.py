@@ -356,14 +356,14 @@ def archive_level(n):
                 response.delete_cookie('archive_id')
 
                 # Log usage
-                print(f"*Completion* New user ({user_id}) submitted level {n} in {time}s.")
+                print(f"*Completion* User ({user_id}) submitted level {n} in {time}s.")
                 return response
             else:
                 # Log progress
                 result = g.archive_session.getResponse()
                 save_session(json.loads(request.cookies.get('archive_id'))[0], g.archive_session)
 
-                print(f"*Progress* User ({user_id}) submitted an incorrect answer for level {n}: ({result})")
+                print(f"*Progress* A user submitted an incorrect answer for level {n}: ({result})")
 
                 return render_template('archive_level.html', clue1=g.archive_session.clue1, clue2=g.archive_session.clue2, answer1=g.archive_session.answer1, 
                                     in_between=g.archive_session.inbetween, answer2=g.archive_session.answer2, response=g.archive_session.response, 
