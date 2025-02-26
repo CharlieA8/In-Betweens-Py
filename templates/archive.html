@@ -9,22 +9,22 @@
     </div>
 
     {% if levels %}
-        <div class="levelGrid">
-            {% for level in levels %}
-                {% if user_levels.get(level) == True %}
-                    <div class="completedLevelCard">
-                        <a href="/archive/{{level}}">{{ level }}</a>
-                    </div>
-                {% else %}
-                    <div class="newLevelCard">
-                        <a href="/archive/{{level}}">{{ level }}</a>
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-    {% else %}
-        <p>No levels found in the archive.</p>
-    {% endif %}
+    <div class="levelGrid">
+        {% for level in levels %}
+            {% if user_levels.get(level) == True %}
+                <div class="completedLevelCard">
+                    {{ level }}
+                </div>
+            {% else %}
+                <a href="/level/{{ level }}" class="newlevelCard">
+                    {{ level }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No levels found in the archive.</p>
+{% endif %}
 
     <div class="parent">
         <button class="backButton" name="button" onclick="window.location.href='/'">Back</button>
