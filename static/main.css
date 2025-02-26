@@ -483,6 +483,7 @@ table, th, td {
 
 .levelGrid {
     display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Ensure four squares per row */
     gap: 10px;
     justify-items: center;
     align-items: center;
