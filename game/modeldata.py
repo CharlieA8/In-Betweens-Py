@@ -17,8 +17,8 @@ class ModelData:
         self.answer2 = answer2
         self.clue1 = clue1
         self.clue2 = clue2
-        self.count1 = 0
-        self.count2 = 0
+        self.count1 = answer.count1
+        self.count2 = answer.count2
 
     def reset(self):
         self.start_time = None
