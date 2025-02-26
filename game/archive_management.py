@@ -8,7 +8,7 @@ def get_archive(level):
     conn = get_db_connection()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute('SELECT * FROM archive WHERE id = %s', (level))
+            cursor.execute('SELECT * FROM archive WHERE id = %s', (level,))
             answers_sql = cursor.fetchone()
             if answers_sql:
                 answers_dict = dict(answers_sql)
@@ -22,7 +22,7 @@ def get_user_progress(user_id):
     conn = get_db_connection()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute('SELECT completed_levels FROM user_data WHERE user_id = %s', (user_id))
+            cursor.execute('SELECT completed_levels FROM user_data WHERE user_id = %s', (user_id,))
             result = cursor.fetchone()
             return result['completed_levels'] if result else [] # returns an array of ints
     finally:
