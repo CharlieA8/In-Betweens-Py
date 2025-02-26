@@ -95,7 +95,7 @@ input {
 }
 
 .shoutout {
-    font-size: 5px;
+    font-size: 15px;
     font-family: 'Arial';
     color: rgb(57, 57, 57);
 }
@@ -496,12 +496,12 @@ table, th, td {
     gap: 5vw;
     justify-items: center;
     align-items: center;
-    width: 70%; /* Take up 60% of the screen width */
+    width: 70%; /* Take up 70% of the screen width */
     margin: 0 auto; /* Center the grid horizontally */
 }
 
 .newlevelCard, .completedLevelCard {
-    width: clamp(50px, 12vw, 90px); 
+    width: clamp(50px, 12vw, 120px); 
     height: clamp(50px, 12vw, 90px);
     color: black;
     text-decoration: none;
