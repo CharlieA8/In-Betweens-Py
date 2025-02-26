@@ -13,10 +13,6 @@
         <h2 class="in_between fadeIn">+ </h2>
         <h2 class="clue2 rightSlide">Betweens</h2>
 
-        <div class="subtitle">
-            <p class="titleLeft">By Charlie</p><p class="titleRight"> & Anna</p>
-        </div>
-
         <div class="times">
             <div class="clue leftSlide">
                 <span class="in_between">Today's Time:</span><span id="time">{{ time_today }}</span>
@@ -33,8 +29,9 @@
                 <button class="rulesButton" name="button" id="shareButton">Share</button>
             {% endif %}
             <button class="rulesButton" id="rules" name="button" onclick="window.location.href='/rules'">Rules</button>
-            <button class="rulesButton" id="archive" name="button" onclick="window.location.href='/archive'">Archive</button>
         </div>
+
+        <button class="rulesButton" id="archive" name="button" onclick="window.location.href='/archive'">Archive</button>
 
         {% if not playable %}
             <div class="tooltip">Next Puzzle In:</div>
@@ -42,6 +39,8 @@
                 <span id="countdown"></span>
             </div>
         {% endif %}
+
+        <p>Created by Charlie Adorney & Anna Dewey</p>
         
     </div>
 {% endblock %}  
