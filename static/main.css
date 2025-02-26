@@ -501,14 +501,14 @@ table, th, td {
 }
 
 .newlevelCard, .completedLevelCard {
-    width: 12vw; 
-    height: 12vw;
+    width: clamp(50px, 12vw, 90px); 
+    height: clamp(50px, 12vw, 90px);
     color: black;
     text-decoration: none;
     border: 1vw solid black;
     padding: 2vw;
     font-family: 'InBetween';
-    font-size: 8vw;
+    font-size: clamp(20px, 8vw, 60px);
     background-color: white;
     border-radius: 5vw; /* Slightly rounded corners */
     overflow: hidden;
