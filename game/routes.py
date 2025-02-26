@@ -311,7 +311,8 @@ def archive_level(n):
     if request.method == 'GET':
         g.archive_session.get_clues()
         g.archive_session.startTimer()
-        save_session(request.cookies.get('archive_id')[0], g.archive_session)
+        archive_id = json.loads(request.cookies.get('archive_id'))[0]
+        save_session(archive_id, g.archive_session)
 
         return render_template('archive_level.html', clue1=g.archive_session.clue1, clue2=g.archive_session.clue2, correct=False,
                         count1=g.archive_session.count1, count2=g.archive_session.count2, newclue=True, response=g.archive_session.response, 
@@ -321,7 +322,7 @@ def archive_level(n):
 
         if submit_action == 'back':
             response = make_response(redirect('/archive'))
-            archive_id = request.cookies.get('archive_id')[0]
+            archive_id = json.loads(request.cookies.get('archive_id'))[0]
             delete_session(archive_id)
             response.delete_cookie('archive_id')
 
@@ -350,7 +351,7 @@ def archive_level(n):
                 response = make_response(render_template('congrats.html', time=time))
                 
                 response.set_cookie('archive', user_id, max_age=max_age)
-                archive_id = request.cookies.get('archive_id')[0]
+                archive_id = json.loads(request.cookies.get('archive_id'))[0]
                 delete_session(archive_id)
                 response.delete_cookie('archive_id')
 
@@ -360,7 +361,7 @@ def archive_level(n):
             else:
                 # Log progress
                 result = g.archive_session.getResponse()
-                save_session(request.cookies.get('archive_id')[0], g.archive_session)
+                save_session(json.loads(request.cookies.get('archive_id'))[0], g.archive_session)
 
                 print(f"*Progress* User ({user_id}) submitted an incorrect answer for level {n}: ({result})")
 
