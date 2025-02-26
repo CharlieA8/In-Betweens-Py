@@ -24,7 +24,11 @@ def get_user_progress(user_id):
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
             cursor.execute('SELECT completed_levels FROM user_data WHERE user_id = %s', (user_id,))
             result = cursor.fetchone()
-            return result['completed_levels'] if result else [] # returns an array of ints
+            map = {}
+            if result:
+                for level in result['completed_levels']:
+                    map[level] = True
+            return map
     finally:
         release_db_connection(conn)
 
