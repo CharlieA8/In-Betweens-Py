@@ -40,6 +40,8 @@ body {
 .mainButtons {
     display: flex;
     justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
     padding-top: 3vh;
     padding-bottom: 3vw;
     gap: 3vw;
@@ -50,7 +52,7 @@ h1 {
     text-align: center;
     font-family: 'InBetween';
     font-weight: bold;
-    font-size: clamp(8vw, 10vw, 12vw);
+    font-size: clamp(20px, 10vw, 40px);
 }
 
 h2 {
