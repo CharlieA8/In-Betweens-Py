@@ -8,7 +8,7 @@ import uuid
 from game.session_management import save_session, load_session, delete_session
 from game.answer_management import get_answers, upload_answers, check_answers, force_update
 from game.answer import normalize_apostrophes, Answer
-from game.archive_management import get_archive, save_level_completion, get_levels_array, upload_archive, visualize_archive, get_user_progress
+from game.archive_management import get_archive, save_level_completion, get_levels_array, upload_archive, visualize_archive, get_user_progress, delete_level
 from copy import deepcopy
 import pytz
 import os
@@ -333,6 +333,13 @@ def view_archive():
     
     levels = visualize_archive()
     return render_template('view_archive.html', levels=levels)
+
+@bp.route('/view-archive/pop/<int:n>', methods=['GET'])
+def archive_pop(n):
+    if not session.get('admin'):
+        return redirect('/login')
+    delete_level(n)
+    return redirect('/view-archive')
 
         
 @bp.route('/forceupdate', methods=['GET'])

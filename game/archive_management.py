@@ -61,6 +61,15 @@ def upload_archive(data):
     finally:
         release_db_connection(conn)
 
+def delete_level(level):
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute('DELETE FROM archive WHERE id = %s', (level,))
+        conn.commit()
+    finally:
+        release_db_connection(conn)
+
 def get_levels_array():
     conn = get_db_connection()
     try:
