@@ -334,7 +334,7 @@ def view_archive():
     levels = visualize_archive()
     return render_template('view_archive.html', levels=levels)
 
-@bp.route('/view-archive/pop/<int:n>', methods=['GET'])
+@bp.route('/view-archive/<int:n>', methods=['GET'])
 def archive_pop(n):
     if not session.get('admin'):
         return redirect('/login')
