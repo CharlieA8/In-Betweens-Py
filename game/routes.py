@@ -339,8 +339,8 @@ def archive_pop(n):
     if not session.get('admin'):
         return redirect('/login')
     delete_level(n)
-    return redirect('/view-archive')
-
+    levels = visualize_archive()
+    return render_template('view_archive.html', levels=levels)
         
 @bp.route('/forceupdate', methods=['GET'])
 def force():
