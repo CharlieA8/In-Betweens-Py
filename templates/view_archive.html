@@ -9,14 +9,38 @@
     {% if levels %}
         <table>
             <tr>
+                <th>Last Input</th>
+            </tr>
+            <tr>
                 <th>Level</th>
                 <th>Answer 1</th>
                 <th>In-Between</th>
                 <th>Answer 2</th>
                 <th>Clue 1</th>
                 <th>Clue 2</th>
-                <th>Count 1</th>
-                <th>Count 2</th>
+                <th>Delete?</th>
+            </tr>
+            <tr>
+                <td>{{ levels[-1]["id"] }}</a></td>
+                <td>{{ levels[-1]["answer1"] }}</td>
+                <td>{{ levels[-1]["in_between"] }}</td>
+                <td>{{ levels[-1]["answer2"] }}</td>
+                <td>{{ levels[-1]["clue1"] }}</td>
+                <td>{{ level[-1]["clue2"] }}</td>
+                <td>
+                    <a href="{{ url_for('bp.archive_pop', n=levels[-1]['id']) }}">Delete</a>
+                </td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th>Level</th>
+                <th>Answer 1</th>
+                <th>In-Between</th>
+                <th>Answer 2</th>
+                <th>Clue 1</th>
+                <th>Clue 2</th>
             </tr>
             {% for level in levels %}
                 <tr>
@@ -26,8 +50,6 @@
                     <td>{{ level["answer2"] }}</td>
                     <td>{{ level["clue1"] }}</td>
                     <td>{{ level["clue2"] }}</td>
-                    <td>{{ level["count1"] }}</td>
-                    <td>{{ level["count2"] }}</td>
                 </tr>
             {% endfor %}
         </table>
