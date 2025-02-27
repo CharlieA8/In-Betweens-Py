@@ -66,6 +66,10 @@ def delete_level(level):
     try:
         with conn.cursor() as cursor:
             cursor.execute('DELETE FROM archive WHERE id = %s', (level,))
+            cursor.execute("""
+                SELECT setval(pg_get_serial_sequence('archive', 'id'), 
+                (SELECT max(id) FROM archive));
+            """)
         conn.commit()
     finally:
         release_db_connection(conn)
