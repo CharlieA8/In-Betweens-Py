@@ -37,6 +37,8 @@
     </div>
 
     <form action="/submit" method="post" id="game-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
         <p><input type="text" autocomplete="off" class="clue1 {% if response and response[0] %}correct{% endif %}" name="answer1" placeholder="Clue 1" value="{{ answer1 }}"></p>
         <p style="padding: 1vw;"><input type="text" autocomplete="off" class="in_between {% if response and response[1] %}correct{% endif %}" name="in_between" placeholder="In-Between" value="{{ in_between }}"></p>
         <p><input type="text" autocomplete="off" class="clue2 {% if response and response[2] %}correct{% endif %}" name="answer2" placeholder="Clue 2" value="{{ answer2 }}"></p>

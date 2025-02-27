@@ -10,6 +10,8 @@
     </div>
 
     <form action="/update" method="post" id="editor-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
         <!-- Editable Clues -->
         <textarea name="clue1" class="clueUpdate" placeholder="Enter Clue 1">{{ firstClue }}</textarea>
         <textarea name="clue2" class="clueUpdate" placeholder="Enter Clue 2">{{ secondClue }}</textarea>

@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file, session, url_for
 from datetime import datetime
+import bcrypt
+from cryptography.fernet import Fernet 
+import base64 
 from game.modeldata import ModelData
 import uuid
 from game.session_management import save_session, load_session, delete_session
@@ -10,23 +13,48 @@ from copy import deepcopy
 import pytz
 import os
 
-
 bp = Blueprint('main', __name__)
+
+# Utility functions for cookie encryption/decryption
+def encrypt_cookie_data(data, secret_key):
+    """Encrypt cookie data"""
+    json_data = json.dumps(data)
+    key = base64.urlsafe_b64encode(secret_key.ljust(32)[:32].encode())
+    cipher = Fernet(key)
+    encrypted_data = cipher.encrypt(json_data.encode())
+    return base64.urlsafe_b64encode(encrypted_data).decode()
+
+def decrypt_cookie_data(encrypted_data, secret_key):
+    """Decrypt cookie data"""
+    try:
+        key = base64.urlsafe_b64encode(secret_key.ljust(32)[:32].encode())
+        cipher = Fernet(key)
+        decoded_data = base64.urlsafe_b64decode(encrypted_data.encode())
+        decrypted_data = cipher.decrypt(decoded_data).decode()
+        return json.loads(decrypted_data)
+    except Exception:
+        return None
 
 @bp.before_request
 def before_request():
     g.answers = get_answers()
+    secret_key = request.environ.get('FLASK_SECRET_KEY', 'dev')
 
     # Check for session cookies
     session_id = request.cookies.get('session_id')
     archive_cookie = request.cookies.get('archive_id')
     
     if archive_cookie:
-        archive_id, n = json.loads(archive_cookie)
-        archive_data = load_session(archive_id)
-        if archive_data:
-            g.archive_session = ModelData(get_archive(n), **archive_data)
-        else:
+        try:
+            # Decrypt the archive cookie
+            archive_data = decrypt_cookie_data(archive_cookie, secret_key)
+            archive_id, n = archive_data
+            session_data = load_session(archive_id)
+            if session_data:
+                g.archive_session = ModelData(get_archive(n), **session_data)
+            else:
+                g.archive_session = None
+        except:
             g.archive_session = None
     else:
         g.archive_session = None
@@ -42,6 +70,7 @@ def before_request():
 
 @bp.route('/')
 def title():
+    secret_key = request.environ.get('FLASK_SECRET_KEY', 'dev')
     stats_cookie = request.cookies.get('game_stats')
     today_cookie = request.cookies.get('today')
     playable = False
@@ -52,18 +81,25 @@ def title():
     date = str(current_time.date())
 
     if stats_cookie:
-        game_stats = json.loads(stats_cookie)
-        average_time = game_stats['average_time']
+        try:
+            game_stats = decrypt_cookie_data(stats_cookie, secret_key)
+            average_time = game_stats['average_time']
+        except:
+            average_time = "N/A"
     else:
         average_time = "N/A"
 
     if today_cookie:
-        today = json.loads(today_cookie)
-        if date != today[1]:
+        try:
+            today = decrypt_cookie_data(today_cookie, secret_key)
+            if date != today[1]:
+                time_today = "N/A"
+                playable = True
+            else:
+                time_today = today[0]
+        except:
             time_today = "N/A"
             playable = True
-        else:
-            time_today = today[0]
     else:
         time_today = "N/A"
         playable = True
@@ -99,17 +135,23 @@ def pause():
 def resume():
     # Check if the user has already played today
     today_cookie = request.cookies.get('today')
+    secret_key = request.environ.get('FLASK_SECRET_KEY', 'dev')
 
     if today_cookie:
-        today = json.loads(today_cookie)
+        try:
+            today = decrypt_cookie_data(today_cookie, secret_key)
+        except:
+            today = ["N/A", None]
+    else: 
+        today = ["N/A", None]
 
-        # Get date in EST
-        timezone = pytz.timezone('US/Eastern')
-        current_time = datetime.now(timezone)
-        date = str(current_time.date())
+    # Get date in EST
+    timezone = pytz.timezone('US/Eastern')
+    current_time = datetime.now(timezone)
+    date = str(current_time.date())
 
-        if date == today[1]:
-            return redirect('/')
+    if date == today[1]:
+        return redirect('/')
 
     if not g.answers:
         return redirect('/')
@@ -149,14 +191,21 @@ def submit():
             # Get the existing stats from cookies
             stats_cookie = request.cookies.get('game_stats')
             today_cookie = request.cookies.get('today')
+            secret_key = request.environ.get('FLASK_SECRET_KEY', 'dev')
 
             if stats_cookie:
-                game_stats = json.loads(stats_cookie)
+                try:
+                    game_stats = decrypt_cookie_data(stats_cookie, secret_key)
+                except:
+                    game_stats = {'times': [], 'average_time': 0}
             else:
                 game_stats = {'times': [], 'average_time': 0}
 
             if today_cookie:
-                today = json.loads(today_cookie)
+                try:
+                    today = decrypt_cookie_data(today_cookie, secret_key)
+                except:
+                    today = ["N/A", None]
             else:
                 today = ["N/A", None]
 
@@ -172,9 +221,14 @@ def submit():
 
             # Set the updated stats in cookies
             max_age = 10 * 365 * 24 * 60 * 60 # 10 years!!
+
+            # Encrypt cookie data
+            encrypted_stats = encrypt_cookie_data(game_stats, secret_key)
+            encrypted_today = encrypt_cookie_data(today, secret_key)
+
             response = make_response(render_template('congrats.html', time=time))
-            response.set_cookie('game_stats', json.dumps(game_stats), max_age=max_age)
-            response.set_cookie('today', json.dumps(today), max_age=86400)
+            response.set_cookie('game_stats', encrypted_stats, max_age=max_age)
+            response.set_cookie('today', encrypted_today, max_age=86400)
 
             # Clear session data
             session_id = request.cookies.get('session_id')
@@ -222,11 +276,14 @@ def login():
         password = request.form['password']
         if not username or not password:
             return render_template('login.html', message="All fields must be filled!")
-        if username == os.getenv('USERNAME') and password == os.getenv('PASSWORD'):
+        
+        hash_pw = os.getenv('PW_HASH')
+
+        if username == os.getenv('USERNAME') and bcrypt.checkpw(password.encode('utf-8'), hash_pw.encode('utf-8')):
             session['admin'] = True
             return redirect('/update')
         else:
-            return render_template('login.html', message="Incorrect username or password")
+            return render_template('login.html', message="Invalid credentials")
         
 @bp.route('/update', methods=['GET', 'POST'])
 def update():
@@ -307,7 +364,7 @@ def archive_level(n):
 
         # set archive_id cookie
         response = make_response(redirect('/archive/' + str(n)))
-        response.set_cookie('archive_id', json.dumps([archive_id, n]))
+        response.set_cookie('archive_id', archive_id)
 
         # Log usage
         print(f"*Start (A)* New user started level {n} with id {archive_id}")
@@ -316,7 +373,7 @@ def archive_level(n):
     if request.method == 'GET':
         g.archive_session.get_clues()
         g.archive_session.startTimer()
-        archive_id = json.loads(request.cookies.get('archive_id'))[0]
+        archive_id = request.cookies.get('archive_id')
         save_session(archive_id, g.archive_session)
 
         return render_template('archive_level.html', clue1=g.archive_session.clue1, clue2=g.archive_session.clue2, correct=False,
@@ -327,7 +384,7 @@ def archive_level(n):
 
         if submit_action == 'back':
             response = make_response(redirect('/archive'))
-            archive_id = json.loads(request.cookies.get('archive_id'))[0]
+            archive_id = request.cookies.get('archive_id')
             delete_session(archive_id)
             response.delete_cookie('archive_id')
 
@@ -367,7 +424,7 @@ def archive_level(n):
             else:
                 # Log progress
                 result = g.archive_session.getResponse()
-                save_session(json.loads(request.cookies.get('archive_id'))[0], g.archive_session)
+                save_session(request.cookies.get('archive_id'), g.archive_session)
 
                 print(f"*Progress* A user submitted an incorrect answer for level {n}: ({result})")
 

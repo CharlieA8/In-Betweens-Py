@@ -3,3 +3,4 @@ venv/
 .DS_Store
 sessions.db
 .env
+encrypt.py
