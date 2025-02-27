@@ -163,7 +163,7 @@ def resume():
 
         # set session_id cookie
         response = make_response(redirect('/play'))
-        response.set_cookie('session_id', session_id)
+        response.set_cookie('session_id', session_id,  httponly=True)
 
         # Log usage
         print(f"*Start* New user started with id {session_id}")
@@ -227,8 +227,8 @@ def submit():
             encrypted_today = encrypt_cookie_data(today, secret_key)
 
             response = make_response(render_template('congrats.html', time=time))
-            response.set_cookie('game_stats', encrypted_stats, max_age=max_age)
-            response.set_cookie('today', encrypted_today, max_age=86400)
+            response.set_cookie('game_stats', encrypted_stats, max_age=max_age,  httponly=True)
+            response.set_cookie('today', encrypted_today, max_age=86400,  httponly=True)
 
             # Clear session data
             session_id = request.cookies.get('session_id')
@@ -364,7 +364,7 @@ def archive_level(n):
 
         # set archive_id cookie
         response = make_response(redirect('/archive/' + str(n)))
-        response.set_cookie('archive_id', archive_id)
+        response.set_cookie('archive_id', archive_id,  httponly=True)
 
         # Log usage
         print(f"*Start (A)* New user started level {n} with id {archive_id}")
@@ -413,7 +413,7 @@ def archive_level(n):
                 max_age = 10 * 365 * 24 * 60 * 60 # 10 years!!
                 response = make_response(render_template('congrats.html', time=time, level=n))
                 
-                response.set_cookie('archive', user_id, max_age=max_age)
+                response.set_cookie('archive', user_id, max_age=max_age,  httponly=True)
                 archive_id = json.loads(request.cookies.get('archive_id'))[0]
                 delete_session(archive_id)
                 response.delete_cookie('archive_id')
