@@ -363,6 +363,7 @@ def archive():
 
 @bp.route("/archive/<int:n>", methods=['GET', 'POST'])
 def archive_level(n):
+    secret_key = request.environ.get('FLASK_SECRET_KEY', 'dev')
     # Check if there's an active session
     if not g.archive_session:
         archive_id = str(uuid.uuid4())
@@ -370,17 +371,19 @@ def archive_level(n):
         save_session(archive_id, g.archive_session)
 
         # set archive_id cookie
+        encrypted_archive_data = encrypt_cookie_data([archive_id, n], secret_key)
         response = make_response(redirect('/archive/' + str(n)))
-        response.set_cookie('archive_id', archive_id,  httponly=True)
+        response.set_cookie('archive_id', encrypted_archive_data,  httponly=True)
 
         # Log usage
         print(f"*Start (A)* New user started level {n} with id {archive_id}")
         return response
     
+    archive_id = json.loads(request.cookies.get('archive_id'))[0]
+    
     if request.method == 'GET':
         g.archive_session.get_clues()
         g.archive_session.startTimer()
-        archive_id = request.cookies.get('archive_id')
         save_session(archive_id, g.archive_session)
 
         return render_template('archive_level.html', clue1=g.archive_session.clue1, clue2=g.archive_session.clue2, correct=False,
@@ -391,7 +394,6 @@ def archive_level(n):
 
         if submit_action == 'back':
             response = make_response(redirect('/archive'))
-            archive_id = request.cookies.get('archive_id')
             delete_session(archive_id)
             response.delete_cookie('archive_id')
 
@@ -421,7 +423,6 @@ def archive_level(n):
                 response = make_response(render_template('congrats.html', time=time, level=n))
                 
                 response.set_cookie('archive', user_id, max_age=max_age,  httponly=True)
-                archive_id = json.loads(request.cookies.get('archive_id'))[0]
                 delete_session(archive_id)
                 response.delete_cookie('archive_id')
 
@@ -431,7 +432,7 @@ def archive_level(n):
             else:
                 # Log progress
                 result = g.archive_session.getResponse()
-                save_session(request.cookies.get('archive_id'), g.archive_session)
+                save_session(archive_id, g.archive_session)
 
                 print(f"*Progress* A user submitted an incorrect answer for level {n}: ({result})")
 
