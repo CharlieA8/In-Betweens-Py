@@ -379,7 +379,9 @@ def archive_level(n):
         print(f"*Start (A)* New user started level {n} with id {archive_id}")
         return response
     
-    archive_id = json.loads(request.cookies.get('archive_id'))[0]
+    archive_cookie = request.cookies.get('archive_id')
+    archive_data = decrypt_cookie_data(archive_cookie, secret_key)
+    archive_id = archive_data[0]
     
     if request.method == 'GET':
         g.archive_session.get_clues()
