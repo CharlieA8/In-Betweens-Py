@@ -361,6 +361,7 @@ input {
     padding: 10px;
     padding-left: 2vw;
     padding-right: 2vw;
+    align-items: center;
     display: inline-block;
     transition: box-shadow 0.3s ease, color 0.3s ease;
     cursor: pointer;
@@ -510,14 +511,15 @@ table, th, td {
 
 .pagination {
     display: flex;
+    align-items: center;
     justify-content: center;
     gap: 1rem;
     margin-bottom: 20px;
 }
 
 .pagination button {
-    padding: 10px 20px;
-    margin: 0 5px;
+    padding: 20px;
+    margin: 5px;
     cursor: pointer;
 }
 
