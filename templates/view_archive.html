@@ -1,58 +1,44 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<script src="{{ url_for('static', filename='script/tablePagination.js') }}" defer></script>
 {% endblock %}
 
 {% block body %}
     <div class="title">Admin Archive</div>
 
     {% if levels %}
-        <table>
-            <tr>
-                <th>Last Input</th>
-            </tr>
-            <tr>
-                <th>Level</th>
-                <th>Answer 1</th>
-                <th>In-Between</th>
-                <th>Answer 2</th>
-                <th>Clue 1</th>
-                <th>Clue 2</th>
-                <th>Delete?</th>
-            </tr>
-            <tr>
-                <td>{{ levels[-1]["id"] }}</a></td>
-                <td>{{ levels[-1]["answer1"] }}</td>
-                <td>{{ levels[-1]["in_between"] }}</td>
-                <td>{{ levels[-1]["answer2"] }}</td>
-                <td>{{ levels[-1]["clue1"] }}</td>
-                <td>{{ levels[-1]["clue2"] }}</td>
-                <td>
-                    <a href="/view-archive/{{ levels[-1]['id'] }}">Delete</a>
-                </td>
-            </tr>
-        </table>
-
-        <table>
-            <tr>
-                <th>Level</th>
-                <th>Answer 1</th>
-                <th>In-Between</th>
-                <th>Answer 2</th>
-                <th>Clue 1</th>
-                <th>Clue 2</th>
-            </tr>
-            {% for level in levels %}
+        <div id="tableContainer">
+            <table class="archiveTable">
                 <tr>
-                    <td>{{ level["id"] }}</a></td>
-                    <td>{{ level["answer1"] }}</td>
-                    <td>{{ level["in_between"] }}</td>
-                    <td>{{ level["answer2"] }}</td>
-                    <td>{{ level["clue1"] }}</td>
-                    <td>{{ level["clue2"] }}</td>
+                    <th>Level</th>
+                    <th>Answer 1</th>
+                    <th>In-Between</th>
+                    <th>Answer 2</th>
+                    <th>Clue 1</th>
+                    <th>Clue 2</th>
+                    <th>Delete?</th>
                 </tr>
-            {% endfor %}
-        </table>
+                {% for level in levels %}
+                    <tr>
+                        <td>{{ level["id"] }}</td>
+                        <td>{{ level["answer1"] }}</td>
+                        <td>{{ level["in_between"] }}</td>
+                        <td>{{ level["answer2"] }}</td>
+                        <td>{{ level["clue1"] }}</td>
+                        <td>{{ level["clue2"] }}</td>
+                        <td>
+                            <a href="/view-archive/{{ level['id'] }}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button id="prevPage" onclick="prevPage()">Previous</button>
+            <button id="nextPage" onclick="nextPage()">Next</button>
+        </div>
     {% else %}
         <p>No levels found in the archive.</p>
     {% endif %}

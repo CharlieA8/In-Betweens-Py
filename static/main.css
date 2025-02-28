@@ -477,6 +477,48 @@ table, th, td {
     box-sizing: border-box; /* Prevent padding from affecting cell size */
 }
 
+.archiveTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Adds a gap between the tables */
+}
+
+.archiveTable th, .archiveTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.archiveTable th {
+    background-color: #f2f2f2;
+    color: black;
+    font-weight: bold;
+}
+
+.archiveTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.archiveTable tr:hover {
+    background-color: #ddd;
+}
+
+.archiveTable th[colspan="7"] {
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
 .clueUpdate {
     display: flex;
     align-self: center;
