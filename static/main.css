@@ -584,7 +584,7 @@ table, th, td {
     gap: 4vw;
     justify-items: center;
     align-items: center;
-    width: clamp(70%, 500px); /* Take up 70% of the screen width */
+    width: clamp(100px, 70%, 400px); /* Take up 70% of the screen width */
     margin: 0 auto; /* Center the grid horizontally */
     padding-bottom: 2vh;
 }
