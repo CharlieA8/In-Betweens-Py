@@ -519,6 +519,49 @@ table, th, td {
     cursor: pointer;
 }
 
+.prevPageButton, .nextPageButton {
+    background-color: black;
+    color: rgb(195, 88, 195);
+    font-size: 24px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.prevPageButton::before {
+    content: "←"; /* Unicode left arrow */
+    font-size: 32px;
+}
+
+.nextPageButton::before {
+    content: "→"; /* Unicode right arrow */
+    font-size: 32px;
+}
+
+.prevPageButton:hover, .nextPageButton:hover {
+    background-color: rgb(91, 255, 107);
+    color: black;
+}
+
+.prevPageButton:disabled, .nextPageButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.prevPageButton:active {
+    transform: scale(0.9);
+}
+
+.nextPageButton:active {
+    transform: scale(0.9);
+}
+
 .clueUpdate {
     display: flex;
     align-self: center;

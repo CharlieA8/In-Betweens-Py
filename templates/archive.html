@@ -11,6 +11,11 @@
     </div>
 
     {% if levels %}
+    <div class="pagination">
+        <button id="prevPageButton" class="prevPageButton">← Prev</button>
+        <button id="nextPageButton" class="nextPageButton">Next →</button>
+    </div>
+
     <div class="levelGrid">
         {% for level in levels %}
             {% if user_levels.get(level) == True %}
@@ -23,11 +28,6 @@
                 </a>
             {% endif %}
         {% endfor %}
-    </div>
-
-    <div class="pagination">
-        <button id="prevPageButton">← Prev</button>
-        <button id="nextPageButton">Next →</button>
     </div>
 
 {% else %}
