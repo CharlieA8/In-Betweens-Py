@@ -375,13 +375,13 @@ input {
     width: 100px;
     height: 50px;
     border: 3px solid rgb(195, 88, 195);
-    border-radius: 50%;
+    border-radius: clamp(50px, 6vw, 6vw);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     font-family: 'InBetween';
-    transition: background 0.3s ease, transform 0.2s ease;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
 }
 
 .hint {
@@ -565,11 +565,6 @@ table, th, td {
     font-size: 32px;
 }
 
-.prevPageButton:hover, .nextPageButton:hover, .archiveBackButton:hover {
-    background-color: rgb(91, 255, 107);
-    color: black;
-}
-
 .prevPageButton:disabled, .nextPageButton:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -600,10 +595,10 @@ table, th, td {
 .levelGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Ensure four squares per row */
-    gap: 4vw;
+    gap: 2rem;
     justify-items: center;
     align-items: center;
-    width: 60%; /* Take up 70% of the screen width */
+    width: 60%;
     height: 60%;
     margin: 0 auto; /* Center the grid horizontally */
 }
@@ -614,7 +609,7 @@ table, th, td {
     color: black;
     text-decoration: none;
     border: clamp(3px, 1vw, 10px) solid black;
-    padding: clamp(10px, 1vw, 20px);
+    padding: 1vw;
     font-family: 'InBetween';
     font-size: clamp(20px, 8vw, 60px);
     background-color: white;
