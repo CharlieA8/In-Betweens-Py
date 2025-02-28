@@ -1,6 +1,6 @@
 const rowsPerPage = 20;
 let currentPage = 1;
-const table = document.querySelector('.archiveTable');
+const table = document.querySelector('.archiveTable main');
 const rows = table.querySelectorAll('tr');
 const totalPages = Math.ceil((rows.length - 1) / rowsPerPage);
 
