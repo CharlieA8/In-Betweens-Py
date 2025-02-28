@@ -14,6 +14,7 @@
     <div class="pagination">
         <button id="prevPageButton" class="prevPageButton"></button>
         <button id="nextPageButton" class="nextPageButton"></button>
+        <button class="backButton" name="button" onclick="window.location.href='/'">Back</button>
     </div>
 
     <div class="levelGrid">
@@ -33,9 +34,5 @@
 {% else %}
     <p>No levels found in the archive.</p>
 {% endif %}
-
-    <div class="rules">
-        <button class="backButton" name="button" onclick="window.location.href='/'">Back</button>
-    </div>
 
 {% endblock %}
