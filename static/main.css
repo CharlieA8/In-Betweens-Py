@@ -133,6 +133,7 @@ input {
     justify-content: center;
     padding-top: 10px;
     gap: 20px;
+    align-items: center;
 }
 
 .times {
@@ -367,6 +368,22 @@ input {
     cursor: pointer;
 }
 
+.archiveBackButton {
+    background-color: rgb(255, 255, 255);
+    color: rgb(195, 88, 195);
+    font-size: 24px;
+    width: 100px;
+    height: 50px;
+    border: 3px solid rgb(195, 88, 195);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'InBetween';
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
 .hint {
     width: clamp(200px, 30vw, 30vw);
     height: clamp(300px, 40vh, 40vh);
@@ -548,7 +565,7 @@ table, th, td {
     font-size: 32px;
 }
 
-.prevPageButton:hover, .nextPageButton:hover {
+.prevPageButton:hover, .nextPageButton:hover, .archiveBackButton:hover {
     background-color: rgb(91, 255, 107);
     color: black;
 }
@@ -586,9 +603,9 @@ table, th, td {
     gap: 4vw;
     justify-items: center;
     align-items: center;
-    width: clamp(100px, 70%, 400px); /* Take up 70% of the screen width */
+    width: 60%; /* Take up 70% of the screen width */
+    height: 60%;
     margin: 0 auto; /* Center the grid horizontally */
-    padding-bottom: 2vh;
 }
 
 .newlevelCard, .completedLevelCard {
