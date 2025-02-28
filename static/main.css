@@ -99,6 +99,7 @@ input {
     font-size: 15px;
     font-family: 'InBetween';
     color: rgb(57, 57, 57);
+    padding-top: 1vh;
 }
 
 
@@ -319,7 +320,6 @@ input {
     color: rgb(195, 88, 195);
     text-align: center;
     padding-top: 1vh;
-    padding-bottom: 1vh;
 }
 
 .playButton{
