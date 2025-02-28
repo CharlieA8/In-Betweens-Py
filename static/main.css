@@ -478,21 +478,26 @@ table, th, td {
 }
 
 .archiveTable {
-    width: 100%;
+    width: 80%;
     border-collapse: collapse;
     margin-bottom: 20px; /* Adds a gap between the tables */
+    table-layout: auto;
+    word-wrap: break-word; /* Wrap text for long values */
+    overflow-wrap: break-word; /* Ensure content wraps properly */
 }
 
 .archiveTable th, .archiveTable td {
-    border: 1px solid #ddd;
+    border: 1px solid white;
     padding: 8px;
     text-align: left;
 }
 
-.archiveTable th {
+.big th {
     background-color: #f2f2f2;
     color: black;
     font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
 }
 
 .archiveTable tr:nth-child(even) {
@@ -501,11 +506,6 @@ table, th, td {
 
 .archiveTable tr:hover {
     background-color: #ddd;
-}
-
-.archiveTable th[colspan="7"] {
-    text-align: center;
-    font-size: 1.2em;
 }
 
 .pagination {
