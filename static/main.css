@@ -541,6 +541,7 @@ table, th, td {
     align-items: center;
     width: 70%; /* Take up 70% of the screen width */
     margin: 0 auto; /* Center the grid horizontally */
+    padding-bottom: 2vh;
 }
 
 .newlevelCard, .completedLevelCard {
