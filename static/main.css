@@ -595,10 +595,10 @@ table, th, td {
 .levelGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Ensure four squares per row */
-    gap: 2rem;
+    gap: 1rem;
     justify-items: center;
     align-items: center;
-    width: 60%;
+    width: 70%;
 }
 
 .newlevelCard, .completedLevelCard {
