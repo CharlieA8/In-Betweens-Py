@@ -150,7 +150,7 @@ def resume():
     current_time = datetime.now(timezone)
     date = str(current_time.date())
 
-    if today[1] is not None and date < today[1]:
+    if today is not None and today[1] is not None and date < today[1]:
         return redirect('/')
 
     if not g.answers:
