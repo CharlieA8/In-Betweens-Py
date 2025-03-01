@@ -261,7 +261,7 @@ input {
     border: 5px solid black;
     padding: 10px;
     font-family: 'InBetween';
-    font-size: clamp(20px, 3vw, 35px);
+    font-size: clamp(15px, 3vw, 35px);
     background-color: white;
     border-radius: 10px;
     overflow: hidden;
