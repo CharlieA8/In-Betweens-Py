@@ -1,6 +1,29 @@
 class Answer:
-    def __init__(self, data):
-        self.load_answer_from_json(data)
+    def __init__(self, data=None):
+        if data is not None:
+            self.load_answer_from_json(data)
+        else:
+            self.id = -1
+            self.answer1 = "Ans1"
+            self.in_between = "Inbtw"
+            self.answer2 = "Ans2"
+            self.clue1 = "Clue1"
+            self.clue2 = "Clue2"
+            self.count1 = "count1"
+            self.count2 = "count2"
+            self.response = [False, False, False]
+    
+    def dictify(self):
+        return {
+            'id': self.id,
+            'answer1': self.answer1,
+            'in_between': self.in_between,
+            'answer2': self.answer2,
+            'clue1': self.clue1,
+            'clue2': self.clue2,
+            'count1': self.count1,
+            'count2': self.count2
+        }
 
     def __str__(self):
         return f"{self.clue1} + {self.clue2}\n{self.answer1} + {self.in_between} + {self.answer2}"

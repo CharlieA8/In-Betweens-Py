@@ -10,6 +10,8 @@
     </div>
 
     <form action="/update" method="post" id="editor-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
         <!-- Editable Clues -->
         <textarea name="clue1" class="clueUpdate" placeholder="Enter Clue 1">{{ firstClue }}</textarea>
         <textarea name="clue2" class="clueUpdate" placeholder="Enter Clue 2">{{ secondClue }}</textarea>
@@ -21,8 +23,15 @@
         <p><input type="text" name="in_between" class="in_between" placeholder="In-Between" value="{{ in_between }}"></p>
         <p><input type="text" name="answer2" class="clue2" placeholder="Answer 2" value="{{ answer2 }}"></p>
 
+        <input type="hidden" id="submit_action" name="submit_action" value="update">
+
         <div class="parent">
-            <button type="submit" class="submit">Update!</button>
+            <button type="submit" class="submit" onclick="document.getElementById('submit_action').value='update'">
+                Update Tomorrow
+            </button>
+            <button type="submit" class="submit" onclick="document.getElementById('submit_action').value='archive'">
+                Add to Archive
+            </button>
         </div>
     </form>
 
@@ -55,6 +64,7 @@
 
     <div class="parent">
         <button class="rulesButton" id="forceupdate" name="button" onclick="window.location.href='/forceupdate'">Force Update</button>
+        <button class="rulesButton" name="button" onclick="window.location.href='/view-archive'">View Archive</button>
     </div>
 
     <script>

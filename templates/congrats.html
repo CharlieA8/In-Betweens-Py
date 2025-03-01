@@ -2,9 +2,10 @@
 
 {% block head %}
 
-<script src="static/script/textCycle.js" defer></script>
-<script src="static/script/shareButton.js" defer></script>
-<script src="static/script/borderCycle.js" defer></script>
+<script src="{{ url_for('static', filename='script/textCycle.js') }}" defer></script>
+<script src="{{ url_for('static', filename='script/shareButton.js') }}" defer></script>
+<script src="{{ url_for('static', filename='script/borderCycle.js') }}" defer></script>
+
 
 {% endblock %}
 
@@ -16,7 +17,11 @@
     <p class="time rightSlide" name="textCycle" id="time">{{ time }}s</p>
     <div class="mainButtons">
         <button class="playButton fadeIn" name="button" onclick="window.location.href='/'">Home</button>
-        <button class="rulesButton fadeIn" name="button" id="shareButton">Share</button>
+        {% if level %}
+            <button class="rulesButton fadeIn" name="button" onclick="window.location.href='/archive'">Archive</button>
+        {% else %}
+            <button class="rulesButton fadeIn" name="button" id="shareButton">Share</button>
+        {% endif %}
     </div>
 </div>
    

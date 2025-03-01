@@ -12,9 +12,10 @@
 }
 
 .subtitle {
-    font-size: clamp(30px, 3vw, 4vw);
+    font-size: clamp(20px, 5vw, 30px);
     text-align: center;
     font-family: 'InBetween';
+    color: rgb(104, 104, 104);
 }
 
 .titleLeft {
@@ -40,7 +41,10 @@ body {
 .mainButtons {
     display: flex;
     justify-content: center;
-    padding-top: 10vh;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-top: 3vh;
+    padding-bottom: 3vw;
     gap: 3vw;
 }
 
@@ -49,7 +53,7 @@ h1 {
     text-align: center;
     font-family: 'InBetween';
     font-weight: bold;
-    font-size: clamp(3vh, 6vh, 6vh);
+    font-size: clamp(20px, 10vw, 40px);
 }
 
 h2 {
@@ -91,6 +95,13 @@ input {
         padding: 1vh;
 }
 
+.shoutout {
+    font-size: 15px;
+    font-family: 'InBetween';
+    color: rgb(57, 57, 57);
+    padding-top: 1vh;
+}
+
 
 .clue1 {
     text-align: center;
@@ -123,6 +134,7 @@ input {
     justify-content: center;
     padding-top: 10px;
     gap: 20px;
+    align-items: center;
 }
 
 .times {
@@ -180,8 +192,9 @@ input {
 }
 
 .plus {
-    font-size: 100px;
+    font-size: 80px;
     font-style: bold;
+    font-family: 'InBetween';
 }
 
 .correct {
@@ -221,7 +234,7 @@ input {
 }
 
 .rulesText {
-    font-size: clamp(20px, 3vw, 40px);
+    font-size: clamp(15px, 3vw, 35px);
     display: inline-block;
     justify-content: center;
     text-align: center;
@@ -234,10 +247,11 @@ input {
 
 .rulesText strong {
     display: inline;
+    color: rgb(195, 88, 195);
 }
 
 .rulesHeading {
-    font-size: clamp(30px, 4vw, 60px);
+    font-size: clamp(20px, 3vw, 40px);
     font-weight: bold;
 }
 
@@ -247,7 +261,7 @@ input {
     border: 5px solid black;
     padding: 10px;
     font-family: 'InBetween';
-    font-size: clamp(20px, 3vw, 40px);
+    font-size: clamp(15px, 3vw, 35px);
     background-color: white;
     border-radius: 10px;
     overflow: hidden;
@@ -264,7 +278,7 @@ input {
     border-radius: 30px;
     box-shadow: 0 0 clamp(40px, 7vw, 60px) rgb(178, 60, 60);
     border: 10px solid rgb(178, 60, 60);
-    font-size: clamp(80px, 8vw, 100px);
+    font-size: clamp(45px, 15vw, 70px);
     text-align: center;
     display: flex;
     justify-content: center;
@@ -351,9 +365,26 @@ input {
     padding: 10px;
     padding-left: 2vw;
     padding-right: 2vw;
+    align-items: center;
     display: inline-block;
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
     cursor: pointer;
+}
+
+.archiveBackButton {
+    background-color: rgb(255, 255, 255);
+    color: rgb(195, 88, 195);
+    font-size: 24px;
+    width: 100px;
+    height: 50px;
+    border: 3px solid rgb(195, 88, 195);
+    border-radius: clamp(50px, 6vw, 6vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'InBetween';
+    transition: box-shadow 0.3s ease, color 0.3s ease;
 }
 
 .hint {
@@ -467,6 +498,89 @@ table, th, td {
     box-sizing: border-box; /* Prevent padding from affecting cell size */
 }
 
+.archiveTable {
+    width: 80%;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Adds a gap between the tables */
+    table-layout: auto;
+    word-wrap: break-word; /* Wrap text for long values */
+    overflow-wrap: break-word; /* Ensure content wraps properly */
+}
+
+.archiveTable th, .archiveTable td {
+    border: 1px solid white;
+    padding: 8px;
+    text-align: left;
+}
+
+.big th {
+    background-color: #f2f2f2;
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.archiveTable tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.archiveTable tr:hover {
+    background-color: #ddd;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 20px;
+}
+
+.pagination button {
+    padding: 20px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.prevPageButton, .nextPageButton {
+    background-color: rgb(255, 255, 255);
+    color: rgb(195, 88, 195);
+    font-size: 24px;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgb(195, 88, 195);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+
+.prevPageButton::before {
+    content: "←"; /* Unicode left arrow */
+    font-size: 32px;
+}
+
+.nextPageButton::before {
+    content: "→"; /* Unicode right arrow */
+    font-size: 32px;
+}
+
+.prevPageButton:disabled, .nextPageButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.prevPageButton:active {
+    transform: scale(0.9);
+}
+
+.nextPageButton:active {
+    transform: scale(0.9);
+}
+
 .clueUpdate {
     display: flex;
     align-self: center;
@@ -479,6 +593,99 @@ table, th, td {
     margin-bottom: 10px;
     resize: vertical;
     padding: 3px;
+}
+
+.levelGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Ensure four squares per row */
+    gap: 1rem;
+    justify-items: center;
+    align-items: center;
+    width: 70%;
+}
+
+.newlevelCard, .completedLevelCard {
+    width: clamp(50px, 12vw, 120px); 
+    height: clamp(50px, 12vw, 120px);
+    color: black;
+    text-decoration: none;
+    border: clamp(3px, 1vw, 10px) solid black;
+    padding: 1vw;
+    font-family: 'InBetween';
+    font-size: clamp(20px, 8vw, 60px);
+    background-color: white;
+    border-radius: clamp(5px, 5vw, 20px); /* Slightly rounded corners */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    transition: box-shadow 0.3s ease, color 0.3s ease;
+    cursor: pointer; /* Indicate that the div is clickable */
+}
+
+.completedLevelCard {
+    border: 5px solid rgb(91, 255, 107);
+    color: rgb(91, 255, 107);
+    animation: glowing 1.5s infinite alternate;
+    pointer-events: none; /* Disable pointer events for completed levels */
+}
+
+/* Rules navigation styles */
+.example-section {
+    background-color: white;
+    border: 5px solid black;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 0 auto 20px;
+    width: 80%;
+    height: 55%;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.step {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-out;
+}
+
+.step.active {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+    opacity: 1;
+    visibility: visible;
+}
+
+#step-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.navButton {
+    font-size: 16px;
+    font-family: 'InBetween';
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 2px solid rgb(195, 88, 195);
+    background-color: white;
+    color: rgb(195, 88, 195);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navButton:hover {
+    background-color: rgb(195, 88, 195);
+    color: white;
+}
+
+.navButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 @keyframes topSlide {

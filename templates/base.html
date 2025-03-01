@@ -15,8 +15,8 @@
     <meta property="og:url" content="https://www.inbetweens.xyz/">
     <meta property="og:type" content="website">
 
-    <script src="static/script/shadows.js" defer></script>
-    <script src="static/script/scaleText.js" defer></script>
+    <script src="{{ url_for('static', filename='script/shadows.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='script/scaleText.js') }}" defer></script>
 
     {% block head %}{% endblock %}
 </head>

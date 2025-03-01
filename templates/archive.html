@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script src="{{ url_for('static', filename='script/borderCycle.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='script/archivePagination.js') }}" defer></script>
+{% endblock %}
+
+{% block body %}
+    <div class="rules">
+        <h1 class="doneCard topSlide" id="borderCycle">Archive!</h1>
+    </div>
+
+    {% if levels %}
+    <div class="pagination">
+        <button id="prevPageButton" class="prevPageButton" name="buton"></button>
+        <button id="nextPageButton" class="nextPageButton" name="button"></button>
+        <button class="archiveBackButton" name="button" onclick="window.location.href='/'">Back</button>
+    </div>
+
+    <div class="parent">
+        <div class="levelGrid">
+            {% for level in levels %}
+                {% if user_levels.get(level) == True %}
+                    <div class="level completedLevelCard">
+                        {{ level }}
+                    </div>
+                {% else %}
+                    <a href="/archive/{{ level }}" class="level newlevelCard" name="button">
+                        {{ level }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% else %}
+    <p>No levels found in the archive.</p>
+{% endif %}
+
+{% endblock %}

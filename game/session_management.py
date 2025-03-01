@@ -3,9 +3,7 @@ import schedule
 import threading
 import json
 from datetime import datetime
-import psycopg2
 from psycopg2.extras import RealDictCursor
-import os
 import pytz
 from game.answer_management import update_answers
 from game.db_setup import get_db_connection, release_db_connection
@@ -17,7 +15,7 @@ def clear_all_sessions():
     conn = get_db_connection()
     try:
         with conn.cursor() as cursor:
-            cursor.execute('DELETE FROM active_sessions')
+            cursor.execute('DELETE FROM sessions')
         conn.commit()
         print("All sessions cleared")
     finally:
@@ -49,7 +47,7 @@ def save_session(session_id, model_data):
         ])
         with conn.cursor() as cursor:
             cursor.execute('''
-                INSERT INTO active_sessions (
+                INSERT INTO sessions (
                     session_id, start_time, time, pauses, pause_start,
                     clue1, clue2, answer1, inbetween, answer2, correct, response
                 ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -79,7 +77,7 @@ def load_session(session_id):
     conn = get_db_connection()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute('SELECT * FROM active_sessions WHERE session_id = %s', (session_id,))
+            cursor.execute('SELECT * FROM sessions WHERE session_id = %s', (session_id,))
             session = cursor.fetchone()
         if session:
             pauses_data = session['pauses'] if session['pauses'] else []
@@ -108,7 +106,7 @@ def delete_session(session_id):
     conn = get_db_connection()
     try:
         with conn.cursor() as cursor:
-            cursor.execute('DELETE FROM active_sessions WHERE session_id = %s', (session_id,))
+            cursor.execute('DELETE FROM sessions WHERE session_id = %s', (session_id,))
         conn.commit()
     finally:
         release_db_connection(conn)

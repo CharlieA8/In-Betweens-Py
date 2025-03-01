@@ -16,6 +16,8 @@
     </div>
 
     <form action="/login" method="post" id="login-form">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
         <p><input type="text" name="username" class="clue1" placeholder="Username"></p>
         <p><input type="password" name="password" class="clue2" placeholder="Password"></p>
 

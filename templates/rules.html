@@ -3,6 +3,7 @@
 {% block head %}
 
 <script src="static/script/borderCycle.js" defer></script>
+<script src="static/script/ruleSteps.js" defer></script>
 
 {% endblock %}
 
@@ -11,39 +12,78 @@
         <h1 class="doneCard topSlide" id="borderCycle">Rules!</h1>
     </div>
 
-    <div class="clues">
-        <div class="exampleClue clue1" id="clueBox">What an optimist sees (3)</div>
-        <div class="in_between plus" id="clueBox">+</div>
-        <div class="exampleClue clue2" id="clueBox">John Stamos hit show (2)</div>
+    <div class="example-section">
+        <div id="step1" class="step active">
+            <div class="rules">
+                <p class="rulesText">Each puzzle has two clues:</p>
+            </div>
+
+            <div class="clues">
+                <div class="exampleClue clue1" id="clueBox">What an optimist sees (3)</div>
+                <div class="in_between plus" id="clueBox">+</div>
+                <div class="exampleClue clue2" id="clueBox">John Stamos hit show (2)</div>
+            </div>
+            
+            <div class="rules">
+                <p class="rulesText">And each clue leads to a phrase:</p>
+            </div>
+                
+            <div class="clues">
+                <div class="clue1 rulesHeading">Glass Half Full</div>
+                <div class="in_between rulesHeading">+</div>
+                <div class="clue2 rulesHeading">Full House</div>
+            </div>
+
+            <div class="rules">
+                <p class="rulesText">The <strong>(number)</strong> in each clue indicates the number of words in each phrase</p>
+            </div>
+        </div>
+        
+        <div id="step2" class="step">
+            <div class="rules">
+                <p class="rulesText">The two phrases share <strong>one word</strong> in the middle - this is the <strong>"In-Between"</strong></p>
+            </div>
+
+            <div class="clues">
+                <div class="clue1 rulesHeading">Glass Half</div>
+                <div class="in_between rulesHeading">Full</div>
+                <div class="clue2 rulesHeading">House</div>
+            </div>
+
+            <form id="game-form" class="tutorialForm">
+                <p>
+                    <input type="text" autocomplete="off" class="in_between exInput" name="in_between" placeholder="In-Between" value="Full" readonly>
+                </p>
+            </form>
+        </div>
+        
+        <div id="step3" class="step">
+            <div class="rules">
+                <p class="rulesText">Answers are entered in the three boxes like this:</p>
+            </div>
+
+            <form id="game-form" class="tutorialForm">
+                <p>
+                    <input type="text" autocomplete="off" class="clue1 exInput" name="answer1" placeholder="Clue 1" value="Glass half" readonly>
+                </p>
+                <p style="padding: 1vw;">
+                    <input type="text" autocomplete="off" class="in_between exInput" name="in_between" placeholder="In-Between" value="Full" readonly>
+                </p>
+                <p>
+                    <input type="text" autocomplete="off" class="clue2 exInput" name="answer2" placeholder="Clue 2" value="House" readonly>
+                </p>
+            </form>
+
+            <div class="rules">
+                <p class="rulesText">New puzzles every Sunday, or try past puzzles in the Archive! Try to solve them as fast as you can - <strong>you're on the clock!</strong></p> 
+            </div>
+        </div>
+        
+        <div id="step-navigation">
+            <button id="prev-btn" class="navButton">Previous</button>
+            <button id="next-btn" class="navButton">Next</button>
+        </div>
     </div>
-
-    <p class="rulesText">You will be given <strong>two clues</strong>, each of which corresponds to a <strong>multi-word phrase</strong>. In <strong>parentheses</strong> is the <strong>number of words</strong> in the phrase:</p>
-
-    <div class="clues">
-        <div class="clue1 rulesHeading">Glass Half Full</div>
-        <div class="in_between rulesHeading">+</div>
-        <div class="clue2 rulesHeading">Full House</div>
-    </div>
-
-    <p class="rulesText">But the two phrases are connected: they share <strong>one word</strong> in the middle, the <strong>"In-Between"</strong>:</p>
-
-    <div class="in_between rulesHeading">Full</div>
-
-    <p class="rulesText">When entering answers, the In-Between goes in the middle box, while the rest of the words go in the corresponding top and bottom boxes. <strong>The In-Between should not be present in the top or bottom box</strong>:</p>
-
-    <form id="game-form" class="tutorialForm">
-        <p>
-            <input type="text" autocomplete="off" class="clue1 exInput" name="answer1" placeholder="Clue 1" value="Glass half" readonly>
-        </p>
-        <p style="padding: 1vw;">
-            <input type="text" autocomplete="off" class="in_between exInput" name="in_between" placeholder="In-Between" value="Full" readonly>
-        </p>
-        <p>
-            <input type="text" autocomplete="off" class="clue2 exInput" name="answer2" placeholder="Clue 2" value="House" readonly>
-        </p>
-    </form>
-
-    <p class="rulesText">There's a new puzzle every day! Try to answer as fast as you can - <strong>you're on the clock!</strong></p>
 
     <div class="rules">
         <button class="backButton" name="button" onclick="window.location.href='/'">Back</button>
