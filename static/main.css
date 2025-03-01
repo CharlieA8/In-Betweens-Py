@@ -233,7 +233,7 @@ input {
 }
 
 .rulesText {
-    font-size: clamp(20px, 3vw, 40px);
+    font-size: clamp(10px, 2vw, 30px);
     display: inline-block;
     justify-content: center;
     text-align: center;
@@ -246,10 +246,11 @@ input {
 
 .rulesText strong {
     display: inline;
+    color: rgb(195, 88, 195);
 }
 
 .rulesHeading {
-    font-size: clamp(30px, 4vw, 60px);
+    font-size: clamp(20px, 3vw, 40px);
     font-weight: bold;
 }
 
@@ -633,10 +634,13 @@ table, th, td {
 /* Rules navigation styles */
 .example-section {
     background-color: white;
+    border: 5px solid black;
     border-radius: 15px;
     padding: 20px;
     margin: 0 auto 20px;
-    max-width: 800px;
+    width: 80%;
+    height: 65%;
+    overflow: hidden;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
