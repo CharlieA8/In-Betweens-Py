@@ -192,9 +192,9 @@ input {
 }
 
 .plus {
-    font-size: 85px;
+    font-size: 80px;
     font-style: bold;
-    font-family: Arial;
+    font-family: 'InBetween';
 }
 
 .correct {
