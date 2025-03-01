@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, g, json, make_response, redirect, send_file, session, url_for
-from datetime import datetime
+from datetime import datetime, timedelta
 import bcrypt
 from cryptography.fernet import Fernet 
 import base64 
@@ -92,7 +92,7 @@ def title():
     if today_cookie:
         try:
             today = decrypt_cookie_data(today_cookie, secret_key)
-            if date != today[1]:
+            if date >= today[1]:
                 time_today = "N/A"
                 playable = True
             else:
@@ -150,7 +150,7 @@ def resume():
     current_time = datetime.now(timezone)
     date = str(current_time.date())
 
-    if date == today[1]:
+    if today[1] is not None and date < today[1]:
         return redirect('/')
 
     if not g.answers:
@@ -211,10 +211,13 @@ def submit():
 
             # Update the stats
             timezone = pytz.timezone('US/Eastern')
-            date = str(datetime.now(timezone).date())
-            if today[0] == "N/A" or today[1] != date or game_stats['times'] == []:
+            current_time = datetime.now(timezone)
+            days_ahead = (6 - current_time.weekday()) if current_time.weekday() != 6 else 7
+            next_sunday_date = str((current_time + timedelta(days=days_ahead)).date())
+
+            if today[0] == "N/A" or today[1] != next_sunday_date or game_stats['times'] == []:
                 game_stats['times'].append(time)
-                today = [time, date]
+                today = [time, next_sunday_date]
 
             num_times = len(game_stats['times'])
             game_stats['average_time'] = round(sum(game_stats['times']) / num_times, 2)
@@ -228,7 +231,7 @@ def submit():
 
             response = make_response(render_template('congrats.html', time=time))
             response.set_cookie('game_stats', encrypted_stats, max_age=max_age,  httponly=True)
-            response.set_cookie('today', encrypted_today, max_age=86400,  httponly=True)
+            response.set_cookie('today', encrypted_today, max_age=max_age,  httponly=True)
 
             # Clear session data
             session_id = request.cookies.get('session_id')
