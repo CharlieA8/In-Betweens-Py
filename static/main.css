@@ -630,6 +630,54 @@ table, th, td {
     pointer-events: none; /* Disable pointer events for completed levels */
 }
 
+/* Rules navigation styles */
+.example-section {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 0 auto 20px;
+    max-width: 800px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+#step-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.navButton {
+    font-size: 16px;
+    font-family: 'InBetween';
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 2px solid rgb(195, 88, 195);
+    background-color: white;
+    color: rgb(195, 88, 195);
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navButton:hover {
+    background-color: rgb(195, 88, 195);
+    color: white;
+}
+
+.navButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 @keyframes topSlide {
     from {
         transform: translateY(-100vh);
