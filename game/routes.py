@@ -83,7 +83,7 @@ def title():
     if stats_cookie:
         try:
             game_stats = decrypt_cookie_data(stats_cookie, secret_key)
-            average_time = game_stats['average_time']
+            average_time = game_stats['average_time'] + "s"
         except:
             average_time = "N/A"
     else:
@@ -96,7 +96,7 @@ def title():
                 time_today = "N/A"
                 playable = True
             else:
-                time_today = today[0]
+                time_today = today[0] + "s"
         except:
             time_today = "N/A"
             playable = True
