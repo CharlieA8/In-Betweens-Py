@@ -209,6 +209,12 @@ def submit():
             else:
                 today = ["N/A", None]
 
+            if today is None:
+                today = ["N/A", None]
+
+            if game_stats is None:
+                game_stats = {'times': [], 'average_time': 0}
+
             # Update the stats
             timezone = pytz.timezone('US/Eastern')
             current_time = datetime.now(timezone)
