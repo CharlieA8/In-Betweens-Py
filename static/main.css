@@ -638,17 +638,14 @@ table, th, td {
     border-radius: 15px;
     padding: 20px;
     margin: 0 auto 20px;
-    width: fit-content(80%);
-    height: fit-content(65%);
+    width: 80%;
+    height: 55%;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    position: relative;
 }
 
 .step {
-    position: absolute;
     display: none;
-    width: 100%;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease-out;
@@ -657,7 +654,6 @@ table, th, td {
 .step.active {
     display: block;
     animation: fadeIn 0.5s ease-in-out;
-    position: relative;
     opacity: 1;
     visibility: visible;
 }
