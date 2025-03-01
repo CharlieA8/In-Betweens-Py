@@ -192,8 +192,9 @@ input {
 }
 
 .plus {
-    font-size: 100px;
+    font-size: 85px;
     font-style: bold;
+    font-family: Arial;
 }
 
 .correct {
