@@ -98,3 +98,16 @@ def visualize_archive():
             return archive_data # returns a list of dictionaries
     finally:
         release_db_connection(conn)
+
+def filter_old_users():
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute('''
+                DELETE FROM user_data
+                WHERE last_updated < NOW() - INTERVAL '365 days'
+            ''')
+        conn.commit()
+        print("Old users cleared")
+    finally:
+        release_db_connection(conn)
