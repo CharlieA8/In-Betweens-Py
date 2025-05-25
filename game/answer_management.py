@@ -50,14 +50,32 @@ def update_answers():
             print(f"Answers already updated for {now}. Update aborted.")
             return
         
+        # Get the new clue from update
         cursor.execute('SELECT * FROM update')
         data = cursor.fetchone()
+
+        # Check to see if it's the same as the current one
+        if data:
+            cursor.execute('SELECT answer1 FROM answers')
+            current_answers = cursor.fetchone()
+            if current_answers and current_answers[0] == data[1]:
+                # If the answer is the same, terminate the update
+                print(f"Answers in update table are unchanged; update aborted.")
+                return
+        
+        # If the answer is different, proceed with the update
         if data:
             clear_answers(conn)
             with conn.cursor() as cursor:
+                # Add new clue to the weekly table
                 cursor.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
                                 clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                                 ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], now))
+                
+                # Add new clue to the archive
+                cursor.execute('''INSERT INTO archive (answer1, in_between, answer2, clue1, 
+                            clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                            ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7]))
                 conn.commit()
                 print("Answers updated for " + str(now))
         else:
