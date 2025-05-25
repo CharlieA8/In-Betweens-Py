@@ -7,6 +7,7 @@ from psycopg2.extras import RealDictCursor
 import pytz
 from game.answer_management import update_answers
 from game.db_setup import get_db_connection, release_db_connection
+from game.archive_management import filter_old_users
 
 shutdown_flag = threading.Event()
 
@@ -30,6 +31,7 @@ def setup_daily_reset():
     est = pytz.timezone('US/Eastern')
     schedule.every().day.at("00:00", est).do(clear_all_sessions)
     schedule.every().day.at("00:00", est).do(update_answers)
+    schedule.every().day.at("00:00", est).do(filter_old_users)
     scheduler_thread = threading.Thread(target=run_scheduler)
     scheduler_thread.daemon = True
     scheduler_thread.start()
