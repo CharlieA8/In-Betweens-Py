@@ -99,9 +99,20 @@ def force_update():
             data = cursor.fetchone()
             if data:
                 clear_answers(conn)
+                # Add new clue to the weekly table
                 cursor.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
                                 clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                                 ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], now))
+                
+                # Check to see if the clue is already in the archive
+                cursor.execute('''SELECT 1 FROM archive WHERE answer1=%s AND in_between=%s AND answer2=%s AND clue1=%s AND clue2=%s''',
+                            (data[1], data[2], data[3], data[4], data[5]))
+                if cursor.fetchone() is None:
+                    # Only insert if not already present
+                    cursor.execute('''INSERT INTO archive (answer1, in_between, answer2, clue1, 
+                                clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                                ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7]))
+
                 conn.commit()
                 print("Answers updated by force.")
             else:
