@@ -46,7 +46,7 @@ def update_answers():
         # Get the date in the answers table, which is the Saturday before the update
         cursor.execute('SELECT date FROM answers LIMIT 1')
         current_answers_date_row = cursor.fetchone()
-        answers_date = current_answers_date_row[0] if current_answers_date_row else None
+        answers_date = current_answers_date_row['date'] if current_answers_date_row else None
 
         # If today is the same or later than the date in the answers table, do not update
         if answers_date and answers_date.date() >= today:
