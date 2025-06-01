@@ -11,7 +11,6 @@ from game.archive_management import filter_old_users
 
 shutdown_flag = threading.Event()
 
-
 def clear_all_sessions():
     conn = get_db_connection()
     try:

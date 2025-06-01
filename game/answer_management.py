@@ -1,7 +1,7 @@
 from game.answer import Answer
 from psycopg2.extras import RealDictCursor
 from game.db_setup import get_db_connection, release_db_connection
-from datetime import datetime
+from datetime import datetime, timedelta
 from pytz import timezone
 
 def get_answers():
@@ -39,26 +39,29 @@ def upload_answers(data):
 
 def update_answers():
     conn = get_db_connection()
-    now = datetime.now(timezone('US/Eastern')).date()
+    today = datetime.now(timezone('US/Eastern')).date()
     try:
         cursor = conn.cursor()
 
+        # Get the date in the answers table, which is the Saturday before the update
         cursor.execute('SELECT date FROM answers LIMIT 1')
-        current_data = cursor.fetchone()
-        if current_data and current_data[0].date() == now:
-            # If the date matches today's date, terminate the update
-            print(f"Answers already updated for {now}. Update aborted.")
+        current_answers_date_row = cursor.fetchone()
+        answers_date = current_answers_date_row[0] if current_answers_date_row else None
+
+        # If today is the same or later than the date in the answers table, do not update
+        if answers_date and answers_date.date() >= today:
+            print(f"*Update* Answers already updated for week of {today}. Update aborted.")
             return
         
-        # Get the new clue from update
+        # Get the new clue from update and the current answers
         cursor.execute('SELECT * FROM update')
         data = cursor.fetchone()
+        cursor.execute('SELECT * FROM answers')
+        current_answers = cursor.fetchone()
 
-        # Check to see if it's the same as the current one
-        if data:
-            cursor.execute('SELECT answer1 FROM answers')
-            current_answers = cursor.fetchone()
-            if current_answers and current_answers[0] == data[1]:
+        # Check to see if update table is the same as the current answers
+        if data and current_answers:
+            if current_answers['answer1'] == data['answer1']:
                 # If the answer is the same, terminate the update
                 print(f"Answers in update table are unchanged; update aborted.")
                 return
@@ -66,19 +69,23 @@ def update_answers():
         # If the answer is different, proceed with the update
         if data:
             clear_answers(conn)
-            with conn.cursor() as cursor:
-                # Add new clue to the weekly table
-                cursor.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
-                                clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                                ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], now))
-                
-                # Add new clue to the archive
-                cursor.execute('''INSERT INTO archive (answer1, in_between, answer2, clue1, 
-                            clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
-                            ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7]))
-                conn.commit()
-                print("Answers updated for " + str(now))
-                print("New clue added to archive.")
+            next_saturday = today + timedelta((5 - today.weekday()) % 7)
+
+            # Add new clue to the weekly table
+            cursor.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
+                            clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+                            ''', (data['answer1'], data['in_between'], data['answer2'], data['clue1'], 
+                                    data['clue2'], data['count1'], data['count2'], next_saturday))
+            
+            # Add new clue to the archive
+            cursor.execute('''INSERT INTO archive (answer1, in_between, answer2, clue1, 
+                        clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                        ''', (data['answer1'], data['in_between'], data['answer2'], data['clue1'], 
+                              data['clue2'], data['count1'], data['count2']))
+            conn.commit()
+            print("*Update* Answers updated until " + str(next_saturday))
+            archive_string = f"{data['answer1']} {data['in_between']} {data['answer2']}"
+            print(f"*Update* New clue added to archive: {archive_string}")
         else:
             clear_answers(conn)
             with conn.cursor() as cursor:
@@ -87,7 +94,7 @@ def update_answers():
                                 ''', ("GLASS HALF", "FULL", "HOUSE", "What an optimist sees", 
                                 "John Stamos hit show", 3, 2, datetime(2000, 1, 1).date()))
                 conn.commit()
-                print("No new answers found in update table; default values added.")
+                print("*Update* No new answers found in update table; default values added.")
     finally:
         release_db_connection(conn)
 
@@ -105,15 +112,6 @@ def force_update():
                                 clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                                 ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], now))
                 
-                # Check to see if the clue is already in the archive
-                cursor.execute('''SELECT 1 FROM archive WHERE answer1=%s AND in_between=%s AND answer2=%s AND clue1=%s AND clue2=%s''',
-                            (data[1], data[2], data[3], data[4], data[5]))
-                if cursor.fetchone() is None:
-                    # Only insert if not already present
-                    cursor.execute('''INSERT INTO archive (answer1, in_between, answer2, clue1, 
-                                clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
-                                ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7]))
-
                 conn.commit()
                 print("Answers updated by force.")
             else:
