@@ -41,7 +41,7 @@ def update_answers():
     conn = get_db_connection()
     today = datetime.now(timezone('US/Eastern')).date()
     try:
-        cursor = conn.cursor()
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
 
         # Get the date in the answers table, which is the Saturday before the update
         cursor.execute('SELECT date FROM answers LIMIT 1')
