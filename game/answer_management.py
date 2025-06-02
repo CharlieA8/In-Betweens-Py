@@ -77,11 +77,18 @@ def update_answers():
                             ''', (data['answer1'], data['in_between'], data['answer2'], data['clue1'], 
                                     data['clue2'], data['count1'], data['count2'], next_saturday))
             
-            # Add new clue to the archive
-            cursor.execute('''INSERT INTO archive (answer1, in_between, answer2, clue1, 
-                        clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
-                        ''', (data['answer1'], data['in_between'], data['answer2'], data['clue1'], 
-                              data['clue2'], data['count1'], data['count2']))
+            # Check if clue is in the archive
+            cursor.execute('''SELECT * FROM archive WHERE answer1 = %s AND in_between = %s AND answer2 = %s''', 
+                           (data['answer1'], data['in_between'], data['answer2']))
+            archive_data = cursor.fetchone()
+
+            # If the clue is not in the archive, insert it
+            if not archive_data:
+                cursor.execute('''INSERT INTO archive (answer1, in_between, answer2, clue1, 
+                            clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
+                            ''', (data['answer1'], data['in_between'], data['answer2'], data['clue1'], 
+                                data['clue2'], data['count1'], data['count2']))
+
             conn.commit()
             print("*Update* Answers updated until " + str(next_saturday))
             archive_string = f"{data['answer1']} {data['in_between']} {data['answer2']}"
