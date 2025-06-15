@@ -1,11 +1,11 @@
-from game.db_setup import setup_db_pool, connection_pool
+import game.db_setup as db
 from game.session_management import clear_all_sessions
 from game.answer_management import update_answers
 from game.archive_management import filter_old_users
 
 if __name__ == "__main__":
-    setup_db_pool()
+    db.setup_db_pool()
     clear_all_sessions()
     print(update_answers())
     print(filter_old_users())
-    connection_pool.closeall()
+    db.connection_pool.closeall()
