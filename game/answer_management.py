@@ -50,8 +50,7 @@ def update_answers():
 
         # If today is the same or later than the date in the answers table, do not update
         if answers_date and answers_date.date() >= today:
-            print(f"*Update* Answers already updated for week of {today}. Update aborted.")
-            return
+            return f"*Update* Answers already updated for week of {today}. Update aborted."
         
         # Get the new clue from update and the current answers
         cursor.execute('SELECT * FROM update')
@@ -63,13 +62,13 @@ def update_answers():
         if data and current_answers:
             if current_answers['answer1'] == data['answer1']:
                 # If the answer is the same, terminate the update
-                print(f"Answers in update table are unchanged; update aborted.")
-                return
+                return f"Answers in update table are unchanged; update aborted."
         
         # If the answer is different, proceed with the update
         if data:
             clear_answers(conn)
             next_saturday = today + timedelta((5 - today.weekday()) % 7)
+            output_string = ""
 
             # Add new clue to the weekly table
             cursor.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
@@ -88,11 +87,13 @@ def update_answers():
                             clue2, count1, count2) VALUES (%s, %s, %s, %s, %s, %s, %s)
                             ''', (data['answer1'], data['in_between'], data['answer2'], data['clue1'], 
                                 data['clue2'], data['count1'], data['count2']))
+                archive_string = f"{data['answer1']} {data['in_between']} {data['answer2']}"
+                output_string += f"*Update* New clue added to archive: {archive_string} \n"
 
             conn.commit()
-            print("*Update* Answers updated until " + str(next_saturday))
-            archive_string = f"{data['answer1']} {data['in_between']} {data['answer2']}"
-            print(f"*Update* New clue added to archive: {archive_string}")
+            output_string += "*Update* Answers updated until " + str(next_saturday)
+            return output_string
+            
         else:
             clear_answers(conn)
             with conn.cursor() as cursor:
@@ -101,7 +102,7 @@ def update_answers():
                                 ''', ("GLASS HALF", "FULL", "HOUSE", "What an optimist sees", 
                                 "John Stamos hit show", 3, 2, datetime(2000, 1, 1).date()))
                 conn.commit()
-                print("*Update* No new answers found in update table; default values added.")
+                return "*Update* No new answers found in update table; default values added."
     finally:
         release_db_connection(conn)
 
