@@ -108,6 +108,6 @@ def filter_old_users():
                 WHERE last_updated < NOW() - INTERVAL '365 days'
             ''')
         conn.commit()
-        print("Old users cleared")
+        return "Old users cleared"
     finally:
         release_db_connection(conn)
