@@ -1,20 +1,10 @@
 from flask import Flask
 import game.routes
-from game.session_management import setup_daily_reset, stop_scheduler
-import signal
 import sys
 import os
 from game.db_setup import init_db, setup_db_pool, connection_pool
 from game.answer_management import update_answers
 from flask_wtf.csrf import CSRFProtect
-
-scheduler_thread = None
-
-def signal_handler(sig, frame):
-    if scheduler_thread:
-        stop_scheduler()
-        scheduler_thread.join()
-    sys.exit(0)
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -47,12 +37,6 @@ def create_app():
 
     # Set up routes
     app.register_blueprint(game.routes.bp)   
-
-    # Set up session reset
-    setup_daily_reset()
-
-    # Set up signal handler
-    signal.signal(signal.SIGINT, signal_handler)
     
     return app
 
@@ -63,6 +47,3 @@ if __name__ == "__main__":
         app.run(host="0.0.0.0", port=port)
     finally:
         connection_pool.closeall()
-        if scheduler_thread:
-            stop_scheduler()
-            scheduler_thread.join()
