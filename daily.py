@@ -6,6 +6,6 @@ from game.archive_management import filter_old_users
 if __name__ == "__main__":
     setup_db_pool()
     clear_all_sessions()
-    update_answers()
-    filter_old_users()
+    print(update_answers())
+    print(filter_old_users())
     connection_pool.closeall()
