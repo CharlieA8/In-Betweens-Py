@@ -19,6 +19,8 @@ def queue_push(data):
                        (data['answer1'], data['in_between'], data['answer2'], data['clue1'], 
                         data['clue2'], data['count1'], data['count2'], now)
         )
+        conn.commit()
+        print(f"*Queue* New clue added to the update queue: {data['answer1']}, {data['in_between']}, {data['answer2']}.")
     finally:
         release_db_connection(conn)
 
@@ -46,6 +48,9 @@ def queue_pop():
                        (row['answer1'], row['in_between'], row['answer2'], row['clue1'], 
                         row['clue2'], row['count1'], row['count2'])
         )
+        cursor.execute('DELETE FROM update_queue WHERE id = %s', (row['id'],)) # Delete old item
+        conn.commit()
+        
         print(f"*Queue* New clue popped from queue & inserted into update: {row['answer1']}, {row['in_between']}, {row['answer2']}.")
         return True
         
