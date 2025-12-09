@@ -37,45 +37,46 @@
             </button>
         </div>
     </form>
-    <div class="parent">
-        <details>
-            <summary style="cursor:pointer;">Show current update table</summary>
-            <div style="margin-top:0.5rem;">
-                {% if new_data %}
-                    <table>
-                        <tr>
-                            <th>Clue 1</th>
-                            <td>{{ new_data.clue1 }}</td>
-                        </tr>
-                        <tr>
-                            <th>Clue 2</th>
-                            <td>{{ new_data.clue2 }}</td>
-                        </tr>
-                        <tr>
-                            <th>Answer 1</th>
-                            <td>{{ new_data.answer1 }}</td>
-                        </tr>
-                        <tr>
-                            <th>In-Between</th>
-                            <td>{{ new_data.in_between }}</td>
-                        </tr>
-                        <tr>
-                            <th>Answer 2</th>
-                            <td>{{ new_data.answer2 }}</td>
-                        </tr>
-                    </table>
-                {% else %}
-                    <p>No current data found in the update table.</p>
-                {% endif %}
-            </div>
-        </details>
-    </div>
 
     <div class="parent">
         <button class="submit" id="forceupdate" name="button" onclick="window.location.href='/forceupdate'">Force Update</button>
         <button class="submit" name="button" onclick="window.location.href='/view-archive'">View Archive</button>
         <button class="submit" name="button" onclick="window.location.href='/view-queue'">View Queue</button>
     </div>
+
+    <details>
+        <summary style="cursor:pointer; text-align: center; font-weight: bold; font-size: 1.2rem; padding: 10px;">
+            Show current update table
+        </summary>
+        <div style="margin-top:0.5rem;">
+            {% if new_data %}
+                <table>
+                    <tr>
+                        <th>Clue 1</th>
+                        <td>{{ new_data.clue1 }}</td>
+                    </tr>
+                    <tr>
+                        <th>Clue 2</th>
+                        <td>{{ new_data.clue2 }}</td>
+                    </tr>
+                    <tr>
+                        <th>Answer 1</th>
+                        <td>{{ new_data.answer1 }}</td>
+                    </tr>
+                    <tr>
+                        <th>In-Between</th>
+                        <td>{{ new_data.in_between }}</td>
+                    </tr>
+                    <tr>
+                        <th>Answer 2</th>
+                        <td>{{ new_data.answer2 }}</td>
+                    </tr>
+                </table>
+            {% else %}
+                <p>No current data found in the update table.</p>
+            {% endif %}
+        </div>
+    </details>
 
     <script>
         // Check if there's a message to display

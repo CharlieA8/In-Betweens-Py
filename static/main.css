@@ -531,37 +531,40 @@ table, th, td {
 
 .queueTable {
     table-layout: fixed;
-    width:90%;
+    width: 90%;
     border-collapse: collapse;
-    margin-bottom: 20px; /* Adds a gap at bottom */
-    word-wrap: break-word; /* Wrap text for long values */
-    overflow-wrap: break-word; /* Ensure content wraps properly */
+    margin-bottom: 20px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
 
-    /* Shrink id/del column widths */
-    th:nth-child(1), td:nth-child(1) {
-        width: 5%;
-    }
-    th:nth-child(8), td:nth-child(8) {
-        width: 8%;
-    }
+/* 1. Shrink id/del column widths */
+.queueTable th:nth-child(1), 
+.queueTable td:nth-child(1) {
+    width: 5%;
+}
+.queueTable th:nth-child(8), 
+.queueTable td:nth-child(8) {
+    width: 8%;
+}
 
-    /* Set moderate widths for answer columns */
-    th:nth-child(2), td:nth-child(2),
-    th:nth-child(3), td:nth-child(3),
-    th:nth-child(4), td:nth-child(4) {
-        width: 10%;
-    }
+/* 2. Set moderate widths for answer columns */
+.queueTable th:nth-child(2), .queueTable td:nth-child(2),
+.queueTable th:nth-child(3), .queueTable td:nth-child(3),
+.queueTable th:nth-child(4), .queueTable td:nth-child(4) {
+    width: 10%;
+}
 
-    /* Set larger widths for clue columns */
-    th:nth-child(5), td:nth-child(5),
-    th:nth-child(6), td:nth-child(6) {
-        width: 23%;
-    }
+/* 3. Set larger widths for clue columns */
+.queueTable th:nth-child(5), .queueTable td:nth-child(5),
+.queueTable th:nth-child(6), .queueTable td:nth-child(6) {
+    width: 23%;
+}
 
-    /* Rest of width goes to timestamp */
-    th:nth-child(7), td:nth-child(7) {
-        width: 11%;
-    }
+/* 4. Rest of width goes to timestamp */
+.queueTable th:nth-child(7), 
+.queueTable td:nth-child(7) {
+    width: 11%;
 }
 
 .pagination {
