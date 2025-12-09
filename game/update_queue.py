@@ -6,7 +6,7 @@ from pytz import timezone
 
 def queue_push(data):
     # data param is a dictionary, with keys corresponding to the columns in update_queue table
-    conn = get_db_connection
+    conn = get_db_connection()
 
     try:
         cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -25,7 +25,7 @@ def queue_push(data):
 def queue_pop():
     # This method pops the oldest element in the queue and inserts it into the update table
     # If the queue is empty, it returns false
-    conn = get_db_connection
+    conn = get_db_connection()
 
     try:
         cursor = conn.cursor(cursor_factory=RealDictCursor)
