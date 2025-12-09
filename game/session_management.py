@@ -21,24 +21,6 @@ def clear_all_sessions():
     finally:
         release_db_connection(conn)
 
-def run_scheduler():
-    while not shutdown_flag.is_set():
-        schedule.run_pending()
-        time.sleep(1)
-
-def setup_daily_reset():
-    est = pytz.timezone('US/Eastern')
-    schedule.every().day.at("00:00", est).do(clear_all_sessions)
-    schedule.every().day.at("00:00", est).do(update_answers)
-    schedule.every().day.at("00:00", est).do(filter_old_users)
-    scheduler_thread = threading.Thread(target=run_scheduler)
-    scheduler_thread.daemon = True
-    scheduler_thread.start()
-    return scheduler_thread
-
-def stop_scheduler():
-    shutdown_flag.set()
-
 def save_session(session_id, model_data):
     conn = get_db_connection()
     try:

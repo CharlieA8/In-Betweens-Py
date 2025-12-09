@@ -9,6 +9,7 @@ from game.session_management import save_session, load_session, delete_session
 from game.answer_management import get_answers, upload_answers, check_answers, force_update
 from game.answer import normalize_apostrophes, Answer
 from game.archive_management import get_archive, save_level_completion, get_levels_array, upload_archive, visualize_archive, get_user_progress, delete_level
+from game.update_queue import visualize_queue, queue_push, delete_from_queue
 from copy import deepcopy
 import pytz
 import os
@@ -331,8 +332,11 @@ def update():
     }
     if submit_action == 'update':
         upload_answers(data)
-    else:
+    elif submit_action == 'archive':
         upload_archive(data)
+    elif submit_action == 'queue':
+        queue_push(data)
+    
     return redirect('/update')
     
 @bp.route('/view-archive', methods=['GET'])
@@ -350,6 +354,21 @@ def archive_pop(n):
     delete_level(n)
     levels = visualize_archive()
     return render_template('view_archive.html', levels=levels)
+
+@bp.route('/view-queue', methods=['GET'])
+def view_queue():
+    if not session.get('admin'):
+        return redirect('/login')
+    clues = visualize_queue()
+    return render_template('view_queue.html', clues=clues)
+
+@bp.route('/view-queue/delete/<int:id>', methods=['GET'])
+def queue_delete(id):
+    if not session.get('admin'):
+        return redirect('/login')
+    delete_from_queue(id)
+    clues = visualize_queue()
+    return render_template('view_queue.html', clues=clues)
         
 @bp.route('/forceupdate', methods=['GET'])
 def force():

@@ -9,18 +9,18 @@ def init_db(database_url):
     with conn.cursor() as cursor:
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS sessions (
-            session_id TEXT PRIMARY KEY,
-            start_time TIMESTAMP,
-            time FLOAT,
-            pauses JSONB,
-            pause_start TIMESTAMP,
-            clue1 TEXT,
-            clue2 TEXT,
-            answer1 TEXT,
-            inbetween TEXT,
-            answer2 TEXT,
-            correct BOOLEAN,
-            response BOOLEAN[]
+                session_id TEXT PRIMARY KEY,
+                start_time TIMESTAMP,
+                time FLOAT,
+                pauses JSONB,
+                pause_start TIMESTAMP,
+                clue1 TEXT,
+                clue2 TEXT,
+                answer1 TEXT,
+                inbetween TEXT,
+                answer2 TEXT,
+                correct BOOLEAN,
+                response BOOLEAN[]
             )
         ''')
         cursor.execute('''
@@ -65,7 +65,20 @@ def init_db(database_url):
                 user_id TEXT PRIMARY KEY,
                 last_updated TIMESTAMP,
                 completed_levels INTEGER[]
-                )
+            )
+        ''')
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS update_queue(
+                id SERIAL PRIMARY KEY,
+                answer1 TEXT,
+                in_between TEXT,
+                answer2 TEXT,
+                clue1 TEXT,
+                clue2 TEXT,
+                count1 INTEGER,
+                count2 INTEGER,
+                date TIMESTAMP
+            )
         ''')
     conn.commit()
     conn.close()

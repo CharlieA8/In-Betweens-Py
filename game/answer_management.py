@@ -1,6 +1,7 @@
 from game.answer import Answer
 from psycopg2.extras import RealDictCursor
 from game.db_setup import get_db_connection, release_db_connection
+from game.update_queue import queue_pop
 from datetime import datetime, timedelta
 from pytz import timezone
 
@@ -92,6 +93,13 @@ def update_answers():
 
             conn.commit()
             output_string += "*Update* Answers updated until " + str(next_saturday)
+
+            # Pop the next clue from the queue into the update table
+            if queue_pop():
+                output_string += "\n*Queue* New clue popped from queue into update table."
+            else:
+                output_string += "\n*Queue* No new clues in queue to pop."
+
             return output_string
             
         else:
