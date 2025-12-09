@@ -625,7 +625,7 @@ table, th, td {
     width: 50%;
     height: 20vh;
     font-family: 'InBetween';
-    font-size: 2vw;
+    font-size: 12px;
     border: solid black 4px;
     border-radius: 10px;
     margin-bottom: 10px;
