@@ -623,13 +623,13 @@ table, th, td {
     display: flex;
     align-self: center;
     width: 50%;
-    height: 30vh;
+    height: 20vh;
     font-family: 'InBetween';
     font-size: 2vw;
     border: solid black 4px;
     border-radius: 10px;
     margin-bottom: 10px;
-    resize: vertical;
+    resize: none;
     padding: 3px;
 }
 
