@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<script src="{{ url_for('static', filename='script/tablePagination.js') }}" defer></script>
+{% endblock %}
+
+{% block body %}
+    <div class="title">Update Queue</div>
+
+    {% if clues %}
+        <div class="pagination">
+            <button id="prevPage" onclick="prevPage()">Previous</button>
+            <button id="nextPage" onclick="nextPage()">Next</button>
+        </div>
+
+        <div id="tableContainer">
+            <table class="queueTable main" id="mainTable">
+                <tr>
+                    <th>ID</th>
+                    <th>Answer 1</th>
+                    <th>In-Between</th>
+                    <th>Answer 2</th>
+                    <th>Clue 1</th>
+                    <th>Clue 2</th>
+                    <th>Timestamp</th>
+                    <th>Delete</th>
+                </tr>
+                {% for clue in clues %}
+                    <tr>
+                        <td>{{ clue["id"] }}</td>
+                        <td>{{ clue["answer1"] }}</td>
+                        <td>{{ clue["in_between"] }}</td>
+                        <td>{{ clue["answer2"] }}</td>
+                        <td>{{ clue["clue1"] }}</td>
+                        <td>{{ clue["clue2"] }}</td>
+                        <td>{{ clue["date"]}}</td>
+                        <td>
+                            <a href="/view-queue/delete/{{ clue['id'] }}">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% else %}
+        <p>No clues found in the queue.</p>
+    {% endif %}
+
+    <div class="parent">
+        <button class="backButton" name="button" onclick="window.location.href='/update'">Back</button>
+    </div>
+
+{% endblock %}

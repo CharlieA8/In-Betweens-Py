@@ -529,6 +529,44 @@ table, th, td {
     background-color: #ddd;
 }
 
+.queueTable {
+    table-layout: fixed;
+    width: 90%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* 1. Shrink id/del column widths */
+.queueTable th:nth-child(1), 
+.queueTable td:nth-child(1) {
+    width: 5%;
+}
+.queueTable th:nth-child(8), 
+.queueTable td:nth-child(8) {
+    width: 8%;
+}
+
+/* 2. Set moderate widths for answer columns */
+.queueTable th:nth-child(2), .queueTable td:nth-child(2),
+.queueTable th:nth-child(3), .queueTable td:nth-child(3),
+.queueTable th:nth-child(4), .queueTable td:nth-child(4) {
+    width: 10%;
+}
+
+/* 3. Set larger widths for clue columns */
+.queueTable th:nth-child(5), .queueTable td:nth-child(5),
+.queueTable th:nth-child(6), .queueTable td:nth-child(6) {
+    width: 23%;
+}
+
+/* 4. Rest of width goes to timestamp */
+.queueTable th:nth-child(7), 
+.queueTable td:nth-child(7) {
+    width: 11%;
+}
+
 .pagination {
     display: flex;
     align-items: center;
@@ -584,14 +622,14 @@ table, th, td {
 .clueUpdate {
     display: flex;
     align-self: center;
-    width: 80%;
+    width: 50%;
     height: 20vh;
     font-family: 'InBetween';
-    font-size: 4vw;
+    font-size: 2vw;
     border: solid black 4px;
     border-radius: 10px;
     margin-bottom: 10px;
-    resize: vertical;
+    resize: none;
     padding: 3px;
 }
 

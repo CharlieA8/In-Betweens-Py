@@ -1,6 +1,7 @@
 from game.answer import Answer
 from psycopg2.extras import RealDictCursor
 from game.db_setup import get_db_connection, release_db_connection
+from game.update_queue import queue_pop
 from datetime import datetime, timedelta
 from pytz import timezone
 
@@ -92,6 +93,13 @@ def update_answers():
 
             conn.commit()
             output_string += "*Update* Answers updated until " + str(next_saturday)
+
+            # Pop the next clue from the queue into the update table
+            if queue_pop():
+                output_string += "\n*Queue* New clue popped from queue into update table."
+            else:
+                output_string += "\n*Queue* No new clues in queue to pop."
+
             return output_string
             
         else:
@@ -108,7 +116,9 @@ def update_answers():
 
 def force_update():
     conn = get_db_connection()
-    now = datetime.now(timezone('US/Eastern')).date()
+    today = datetime.now(timezone('US/Eastern')).date()
+    next_saturday = today + timedelta((5 - today.weekday()) % 7)
+
     try:
         with conn.cursor() as cursor:
             cursor.execute('SELECT * FROM update')
@@ -118,7 +128,7 @@ def force_update():
                 # Add new clue to the weekly table
                 cursor.execute('''INSERT INTO answers (answer1, in_between, answer2, clue1, 
                                 clue2, count1, count2, date) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                                ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], now))
+                                ''', (data[1], data[2], data[3], data[4], data[5], data[6], data[7], next_saturday))
                 
                 conn.commit()
                 print("Answers updated by force.")
