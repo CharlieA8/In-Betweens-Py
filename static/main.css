@@ -529,6 +529,41 @@ table, th, td {
     background-color: #ddd;
 }
 
+.queueTable {
+    table-layout: fixed;
+    width:90%;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Adds a gap at bottom */
+    word-wrap: break-word; /* Wrap text for long values */
+    overflow-wrap: break-word; /* Ensure content wraps properly */
+
+    /* Shrink id/del column widths */
+    th:nth-child(1), td:nth-child(1) {
+        width: 5%;
+    }
+    th:nth-child(8), td:nth-child(8) {
+        width: 8%;
+    }
+
+    /* Set moderate widths for answer columns */
+    th:nth-child(2), td:nth-child(2),
+    th:nth-child(3), td:nth-child(3),
+    th:nth-child(4), td:nth-child(4) {
+        width: 10%;
+    }
+
+    /* Set larger widths for clue columns */
+    th:nth-child(5), td:nth-child(5),
+    th:nth-child(6), td:nth-child(6) {
+        width: 23%;
+    }
+
+    /* Rest of width goes to timestamp */
+    th:nth-child(7), td:nth-child(7) {
+        width: 11%;
+    }
+}
+
 .pagination {
     display: flex;
     align-items: center;
