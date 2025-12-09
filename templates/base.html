@@ -21,6 +21,21 @@
     {% block head %}{% endblock %}
 </head>
 <body>
+    {% if session.get('admin') %}
+        <nav class="admin-navbar">
+            <div class="nav-brand">In + Betweens Admin</div>
+            <div class="nav-links">
+                <a href="{{ url_for('game.dashboard') }}" class="nav-item">Dashboard</a>
+                <a href="{{ url_for('game.create_puzzle') }}" class="nav-item">Create</a>
+                <a href="{{ url_for('game.view_queue') }}" class="nav-item">Queue</a>
+                <a href="{{ url_for('game.view_archive') }}" class="nav-item">Archive</a>
+            </div>
+            <div class="nav-logout">
+                <a href="{{ url_for('game.logout') }}">Logout</a>
+            </div>
+        </nav>
+    {% endif %}
+
     {% block body %}{% endblock %}
 </body>
 </html>

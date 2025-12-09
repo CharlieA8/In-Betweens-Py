@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="dashboard-grid">
+    
+    <div class="status-card">
+        <h2>🔴 Live Now</h2>
+        {% if live %}
+            <div class="data-row">
+                <span class="data-label">Answer 1</span>
+                <span class="data-value">{{ live.answer1 }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">In-Between</span>
+                <span class="data-value">{{ live.in_between }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Answer 2</span>
+                <span class="data-value">{{ live.answer2 }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Clue 1</span>
+                <span class="data-value">{{ live.clue1 }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Clue 2</span>
+                <span class="data-value">{{ live.clue2 }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Date Set</span>
+                <span class="data-value">{{ live.date }}</span>
+            </div>
+        {% else %}
+            <div class="empty-state">No live puzzle found.</div>
+        {% endif %}
+    </div>
+
+    <div class="status-card">
+        <h2>🟢 Staged for Sunday</h2>
+        {% if staged %}
+            <div class="data-row">
+                <span class="data-label">Answer 1</span>
+                <span class="data-value">{{ staged.answer1 }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">In-Between</span>
+                <span class="data-value">{{ staged.in_between }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Answer 2</span>
+                <span class="data-value">{{ staged.answer2 }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Clue 1</span>
+                <span class="data-value">{{ staged.clue1 }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Clue 2</span>
+                <span class="data-value">{{ staged.clue2 }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Action</span>
+                <span class="data-value">
+                    <a href="{{ url_for('game.create_puzzle') }}" style="color: blue;">Edit in Create</a>
+                </span>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                No puzzle staged.<br>
+                <a href="{{ url_for('game.create_puzzle') }}">Create one now</a>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
