@@ -754,14 +754,25 @@ table, th, td {
     background-color: #333;
     color: white;
     padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
+}
+
+.nav-brand {
+    justify-self: start;
+    white-space: nowrap;
+    font-family: 'InBetween';
 }
 
 .nav-links {
     display: flex;
     gap: 20px;
+    justify-self: center;
+}
+
+.nav-logout {
+    justify-self: end;
 }
 
 .nav-item {
