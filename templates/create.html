@@ -33,4 +33,18 @@
         </div>
     </form>
 
+    <script>
+        // Check if there's a message to display
+        const message = "{{ message|safe }}";
+        const messageType = "{{ message_type }}";
+        
+        if (message) {
+            if (messageType === "success") {
+                alert(message);
+            } else if (messageType === "error") {
+                alert("Error: " + message);
+            }
+        }
+    </script>
+
 {% endblock %}
