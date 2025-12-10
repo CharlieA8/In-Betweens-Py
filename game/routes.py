@@ -394,9 +394,7 @@ def force():
     if not session.get('admin'):
         return redirect('/login')
     force_update()
-    message = "Update successfully forced."
-    message_type = "success"
-    return render_template('update.html', message=message, message_type=message_type, new_data=get_update())
+    return redirect('/admin/dashboard')
 
 @bp.route('/archive', methods=['GET'])
 def archive():

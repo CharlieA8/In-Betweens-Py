@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
 
+{% block head %}
+<script src="static/script/borderCycle.js" defer></script>
+{% endblock %}
+
 {% block body %}
 <div class="dashboard-grid">
     
-    <div class="status-card">
+    <div class="status-card" id="borderCycle">
         <div class="title">🔴 Live Now</div>
         {% if live %}
             <div class="data-row">
@@ -35,7 +39,7 @@
         {% endif %}
     </div>
 
-    <div class="status-card">
+    <div class="status-card" id="otherBorderCycle">
         <div class="title">🟢 For Sunday</div>
         {% if staged %}
             <div class="data-row">
@@ -61,7 +65,7 @@
             <div class="data-row">
                 <span class="data-label">Action</span>
                 <span class="data-value">
-                    <a href="{{ url_for('main.create_puzzle') }}" style="color: blue;">Edit in Create</a>
+                    <a href="{{ url_for('main.force') }}" style="color: blue;">Force Update</a>
                 </span>
             </div>
         {% else %}
