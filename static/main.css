@@ -757,6 +757,7 @@ table, th, td {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
+    border-radius: 20px;
 }
 
 .nav-brand {
@@ -805,8 +806,8 @@ table, th, td {
 /* Status Cards */
 .status-card {
     background: white;
-    border: 10px solid rgb(195, 88, 195);
-    border-radius: 8px;
+    border: 8px solid rgb(195, 88, 195);
+    border-radius: 15px;
     padding: 1.5rem;
     box-shadow: 0 0 clamp(40px, 7vw, 60px) rgba(195, 88, 195, 0.5);
     transition: border-color 2s, box-shadow 2s;
