@@ -23,12 +23,13 @@
 <body>
     {% if session.get('admin') %}
         <nav class="admin-navbar">
-            <div class="nav-brand">In + Betweens Admin</div>
+            <div class="nav-brand">In + Betweens Admin (Hi Anna ❤️)</div>
             <div class="nav-links">
                 <a href="{{ url_for('main.dashboard') }}" class="nav-item">Dashboard</a>
                 <a href="{{ url_for('main.create_puzzle') }}" class="nav-item">Create</a>
                 <a href="{{ url_for('main.view_queue') }}" class="nav-item">Queue</a>
                 <a href="{{ url_for('main.view_archive') }}" class="nav-item">Archive</a>
+                <a href="{{ url_for('main.title') }}" class="nav-item">Play</a>
             </div>
             <div class="nav-logout">
                 <a href="{{ url_for('main.logout') }}">Logout</a>

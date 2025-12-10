@@ -499,12 +499,35 @@ table, th, td {
 }
 
 .archiveTable {
-    width: 80%;
+    width: 90%;
     border-collapse: collapse;
     margin-bottom: 20px; /* Adds a gap between the tables */
-    table-layout: auto;
+    table-layout: fixed;
     word-wrap: break-word; /* Wrap text for long values */
     overflow-wrap: break-word; /* Ensure content wraps properly */
+}
+
+/* 1. Shrink level/del column widths */
+.archiveTable th:nth-child(1), 
+.archiveTable td:nth-child(1) {
+    width: 5%;
+}
+.archiveTable th:nth-child(7), 
+.archiveTable td:nth-child(7) {
+    width: 8%;
+}
+
+/* 2. Set moderate widths for answer columns */
+.archiveTable th:nth-child(2), .archiveTable td:nth-child(2),
+.archiveTable th:nth-child(3), .archiveTable td:nth-child(3),
+.archiveTable th:nth-child(4), .archiveTable td:nth-child(4) {
+    width: 10%;
+}
+
+/* 3. Set larger widths for clue columns */
+.archiveTable th:nth-child(5), .archiveTable td:nth-child(5),
+.archiveTable th:nth-child(6), .archiveTable td:nth-child(6) {
+    width: 23%;
 }
 
 .archiveTable th, .archiveTable td {
@@ -771,10 +794,11 @@ table, th, td {
 /* Status Cards */
 .status-card {
     background: white;
-    border: 1px solid #ddd;
+    border: 10px solid rgb(195, 88, 195);
     border-radius: 8px;
     padding: 1.5rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: border-color 2s, box-shadow 2s;
 }
 
 .status-card h2 {
