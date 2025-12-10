@@ -2,6 +2,9 @@
 
 {% block head %}
 <script src="{{ url_for('static', filename='script/borderCycle.js') }}" defer></script>
+<script src="{{ url_for('static', filename='script/countdown.js') }}" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.34/moment-timezone-with-data.min.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -81,6 +84,11 @@
             </div>
         {% endif %}
     </div>
-
 </div>
+
+<div class="tooltip">Puzzle Updates In:</div>
+            <div class="countdown">
+                <span id="countdown"></span>
+</div>
+
 {% endblock %}
