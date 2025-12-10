@@ -2,7 +2,9 @@
 
 {% block body %}
 <div class="update-container">
-    <h1>Create New Puzzle</h1>
+    <div class="title">
+        <h1>Create New Puzzle</h1>
+    </div>
     
     <form method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
@@ -12,22 +14,21 @@
            <textarea name="clue2" class="clueUpdate" placeholder="Enter Clue 2"></textarea>
         </div>
 
-        <div class="answers">
-           <textarea name="answer1" class="answerUpdate" placeholder="Answer 1"></textarea>
-           <textarea name="in_between" class="answerUpdate" placeholder="In-Between"></textarea>
-           <textarea name="answer2" class="answerUpdate" placeholder="Answer 2"></textarea>
-        </div>
+        <!-- Editable Answers -->
+        <p><input type="text" name="answer1" class="clue1" placeholder="Answer 1" value="{{ answer1 }}"></p>
+        <p><input type="text" name="in_between" class="in_between" placeholder="In-Between" value="{{ in_between }}"></p>
+        <p><input type="text" name="answer2" class="clue2" placeholder="Answer 2" value="{{ answer2 }}"></p>
         
         <div class="dropdown-container">
-            <label for="destination">Destination:</label>
-            <select name="destination" id="destination">
+            <label for="destination" style="font-family: 'InBetween'; font-size: 1.5rem;">Destination:</label>
+            <select name="submit_action" id="destination" class="rounded-dropdown">
                 <option value="queue">Add to Queue (Recommended)</option>
                 <option value="update">Staging (Next Sunday)</option>
                 <option value="archive">Archive (New Level)</option>
             </select>
         </div>
 
-        <button type="submit" class="submit-btn">Submit Puzzle</button>
+        <button type="submit" class="submit">Submit Puzzle</button>
     </form>
 </div>
 {% endblock %}
