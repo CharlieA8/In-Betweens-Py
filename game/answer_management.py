@@ -19,6 +19,19 @@ def get_answers():
     finally:
         release_db_connection(conn)
 
+def get_answers_dict():
+    conn = get_db_connection()
+    try:
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute('SELECT * FROM answers')
+            data = cursor.fetchone()
+            if data:
+                return dict(data)
+            else:
+                return None
+    finally:
+        release_db_connection(conn)
+
 def clear_answers(conn):
     cursor = conn.cursor()
     cursor.execute('DELETE FROM answers')
@@ -137,7 +150,7 @@ def force_update():
     finally:
         release_db_connection(conn)
 
-def check_answers():
+def get_update():
     conn = get_db_connection()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:

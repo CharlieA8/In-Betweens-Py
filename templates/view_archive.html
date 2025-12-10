@@ -5,14 +5,14 @@
 {% endblock %}
 
 {% block body %}
-    <div class="title">Admin Archive</div>
+    <div class="title">
+        <h1 class="clue1">View</h1>
+        <h1 class="clue2">Archive</h1>
+    </div>
 
     {% if levels %}
         <div id="tableContainer">
             <table class="archiveTable">
-                <tr>
-                    <th class="big" colspan="7">Last Inputted Level</th>
-                </tr>
                 <tr>
                     <th>Level</th>
                     <th>Answer 1</th>
@@ -37,14 +37,12 @@
         </div>
 
         <div class="pagination">
-            <button id="prevPage" onclick="prevPage()">Previous</button>
+            <button id="prevPage" onclick="prevPage()">Prev</button>
             <button id="nextPage" onclick="nextPage()">Next</button>
         </div>
 
         <div id="tableContainer">
             <table class="archiveTable main" id="mainTable">
-                <tr>
-                    <th colspan="6" class="big">All Levels</th>
                 <tr>
                     <th>Level</th>
                     <th>Answer 1</th>
@@ -68,9 +66,5 @@
     {% else %}
         <p>No levels found in the archive.</p>
     {% endif %}
-
-    <div class="parent">
-        <button class="backButton" name="button" onclick="window.location.href='/update'">Back</button>
-    </div>
 
 {% endblock %}

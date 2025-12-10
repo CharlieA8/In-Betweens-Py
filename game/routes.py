@@ -6,7 +6,7 @@ import base64
 from game.modeldata import ModelData
 import uuid
 from game.session_management import save_session, load_session, delete_session
-from game.answer_management import get_answers, upload_answers, check_answers, force_update
+from game.answer_management import get_answers, upload_answers, get_update, force_update, get_answers_dict
 from game.answer import normalize_apostrophes, Answer
 from game.archive_management import get_archive, save_level_completion, get_levels_array, upload_archive, visualize_archive, get_user_progress, delete_level
 from game.update_queue import visualize_queue, queue_push, delete_from_queue
@@ -291,53 +291,72 @@ def login():
 
         if username == os.getenv('USERNAME') and bcrypt.checkpw(password.encode('utf-8'), hash_pw.encode('utf-8')):
             session['admin'] = True
-            return redirect('/update')
+            return redirect('/admin/dashboard')
         else:
             return render_template('login.html', message="Invalid credentials")
         
-@bp.route('/update', methods=['GET', 'POST'])
-def update():
+@bp.route('/logout')
+def logout():
+    session.pop('admin', None)
+    return redirect('/login')
+        
+@bp.route('/admin/dashboard')
+def dashboard():
     if not session.get('admin'):
         return redirect('/login')
+
+    current_answers = get_answers_dict()
+    current_update = get_update()
     
-    if request.method == 'GET':
-        return render_template('update.html', new_data=check_answers())
+    return render_template('dashboard.html', live=current_answers, staged=current_update)
+        
+@bp.route('/admin/create', methods=['GET', 'POST'])
+def create_puzzle():
+    if not session.get('admin'):
+        return redirect('/login')
 
-    submit_action = request.form.get('submit_action')
+    if request.method == 'POST':
+        submit_action = request.form.get('submit_action')
 
-    # Extract form values
-    clue1 = normalize_apostrophes(request.form["clue1"].strip())
-    clue2 = normalize_apostrophes(request.form["clue2"].strip())
-    in_between = normalize_apostrophes(request.form["in_between"].strip().upper())
-    answer1 = normalize_apostrophes(request.form["answer1"].strip().upper())
-    answer2 = normalize_apostrophes(request.form["answer2"].strip().upper())
+        # Extract form values
+        clue1 = normalize_apostrophes(request.form["clue1"].strip())
+        clue2 = normalize_apostrophes(request.form["clue2"].strip())
+        in_between = normalize_apostrophes(request.form["in_between"].strip().upper())
+        answer1 = normalize_apostrophes(request.form["answer1"].strip().upper())
+        answer2 = normalize_apostrophes(request.form["answer2"].strip().upper())
 
-    if not (clue1 and clue2 and in_between and answer1 and answer2):
-        message = "All fields must be filled!"
-        message_type = "error"
-        return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
-    elif '"' in clue1 or '"' in clue2:
-        message = "Clues cannot contain double quotes!"
-        message_type = "error"
-        return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
+        if not (clue1 and clue2 and in_between and answer1 and answer2):
+            message = "All fields must be filled!"
+            message_type = "error"
+            return render_template('create.html', message=message, message_type=message_type)
+        elif '"' in clue1 or '"' in clue2:
+            message = "Clues cannot contain double quotes!"
+            message_type = "error"
+            return render_template('create.html', message=message, message_type=message_type)
 
-    data = {
-        "clue1": clue1,
-        "clue2": clue2,
-        "in_between": in_between,
-        "answer1": answer1,
-        "answer2": answer2,
-        "count1": len(answer1.split()) + 1,
-        "count2": len(answer2.split()) + 1,
-    }
-    if submit_action == 'update':
-        upload_answers(data)
-    elif submit_action == 'archive':
-        upload_archive(data)
-    elif submit_action == 'queue':
-        queue_push(data)
-    
-    return redirect('/update')
+        data = {
+            "clue1": clue1,
+            "clue2": clue2,
+            "in_between": in_between,
+            "answer1": answer1,
+            "answer2": answer2,
+            "count1": len(answer1.split()) + 1,
+            "count2": len(answer2.split()) + 1,
+        }
+        if submit_action == 'update':
+            upload_answers(data)
+            message = "Update table successfully updated!"
+        elif submit_action == 'archive':
+            upload_archive(data)
+            message = "Archive successfully updated!"
+        elif submit_action == 'queue':
+            queue_push(data)
+            message = "Puzzle successfully added to queue!"
+        
+        message_type = "success"
+        return render_template('create.html', message=message, message_type=message_type)
+    else:
+        return render_template('create.html')
     
 @bp.route('/view-archive', methods=['GET'])
 def view_archive():
@@ -375,9 +394,7 @@ def force():
     if not session.get('admin'):
         return redirect('/login')
     force_update()
-    message = "Update successfully forced."
-    message_type = "success"
-    return render_template('update.html', message=message, message_type=message_type, new_data=check_answers())
+    return redirect('/admin/dashboard')
 
 @bp.route('/archive', methods=['GET'])
 def archive():
