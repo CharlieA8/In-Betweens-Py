@@ -764,6 +764,7 @@ table, th, td {
     justify-self: start;
     white-space: nowrap;
     font-family: 'InBetween';
+    color:rgb(195, 88, 195)
 }
 
 .nav-links {
@@ -884,8 +885,22 @@ table, th, td {
         grid-template-columns: 1fr; /* Stack vertically on phones */
     }
     .admin-navbar {
+        display: flex;
         flex-direction: column;
         gap: 1rem;
+    }
+    .nav-brand, 
+    .nav-links, 
+    .nav-logout {
+        justify-self: auto; /* Reset grid positioning */
+        width: 100%;       /* Allow them to take full width */
+        text-align: center; /* Center text inside them */
+        justify-content: center; /* Center flex items inside them */
+    }
+    /* 3. Allow the middle links to wrap if they are still too wide */
+    .nav-links {
+        flex-wrap: wrap; 
+        gap: 15px; /* Smaller gap between individual links on mobile */
     }
 }
 
