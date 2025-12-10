@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<div class="update-container">
     <div class="title">
-        <h1>Create New Puzzle</h1>
+        <h1 class="clue1">Create</h1>
+        <h1 class="clue2">Puzzle</h1>
     </div>
-    
+        
     <form method="post">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         
@@ -29,8 +29,8 @@
             </select>
         </div>
         <div class="parent">
-            <button type="submit" class="submit" name="button">Submit Puzzle</button>
+            <button type="submit" class="submit" name="button">Submit</button>
         </div>
     </form>
-</div>
+
 {% endblock %}
