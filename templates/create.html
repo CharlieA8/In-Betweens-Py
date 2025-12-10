@@ -20,15 +20,17 @@
         <p><input type="text" name="answer2" class="clue2" placeholder="Answer 2" value="{{ answer2 }}"></p>
         
         <div class="dropdown-container">
-            <label for="destination" style="font-family: 'InBetween'; font-size: 1.5rem;">Destination:</label>
-            <select name="submit_action" id="destination" class="rounded-dropdown">
+            <select name="submit_action" id="destination" class="rounded-dropdown" required>
+                <option value="" disabled selected hidden>Destination</option>
+
                 <option value="queue">Add to Queue (Recommended)</option>
                 <option value="update">Staging (Next Sunday)</option>
                 <option value="archive">Archive (New Level)</option>
             </select>
         </div>
-
-        <button type="submit" class="submit">Submit Puzzle</button>
+        <div class="parent">
+            <button type="submit" class="submit" name="button">Submit Puzzle</button>
+        </div>
     </form>
 </div>
 {% endblock %}

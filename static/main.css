@@ -816,28 +816,30 @@ table, th, td {
     background-color: white;
     
     /* The "Round" Look */
-    border-radius: 50px;
+    border-radius: 13px;
     padding: 10px 25px; /* Generous padding for the pill shape */
     
     /* The "Colorful/Outset" Look */
-    border: 5px outset rgb(195, 88, 195); /* Matches your purple theme */
+    border: 5px outset rgb(220, 136, 19); /* Matches your purple theme */
     
     cursor: pointer;
     outline: none;
-    appearance: none; /* Removes default ugly browser arrow (optional) */
     text-align: center;
-    margin-left: 10px;
 }
 
-/* Optional: Add a simple hover effect */
 .rounded-dropdown:hover {
     background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgb(195, 88, 195); /* Shadow hover */
+    box-shadow: 0 0 10px rgb(220, 136, 19); /* Shadow hover */
 }
 
-/* Optional: "Click" effect */
-.rounded-dropdown:focus {
-    border-style: inset;
+/* 1. Make the text grey ONLY when the placeholder (empty value) is selected */
+.rounded-dropdown:invalid {
+    color: gray;
+}
+
+/* 2. Ensure the actual list of options appears black when the menu opens */
+.rounded-dropdown option {
+    color: black;
 }
 
 /* Mobile Responsiveness */
