@@ -61,13 +61,13 @@
             <div class="data-row">
                 <span class="data-label">Action</span>
                 <span class="data-value">
-                    <a href="{{ url_for('game.create_puzzle') }}" style="color: blue;">Edit in Create</a>
+                    <a href="{{ url_for('game.routes.create_puzzle') }}" style="color: blue;">Edit in Create</a>
                 </span>
             </div>
         {% else %}
             <div class="empty-state">
                 No puzzle staged.<br>
-                <a href="{{ url_for('game.create_puzzle') }}">Create one now</a>
+                <a href="{{ url_for('game.routes.create_puzzle') }}">Create one now</a>
             </div>
         {% endif %}
     </div>

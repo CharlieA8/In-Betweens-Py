@@ -25,13 +25,13 @@
         <nav class="admin-navbar">
             <div class="nav-brand">In + Betweens Admin</div>
             <div class="nav-links">
-                <a href="{{ url_for('game.dashboard') }}" class="nav-item">Dashboard</a>
-                <a href="{{ url_for('game.create_puzzle') }}" class="nav-item">Create</a>
-                <a href="{{ url_for('game.view_queue') }}" class="nav-item">Queue</a>
-                <a href="{{ url_for('game.view_archive') }}" class="nav-item">Archive</a>
+                <a href="{{ url_for('game.routes.dashboard') }}" class="nav-item">Dashboard</a>
+                <a href="{{ url_for('game.routes.create_puzzle') }}" class="nav-item">Create</a>
+                <a href="{{ url_for('game.routes.view_queue') }}" class="nav-item">Queue</a>
+                <a href="{{ url_for('game.routes.view_archive') }}" class="nav-item">Archive</a>
             </div>
             <div class="nav-logout">
-                <a href="{{ url_for('game.logout') }}">Logout</a>
+                <a href="{{ url_for('game.routes.logout') }}">Logout</a>
             </div>
         </nav>
     {% endif %}

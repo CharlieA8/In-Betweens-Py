@@ -295,6 +295,11 @@ def login():
         else:
             return render_template('login.html', message="Invalid credentials")
         
+@bp.route('/logout')
+def logout():
+    session.pop('admin', None)
+    return redirect('/login')
+        
 @bp.route('/admin/dashboard')
 def dashboard():
     if not session.get('admin'):
