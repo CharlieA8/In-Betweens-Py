@@ -797,7 +797,7 @@ table, th, td {
     border: 10px solid rgb(195, 88, 195);
     border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 0 clamp(40px, 7vw, 60px) rgba(195, 88, 195, 0.5);
     transition: border-color 2s, box-shadow 2s;
 }
 
