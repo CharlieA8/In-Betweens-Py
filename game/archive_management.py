@@ -74,6 +74,27 @@ def delete_level(level):
     finally:
         release_db_connection(conn)
 
+def edit_level(n, data):
+    conn = get_db_connection()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(''' 
+                UPDATE archive SET
+                answer1 = %s,
+                in_between = %s,
+                answer2 = %s,
+                clue1 = %s,
+                clue2 = %s,
+                count1 = %s,
+                count2 = %s
+                WHERE id = %s
+            ''', (data['answer1'], data['in_between'], data['answer2'], 
+                  data['clue1'], data['clue2'], data['count1'], data['count2'], n)
+            )
+            conn.commit()
+    finally:
+        release_db_connection(conn)
+
 def get_levels_array():
     conn = get_db_connection()
     try:
