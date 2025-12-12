@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <div class="title">
+        <h1 class="clue1">Edit</h1>
+        <h1 class="clue2">Puzzle</h1>
+    </div>
+        
+    <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        
+        <div class="clues">
+           <textarea name="clue1" class="clueUpdate" placeholder="Enter Clue 1">{{ clue1 }}</textarea>
+           <textarea name="clue2" class="clueUpdate" placeholder="Enter Clue 2">{{ clue2 }}</textarea>
+        </div>
+
+        <!-- Editable Answers -->
+        <p><input type="text" name="answer1" class="clue1" placeholder="Answer 1" value="{{ answer1 }}"></p>
+        <p><input type="text" name="in_between" class="in_between" placeholder="In-Between" value="{{ in_between }}"></p>
+        <p><input type="text" name="answer2" class="clue2" placeholder="Answer 2" value="{{ answer2 }}"></p>
+        
+        <div class="parent">
+            <button type="submit" class="submit" name="button">Submit</button>
+        </div>
+    </form>
+
+    <script>
+        // Check if there's a message to display
+        const message = "{{ message|safe }}";
+        const messageType = "{{ message_type }}";
+        
+        if (message) {
+            if (messageType === "success") {
+                alert(message);
+            } else if (messageType === "error") {
+                alert("Error: " + message);
+            }
+        }
+    </script>
+
+{% endblock %}

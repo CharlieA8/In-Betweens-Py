@@ -8,7 +8,7 @@ import uuid
 from game.session_management import save_session, load_session, delete_session
 from game.answer_management import get_answers, upload_answers, get_update, force_update, get_answers_dict
 from game.answer import normalize_apostrophes, Answer
-from game.archive_management import get_archive, save_level_completion, get_levels_array, upload_archive, visualize_archive, get_user_progress, delete_level
+from game.archive_management import edit_level, get_archive, save_level_completion, get_levels_array, upload_archive, visualize_archive, get_user_progress, delete_level
 from game.update_queue import visualize_queue, queue_push, delete_from_queue
 from copy import deepcopy
 import pytz
@@ -373,6 +373,44 @@ def archive_pop(n):
     delete_level(n)
     levels = visualize_archive()
     return render_template('view_archive.html', levels=levels)
+
+@bp.route('/edit-archive/<int:n>', methods=['GET', 'POST'])
+def edit_archive(n):
+    if not session.get('admin'):
+        return redirect('/login')
+    level = get_archive(n)
+    if request.method == 'POST':
+        # Extract form values
+        clue1 = normalize_apostrophes(request.form["clue1"].strip())
+        clue2 = normalize_apostrophes(request.form["clue2"].strip())
+        in_between = normalize_apostrophes(request.form["in_between"].strip().upper())
+        answer1 = normalize_apostrophes(request.form["answer1"].strip().upper())
+        answer2 = normalize_apostrophes(request.form["answer2"].strip().upper())
+
+        if not (clue1 and clue2 and in_between and answer1 and answer2):
+            message = "All fields must be filled!"
+            message_type = "error"
+            return render_template('edit.html', clue1=clue1, clue2=clue2, in_between=in_between, answer1=answer1, answer2=answer2, message=message, message_type=message_type)
+        elif '"' in clue1 or '"' in clue2:
+            message = "Clues cannot contain double quotes!"
+            message_type = "error"
+            return render_template('edit.html', clue1=clue1, clue2=clue2, in_between=in_between, answer1=answer1, answer2=answer2, message=message, message_type=message_type)
+
+        data = {
+            "clue1": clue1,
+            "clue2": clue2,
+            "in_between": in_between,
+            "answer1": answer1,
+            "answer2": answer2,
+            "count1": len(answer1.split()) + 1,
+            "count2": len(answer2.split()) + 1,
+        }
+        edit_level(n, data)
+        message = f'Puzzle {n} successfully updated!'
+        message_type = "success"
+        return render_template('edit.html', clue1=clue1, clue2=clue2, in_between=in_between, answer1=answer1, answer2=answer2, message=message, message_type=message_type)
+    else:
+        return render_template('edit.html', clue1=level.clue1, clue2=level.clue2, in_between=level.in_between, answer1=level.answer1, answer2=level.answer2)
 
 @bp.route('/view-queue', methods=['GET'])
 def view_queue():
