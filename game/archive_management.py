@@ -91,6 +91,10 @@ def edit_level(n, data):
             ''', (data['answer1'], data['in_between'], data['answer2'], 
                   data['clue1'], data['clue2'], data['count1'], data['count2'], n)
             )
+            cursor.execute("""
+                SELECT setval(pg_get_serial_sequence('archive', 'id'), 
+                (SELECT max(id) FROM archive));
+            """)
             conn.commit()
     finally:
         release_db_connection(conn)
@@ -114,7 +118,7 @@ def visualize_archive():
     conn = get_db_connection()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-            cursor.execute('SELECT * FROM archive')
+            cursor.execute('SELECT * FROM archive ORDER BY id ASC')
             archive_data = cursor.fetchall()
             return archive_data # returns a list of dictionaries
     finally:
